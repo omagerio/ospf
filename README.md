@@ -87,14 +87,14 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 ### Panel functions ###
 Panels have different methods you must know:
 - `getThis()`: returns a unique reference of the panel you can use in delayed actions. For example: `onclick="<%- _self.getThis() %>.clickHandler()"`
-- `refresh()`: refreshes the panel's template
-- `databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel
-- `update()`: calls `refresh()` and `databind()` sequentially
+- `databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel when you have to load data required from your tpl.
+- `refresh()`: refreshes the panel's template. You should never override this method.
+- `update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 
 Inside the template file, you can use `_self` to reference your panel.
 
 
-### To sum it up ###
+### That's all folks ###
 This is everything you must know if you want to start using OSPF!
 
 Happy coding
