@@ -12,6 +12,22 @@ Visit the URL of that folder, for example ` http://localhost/myfolder `
 
 Et voilà. The framework is up and running strong. Easy right?
 
+# Application flow #
+The application starts from the `index.js` file you can find in the root of the project. A function named `appInit` will be called when the framework is ready. For example, the default:
+
+```
+function appInit() {
+	mainPanelViewer.panel = new HomePage(mainPanelViewer);
+	mainPanelViewer.refresh();
+}
+```
+
+This code should be self explanatory. 
+
+> The `mainPanelViewer` is a special panel, globally accessible, and it is the root of your application. The `panel` property represents the panel it must show when rendered. Read more about panels below.
+
+Ok now the `HomePage` panel will be rendered when you start the application. 
+
 ## Creating panels ##
 An example panel was made for you to start with. 
 You can find it inside `ospf/components/custom/_examplePanel`. You can even edit the `homePage` if you want.
@@ -52,11 +68,34 @@ let components = {
 	],
 	"custom": [
 		"homePage",
-    "myPanel"
+    		"myPanel"
 	]
 };
 ```
 
-Well done, you can now start using your panel in your application, let's see how!
+The HTML file represents the template of the panel. Let's see the default tpl:
+```
+<div id="<%- _self.id %>" class="examplePanel">
+	hello world
+</div>
+```
 
-WORK IN PROGRESS
+Here you place the HTML of your panel. Be sure to set the `id` attribute of the tag (can be any tag you want, here is a `div`) to `<%- _self.id %>` to allow the framework to recognize the panel later on. 
+
+> As you can see, this framework uses the extraordinary `ejs` library. Find more here: https://ejs.co/
+
+### Panel functions ###
+Panels have different methods you must know:
+- `getThis()`: returns a unique reference of the panel you can use in delayed actions. For example: `onclick="<%- _self.getThis() %>.clickHandler()"`
+- `refresh()`: refreshes the panel's template
+- `databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel
+- `update()`: calls `refresh()` and `databind()` sequentially
+
+Inside the template file, you can use `_self` to reference your panel.
+
+
+### To sum it up ###
+This is everything you must know if you want to start using OSPF!
+
+Happy coding
+
