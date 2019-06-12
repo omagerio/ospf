@@ -90,12 +90,20 @@ Panels have different methods you must know:
 - `databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel when you have to load data required from your tpl.
 - `refresh()`: refreshes the panel's template. You should never override this method.
 - `update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
+- `getHtml()`: returns the HTML of the panel. Use this method inside your template to render children panels.
 
 Inside the template file, you can use `_self` to reference your panel.
 
+### Core panels ###
+OSPF comes with different core panels that may suit your needs:
+- PanelViewer: displays another panel programatically. 
+- PopupPanelViewer: displays another panel inside a popup (modal)
+- LoadingPanel: displays a loading icon for long running tasks
 
 ### That's all folks ###
 This is everything you must know if you want to start using OSPF!
 
 Happy coding
+
+> This README is work in progress
 
