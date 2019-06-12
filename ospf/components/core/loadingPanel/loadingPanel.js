@@ -1,6 +1,6 @@
 class LoadingPanel extends Panel {
-	constructor() {
-		super();
+	constructor(parent) {
+		super(parent);
 		this.panelName = "loadingPanel";
 		this.visible = false;
 	}

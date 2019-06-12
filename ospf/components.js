@@ -7,5 +7,7 @@ let components = {
 		"loadingPanel",
 		"eventHelper"
 	],
-	"custom": []
+	"custom": [
+		"homePage"
+	]
 };

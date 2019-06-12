@@ -21,16 +21,29 @@ async function pauseIfNotRendered(id) {
 class Panel {
 
 	constructor(parent = null) {
+		this._children = [];
 		this.panelName = "panel";
 		this.id = "p" + lastComponentId++;
-		createdComponents[this.id] = this;
+		// createdComponents[this.id] = this;
 		this.rendered = false;
 		this.parent = parent;
+		if (this.parent != null) {
+			parent._children.push(this);
+		}
 	};
 
 	destroy() {
-		createdComponents[this.id] = undefined;
-		delete createdComponents[this.id];
+		// destroying all childrens
+		for (let child of this._children) {
+			child.destroy();
+		}
+
+		let cloned = this.parent._children.slice(0);
+		for (let parentChild of cloned) {
+			if (parentChild.id == this.id) {
+				this.parent._children.splice(this.parent._children.indexOf(parentChild), 1);
+			}
+		}
 	}
 
 	static destroyAll(array) {
@@ -52,7 +65,9 @@ class Panel {
 
 	getThis() {
 		// let index = createdComponents.indexOf(this);
-		return "createdComponents." + this.id;
+		// return "createdComponents." + this.id;
+		let string = "getComponent('" + this.id + "')";
+		return string;
 	};
 
 	getHtml() {
@@ -68,10 +83,15 @@ class Panel {
 						this.rendered = true;
 						this.onRender();
 						clearInterval(renderedInterval);
+						renderedInterval = null;
 					}
 				}, 100
 			);
 
+			setTimeout(() => {
+				clearInterval(renderedInterval);
+				renderedInterval = null;
+			}, 1000);
 		}
 
 		return html;
@@ -115,14 +135,9 @@ class Panel {
 
 	onRender() { };
 
-	/**
-	 *
-	 */
 	databind() {
-		for (let component of Object.values(createdComponents)) {
-			if (component.parent == this) {
-				component.databind();
-			}
+		for (let child of this._children) {
+			child.databind();
 		}
 	}
 

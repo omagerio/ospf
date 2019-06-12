@@ -3,7 +3,12 @@ class MainPanelViewer extends Panel {
 		super();
 		this.panelName = "mainPanelViewer";
 		this.panel = null;
-		this.popupPanelViewer = new PopupPanelViewer();
-		this.loadingPanel = new LoadingPanel();
+		this.popupPanelViewer = new PopupPanelViewer(this);
+		this.loadingPanel = new LoadingPanel(this);
+		MainPanelViewer.singleton = this;
 	};
+
+	static getInstance(){
+		return MainPanelViewer.singleton;
+	}
 }

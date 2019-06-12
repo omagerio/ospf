@@ -1,25 +1,25 @@
-let eventHelper = null;
-
 class EventHelper extends Panel {
 	constructor(parent) {
 		super(parent);
 		let _self = this;
 		this.panelName = "eventHelper";
-
 		this.eventListeners = {};
+		EventHelper.singleton = this;
 	}
 
 	static getInstance() {
-		if (eventHelper == null) {
-			eventHelper = new EventHelper();
+		if(EventHelper.singleton == null){
+			new EventHelper();
 		}
-		return eventHelper;
+		return EventHelper.singleton;
 	}
 
 	static removeListener(event, listener) {
 		let helper = EventHelper.getInstance();
-		let pos = helper.eventListeners[event].indexOf(listener);
-		helper.eventListeners[event].splice(pos, 1);
+		if(helper.eventListeners[event] != undefined){
+			let pos = helper.eventListeners[event].indexOf(listener);
+			helper.eventListeners[event].splice(pos, 1);
+		}
 	}
 
 	static addListener(event, listener) {

@@ -1,6 +1,6 @@
 class PopupPanelViewer extends Panel {
-	constructor(){
-		super();
+	constructor(parent){
+		super(parent);
 		this.panelName = "popupPanelViewer";
 		this.panel = null;
 		this.visible = false;
