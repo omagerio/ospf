@@ -128,12 +128,15 @@ class Panel {
 			document.querySelector("#htmlPreloader").removeChild(tempDiv);
 		}
 
+		this.onRefresh();
+
 		if (typeof callback == "function") {
 			callback();
 		}
 	};
 
 	onRender() { };
+	onRefresh() { };
 
 	databind() {
 		for (let child of this._children) {
