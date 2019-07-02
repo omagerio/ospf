@@ -8,6 +8,6 @@ let components = {
 		"eventHelper"
 	],
 	"custom": [
-		"homePage"
+		"demoPanel"
 	]
 };

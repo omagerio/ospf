@@ -82,6 +82,7 @@ class Panel {
 					if (document.getElementById(this.id)) {
 						this.rendered = true;
 						this.onRender();
+						this.onRefresh();
 						clearInterval(renderedInterval);
 						renderedInterval = null;
 					}

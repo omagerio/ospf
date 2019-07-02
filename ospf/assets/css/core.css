@@ -128,3 +128,16 @@ body,
 	background-color:rgb(99, 99, 99);
 	border-radius:10px;
   }
+
+  .demoPanel
+  {
+	  background:white;
+	  width:500px;
+	  margin:auto;
+	  padding:20px;
+  }
+
+  .demoPanel fieldset
+  {
+	  border:1px solid black;
+  }
