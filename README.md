@@ -122,8 +122,25 @@ Inside the template file, you can use `_self` to reference your panel.
 ### Core panels ###
 OSPF comes with different core panels that may suit your needs:
 - PanelViewer: displays another panel programatically.
+```javascript
+let panelViewer = new PanelViewer(this);
+panelViewer.panel = new YourCustomPanel(this);
+panelViewer.refresh();
+```
+
 - PopupPanelViewer: displays another panel inside a popup (modal)
+```javascript
+mainPanelViewer.popupPanelViewer.panel = new YourCustomPanel(this);
+mainPanelViewer.popupPanelViewer.show(); //=> to show
+// mainPanelViewer.popupPanelViewer.hide(); //=> to hide
+```
+
 - LoadingPanel: displays a loading icon for long running tasks
+```javascript
+mainPanelViewer.loadingPanel.show();
+// or
+mainPanelViewer.loadingPanel.hide();
+```
 
 ### That's all folks ###
 This is everything you must know if you want to start using OSPF!
