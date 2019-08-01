@@ -1,7 +1,5 @@
 let lastComponentId = 0;
 let templates = [];
-// let createdComponents = {};
-
 let mainPanelViewer = null;
 
 window.addEventListener("load", windowLoad);
@@ -13,7 +11,6 @@ function windowLoad() {
 
 function loadLibs() {
 	for (let lib of libs) {
-		// console.warn("Loading lib " + libs);
 		let script = document.createElement("script");
 		script.src = "ospf/assets/js/" + libs;
 		document.querySelector("head").appendChild(script);
@@ -22,7 +19,6 @@ function loadLibs() {
 
 function loadCoreComponents() {
 	let i = Object.keys(templates).length;
-	// console.warn("Loading " + components.core[i]);
 	let script = document.createElement("script");
 	script.src = "ospf/components/core/" + components.core[i] + "/" + basename(components.core[i]) + ".js";
 	script.component = components.core[i];
@@ -47,7 +43,6 @@ function loadCoreComponents() {
 function loadCustomComponents() {
 	if (components.custom.length > 0) {
 		let i = Object.keys(templates).length - components.core.length;
-		// console.warn("Loading " + components.custom[i]);
 		let script = document.createElement("script");
 		script.src = "ospf/components/custom/" + components.custom[i] + "/" + basename(components.custom[i]) + ".js";
 		script.component = components.custom[i];
@@ -56,7 +51,6 @@ function loadCustomComponents() {
 			ajax.url = "ospf/components/custom/" + event.target.component + "/" + basename(event.target.component) + ".htm";
 			ajax.component = event.target.component;
 			ajax.callback = function (response) {
-				// console.warn(ajax.component + " loaded");
 				templates[ajax.component] = response.responseText;
 				if (Object.keys(templates).length == components.custom.length + components.core.length) {
 					frameworkLoadComplete();
@@ -175,33 +169,6 @@ function htmlspecialchars(text) {
 	};
 
 	return text.replace(/[&<>"']/g, function (m) { return map[m]; });
-}
-
-let locks = [];
-function setLock(lockName){
-	locks.push(lockName);
-}
-function removeLock(lockName){
-	locks.splice(locks.indexOf(lockName),1);
-}
-async function getLock(lockName){
-	return new Promise((resolve, reject) => {
-		let interval = setInterval(()=>{
-			if(locks.indexOf(lockName) == -1){
-				setLock(lockName);
-				clearInterval(interval);
-				resolve();
-			}
-		}, 10);
-	});
-}
-
-let _bmtime = null;
-function bm(){
-	let now = Date.now();
-	let passed = now - _bmtime;
-	_bmtime = now;
-	console.warn("passed ", passed);
 }
 
 function getQuerystringParameters(){

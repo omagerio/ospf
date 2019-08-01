@@ -24,7 +24,6 @@ class Panel {
 		this._children = [];
 		this.panelName = "panel";
 		this.id = "p" + lastComponentId++;
-		// createdComponents[this.id] = this;
 		this.rendered = false;
 		this.parent = parent;
 		if (this.parent != null) {
@@ -64,8 +63,6 @@ class Panel {
 	}
 
 	getThis() {
-		// let index = createdComponents.indexOf(this);
-		// return "createdComponents." + this.id;
 		let string = "getComponent('" + this.id + "')";
 		return string;
 	};
@@ -149,8 +146,11 @@ class Panel {
 	 * Updates the control, calling databind() and then refresh()
 	 * @param {function} callback
 	 */
-	update(callback) {
+	async update(callback) {
 		this.databind();
-		this.refresh(callback);
+		await this.refresh();
+		if(callback != undefined){
+			callback();
+		}
 	}
 }
