@@ -1,0 +1,31 @@
+<div id='<%- _self.id %>' class='demoPanel'>
+	Hello, wonderful world!<br><br>
+
+	This is an example page of the framework.
+	<br><br>
+
+	<b>Button test</b><br>
+	<button type="button" onclick="<%- _self.getThis() %>.button1Click()">Button 1 - Click me!</button>
+	<br><br>
+
+	<button type="button" onclick="<%- _self.getThis() %>.button2Click()">Button 2 - Click me!</button>
+	<br>
+
+	<input id="text" type="text" value="Text input <%- _self.counter %>" style="border:1px solid black">
+	<br><br>
+
+	<button type="button" onclick="<%- _self.getThis() %>.popupButtonClick()">Show popup</button>
+	<br><br>
+
+
+	<button type="button" onclick="<%- _self.getThis() %>.showPanelInViewer()">Show Panel inside the panelViewer</button>
+	<fieldset>
+		<legend>This is a panelViewer:</legend>
+		<%- _self.panelViewer.getHtml() %>
+	</fieldset>
+	<br><br>
+
+
+	<button id="<%- _self.id %>_button5" type="button">This button action is bound on render</button>
+
+</div>
