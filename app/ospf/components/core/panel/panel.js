@@ -97,9 +97,8 @@ class Panel {
 
 	/**
 	 * Refreshes the template only.
-	 * @param {function} callback
 	 */
-	async refresh(callback) {
+	async refresh() {
 
 		await pauseIfNotRendered(this.id);
 
@@ -127,18 +126,14 @@ class Panel {
 		}
 
 		this.onRefresh();
-
-		if (typeof callback == "function") {
-			callback();
-		}
 	};
 
 	onRender() { };
 	onRefresh() { };
 
-	databind() {
+	async databind() {
 		for (let child of this._children) {
-			child.databind();
+			await child.databind();
 		}
 	}
 
@@ -146,11 +141,23 @@ class Panel {
 	 * Updates the control, calling databind() and then refresh()
 	 * @param {function} callback
 	 */
-	async update(callback) {
-		this.databind();
+	async update() {
+		await this.databind();
 		await this.refresh();
-		if(callback != undefined){
-			callback();
+	}
+
+	validate() {
+		let validationInfo = {
+			"valid": true,
+			"errors": []
 		}
+		for (let child of this._children) {
+			let childValidationInfo = child.validate();
+			if (childValidationInfo.valid == false) {
+				validationInfo.valid = false;
+				validationInfo.errors.concat(childValidationInfo.errors);
+			}
+		}
+		return validationInfo;
 	}
 }
