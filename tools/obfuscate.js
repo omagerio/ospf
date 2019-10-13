@@ -4,19 +4,20 @@ let recCopy = require("recursive-copy");
 let rimraf = require("rimraf");
 
 (async () => {
-    let rootFolder = __dirname + "/../app_release";
+    let rootFolder = __dirname + "/../game";
+    let releaseFolder = __dirname + "/../release";
 
-    console.log("Copying files inside app_release folder...");
-    await recCopy(__dirname + "/../app", rootFolder, { overwrite: true });
+    console.log("Copying files inside release folder...");
+    await recCopy(rootFolder, releaseFolder, { overwrite: true });
     console.log("Copy done");
 
     console.log("Removing .git folder...");
-    if (fs.existsSync(rootFolder + "/.git")) {
-        rimraf(rootFolder + "/.git", () => { });
+    if (fs.existsSync(releaseFolder + "/.git")) {
+        rimraf(releaseFolder + "/.git", () => { });
     }
     console.log("Removing done");
 
-    let skipFiles = ["ejs.min.js"];
+    let skipFiles = ["ejs.min.js", "phaser.js"];
 
     function obfuscateFile(path) {
         let data = fs.readFileSync(path);
@@ -62,6 +63,6 @@ let rimraf = require("rimraf");
         });
     }
 
-    readFilesInFolder(rootFolder);
+    readFilesInFolder(releaseFolder);
 })()
 
