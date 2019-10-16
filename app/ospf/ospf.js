@@ -66,8 +66,8 @@ function loadCustomComponents() {
 	}
 }
 
-function frameworkLoadComplete() {
-	mainPanelViewer = new MainPanelViewer();
+async function frameworkLoadComplete() {
+	mainPanelViewer = await MainPanelViewer.Create();
 	document.querySelector("body").innerHTML += mainPanelViewer.getHtml();
 	appInit();
 }
@@ -203,8 +203,6 @@ function getComponent(id, component){
 			}
 		}
 	}
-
-	console.log(component);
 
 	return toReturn;
 }

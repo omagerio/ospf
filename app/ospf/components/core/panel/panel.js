@@ -45,7 +45,6 @@ class Panel {
 		for (let childIndex in this._children) {
 			let child = this._children[childIndex];
 			if (child.tags == tags) {
-				console.log(child);
 				return this._children[childIndex];
 			}
 		}
@@ -66,6 +65,7 @@ class Panel {
 		if (removeOthersWithSameTags == undefined) {
 			removeOthersWithSameTags = false;
 		}
+
 		if (!Array.isArray(tags)) {
 			tags = [tags];
 		}

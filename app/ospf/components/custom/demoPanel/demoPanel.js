@@ -3,8 +3,7 @@ class DemoPanel extends Panel {
 		let pnl = new DemoPanel();
 		pnl.panelName = "demoPanel";
 		pnl.counter = 0;
-		let pw = new PanelViewer();
-		pnl.addChild(pw, "panelViewer");
+		await pnl.addChild(PanelViewer.Create(), "panelViewer");
 		return pnl;
 	}
 
@@ -18,8 +17,8 @@ class DemoPanel extends Panel {
 	}
 
 	async popupButtonClick() {
-		mainPanelViewer.child("popupPanelViewer").addChild(DemoPanel.Create(), true);
-		mainPanelViewer.child("popupPanelViewer").refresh();
+		await mainPanelViewer.child("popupPanelViewer").addChild(DemoPanel.Create(), "panel");
+		await mainPanelViewer.child("popupPanelViewer").refresh();
 		mainPanelViewer.child("popupPanelViewer").show();
 	}
 

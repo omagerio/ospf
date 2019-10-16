@@ -3,8 +3,8 @@ class MainPanelViewer extends Panel {
 		let pnl = new MainPanelViewer();
 		pnl.panelName = "mainPanelViewer";
 		pnl.panel = null;
-		pnl.addChild(PopupPanelViewer.Create(), "popupPanelViewer");
-		pnl.addChild(LoadingPanel.Create(), "loadingPanel");
+		await pnl.addChild(PopupPanelViewer.Create(), "popupPanelViewer");
+		await pnl.addChild(LoadingPanel.Create(), "loadingPanel");
 		MainPanelViewer.singleton = pnl;
 		return pnl;
 	}
