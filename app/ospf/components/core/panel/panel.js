@@ -20,29 +20,112 @@ async function pauseIfNotRendered(id) {
 
 class Panel {
 
-	constructor(parent = null) {
+	constructor() {
 		this._children = [];
 		this.panelName = "panel";
 		this.id = "p" + lastComponentId++;
 		this.rendered = false;
-		this.parent = parent;
-		if (this.parent != null) {
-			parent._children.push(this);
-		}
 	};
 
-	destroy() {
-		// destroying all childrens
-		for (let child of this._children) {
-			child.destroy();
+	static async Create(){
+		let pnl = new Panel();
+		return pnl;
+	}
+
+	removeChild(tags) {
+		for (let childIndex in this._children) {
+			let child = this._children[childIndex];
+			if (child.tags == tags) {
+				this._children.splice(childIndex, 1);
+			}
+		}
+	}
+
+	getChild(tags) {
+		for (let childIndex in this._children) {
+			let child = this._children[childIndex];
+			if (child.tags == tags) {
+				console.log(child);
+				return this._children[childIndex];
+			}
+		}
+	}
+
+	async addChild(newPanelOrPromise, tags, removeOthersWithSameTags) {
+		let panel;
+		if(typeof newPanelOrPromise.then == "function"){
+			panel = await newPanelOrPromise;
+		}else{
+			panel = newPanelOrPromise;
 		}
 
+		if(tags == undefined || tags == null){
+			console.error("You have to define at least one tag in $tags");
+		}
+
+		if (removeOthersWithSameTags == undefined) {
+			removeOthersWithSameTags = false;
+		}
+		if (!Array.isArray(tags)) {
+			tags = [tags];
+		}
+
+		if (removeOthersWithSameTags) {
+			this.removeChild(tags);
+		}
+
+		this._children.push(
+			{
+				"tags": tags,
+				"panel": panel
+			}
+		);
+	}
+
+	getChildByTags(tags) {
+		let children = this.getChildrenByTags(tags);
+		if (children.length > 0) {
+			return children[0];
+		} else {
+			return null;
+		}
+	}
+
+	getChildrenByTags(tags) {
+		if (!Array.isArray(tags)) {
+			tags = [tags];
+		}
+		let children = [];
+		for (let child of this._children) {
+			let isCompatible = true;
+			for (let tag of tags) {
+				if (child.tags.indexOf(tag) == -1) {
+					isCompatible = false;
+				}
+			}
+
+			if(isCompatible){
+				children.push(child.panel);
+			}
+		}
+		return children;
+	}
+
+	destroy() {
+		// destroying all children
+		for (let child of this._children) {
+			child.panel.destroy();
+		}
+		this._children = [];
+
+		/*
 		let cloned = this.parent._children.slice(0);
 		for (let parentChild of cloned) {
 			if (parentChild.id == this.id) {
 				this.parent._children.splice(this.parent._children.indexOf(parentChild), 1);
 			}
 		}
+		*/
 	}
 
 	static destroyAll(array) {
@@ -60,6 +143,10 @@ class Panel {
 			id = prefix + "_" + this.id;
 		}
 		return id;
+	}
+
+	child(tag){
+		return this.getChildByTags(tag);
 	}
 
 	getThis() {

@@ -1,7 +1,7 @@
 class PanelViewer extends Panel {
-	constructor(parent) {
-		super(parent);
-		this.panelName = "panelViewer";
-		this.panel = null;
+	 static async Create() {
+		let pnl = new PanelViewer();
+		pnl.panelName = "panelViewer";
+		return pnl;
 	}
 }

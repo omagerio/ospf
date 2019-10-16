@@ -1,41 +1,36 @@
 class DemoPanel extends Panel {
-
-	/* initialize the panel */
-	constructor(parent) {
-		/* required settings */
-		super(parent);
-		this.panelName = "demoPanel";
-		/* ----------------- */
-
-
-		this.counter = 0;
-		this.panelViewer = new PanelViewer(this);
+	static async Create() {
+		let pnl = new DemoPanel();
+		pnl.panelName = "demoPanel";
+		pnl.counter = 0;
+		let pw = new PanelViewer();
+		pnl.addChild(pw, "panelViewer");
+		return pnl;
 	}
 
-	button1Click(){
+	async button1Click() {
 		alert("You clicked");
 	}
 
-	button2Click(){
+	async button2Click() {
 		this.counter++;
 		this.refresh();
 	}
 
-	popupButtonClick(){
-		mainPanelViewer.popupPanelViewer.panel = new DemoPanel(this);
-		mainPanelViewer.popupPanelViewer.refresh();
-		mainPanelViewer.popupPanelViewer.show();
+	async popupButtonClick() {
+		mainPanelViewer.child("popupPanelViewer").addChild(DemoPanel.Create(), true);
+		mainPanelViewer.child("popupPanelViewer").refresh();
+		mainPanelViewer.child("popupPanelViewer").show();
 	}
 
-	showPanelInViewer(){
-		let newPanel = new DemoPanel(this);
-		this.panelViewer.panel = newPanel;
-		this.panelViewer.refresh();
+	async showPanelInViewer() {
+		this.child("panelViewer").addChild(DemoPanel.Create(), "panel");
+		this.child("panelViewer").refresh();
 	}
 
-	onRefresh(){
+	async onRefresh() {
 		super.onRefresh();
-		qs("#"+this.id+"_button5").addEventListener("click", ()=>{
+		qs("#" + this.id + "_button5").addEventListener("click", () => {
 			alert("Click!");
 		});
 	}

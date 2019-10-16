@@ -1,7 +1,7 @@
 <div id='<%- _self.id %>' class='panelViewer'>
 	<%
-		if(_self.panel != null){
-			__append(_self.panel.getHtml());
+		if(_self.child("panel") != null){
+			__append(_self.child("panel").getHtml());
 		}
 	%>
 </div>

@@ -1,14 +1,15 @@
 class MainPanelViewer extends Panel {
-	constructor() {
-		super();
-		this.panelName = "mainPanelViewer";
-		this.panel = null;
-		this.popupPanelViewer = new PopupPanelViewer(this);
-		this.loadingPanel = new LoadingPanel(this);
-		MainPanelViewer.singleton = this;
-	};
+	static async Create() {
+		let pnl = new MainPanelViewer();
+		pnl.panelName = "mainPanelViewer";
+		pnl.panel = null;
+		pnl.addChild(PopupPanelViewer.Create(), "popupPanelViewer");
+		pnl.addChild(LoadingPanel.Create(), "loadingPanel");
+		MainPanelViewer.singleton = pnl;
+		return pnl;
+	}
 
-	static getInstance(){
+	static getInstance() {
 		return MainPanelViewer.singleton;
 	}
 }

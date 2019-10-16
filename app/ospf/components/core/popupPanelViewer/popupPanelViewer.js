@@ -1,16 +1,17 @@
 class PopupPanelViewer extends Panel {
-	constructor(parent){
-		super(parent);
-		this.panelName = "popupPanelViewer";
-		this.panel = null;
-		this.visible = false;
+	static async Create() {
+		let pnl = new PopupPanelViewer();
+		pnl.panelName = "popupPanelViewer";
+		pnl.panel = null;
+		pnl.visible = false;
+		return pnl;
 	}
 
 	show() {
 		document.getElementById(this.id).style.bottom = "0%";
 	};
 
-	hide(){
+	hide() {
 		document.getElementById(this.id).style.bottom = "100%";
 	}
 }

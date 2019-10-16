@@ -1,7 +1,7 @@
 class ExamplePanel extends Panel {
-	constructor(parent) {
+	constructor() {
 		/* required settings */
-		super(parent);
+		super();
 		this.panelName = "examplePanel";
 		/* required settings */
 	}
