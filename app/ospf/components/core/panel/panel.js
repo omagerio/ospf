@@ -233,13 +233,13 @@ class Panel {
 		await this.refresh();
 	}
 
-	validate() {
+	async validate() {
 		let validationInfo = {
 			"valid": true,
 			"errors": []
 		}
 		for (let child of this._children) {
-			let childValidationInfo = child.validate();
+			let childValidationInfo = await child.validate();
 			if (childValidationInfo.valid == false) {
 				validationInfo.valid = false;
 				validationInfo.errors.concat(childValidationInfo.errors);

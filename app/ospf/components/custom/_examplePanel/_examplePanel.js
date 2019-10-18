@@ -11,8 +11,8 @@ class ExamplePanel extends Panel {
 		super.databind();
 	}
 
-	validate() {
-		let validationInfo = super.validate();
+	async validate() {
+		let validationInfo = await super.validate();
 		/*
 		... your validation code here ...
 		validationInfo.valid = false;
