@@ -21,7 +21,7 @@
 	<button type="button" onclick="<%- _self.getThis() %>.showPanelInViewer()">Show Panel inside the panelViewer</button>
 	<fieldset>
 		<legend>This is a panelViewer:</legend>
-		<%- _self.panelViewer.getHtml() %>
+		<%- _self.child('panelViewer').getHtml() %>
 	</fieldset>
 	<br><br>
 

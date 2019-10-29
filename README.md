@@ -16,17 +16,22 @@ Et voilà. The framework is up and running strong. Easy right?
 The application starts from the `index.js` file you can find in the root of the project. A function named `appInit` will be called when the framework is ready. For example, the default:
 
 ```javascript
-function appInit() {
-	mainPanelViewer.panel = new HomePage(mainPanelViewer);
-	mainPanelViewer.refresh();
+async function appInit() {
+	/* mainPanelViewer is the root of your application. It is globally accessible */
+	await mainPanelViewer.setPanel(await DemoPanel.Create());
+	await mainPanelViewer.refresh();
 }
 ```
 
 This code should be self explanatory.
 
-> The `mainPanelViewer` is a special panel, globally accessible, and it is the root of your application. The `panel` property represents the panel it must show when rendered. Read more about panels below.
+> The `mainPanelViewer` is a special panel, globally accessible, and it is the root of your application.
+The method "addChild" adds a child to the selected panel, and accepts the panel being created, and the key of the panel.
+Read more about panels below.
 
-Ok now the `HomePage` panel will be rendered when you start the application.
+Ok now the `DemoPanel` panel will be rendered when you start the application.
+
+> Please note: addChild expects the first parameter to be a Panel or a Promise.
 
 ## Folder structure ##
 ```text
@@ -55,7 +60,7 @@ README.md				This file
 
 ## Creating panels ##
 An example panel was made for you to start with.
-You can find it inside `ospf/components/custom/_examplePanel`. You can even edit the `homePage` if you want.
+You can find it inside `ospf/components/custom/_examplePanel`. You can even edit the `demoPanel` if you want.
 For now, lets use the example panel.
 
 - Clone the `_examplePanel` folder with a new name, `myPanel`
@@ -68,13 +73,17 @@ Inside this folder, you can find a JS and an HTML file. The js is, surprisingly,
 
 Inside this file you can find a class extending the `Panel` class.
 
-- Rename this class to what you want, for example `MyPanel`, and set `this.panelName` name to `myPanel`, like this:
+- Rename this class to what you want, for example `MyPanel`.
+Edit the static method `Create` and set `panelName` to `myPanel`, like this:
 ```javascript
 class MyPanel extends Panel {
-	constructor(parent) {
-		super(parent);
-		this.panelName = "myPanel";
+	static async Create() {
+		let pnl = new MyPanel();
+		pnl.panelName = "myPanel";
+		return pnl;
 	}
+
+	// ...
 }
 ```
 
@@ -92,8 +101,8 @@ let components = {
 		"eventHelper"
 	],
 	"custom": [
-		"homePage",
-    		"myPanel"
+		"demoPanel",
+    	"myPanel"
 	]
 };
 ```
@@ -112,9 +121,9 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 ### Panel functions ###
 Panels have different methods you must know:
 - `getThis()`: returns a unique reference of the panel you can use in delayed actions. For example: `onclick="<%- _self.getThis() %>.clickHandler()"`
-- `databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel when you have to load data required from your tpl.
-- `refresh()`: refreshes the panel's template. You should never override this method.
-- `update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
+- `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your panel when you have to load data required from your tpl.
+- `async refresh()`: refreshes the panel's template. You should never override this method.
+- `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 - `getHtml()`: returns the HTML of the panel. Use this method inside your template to render children panels.
 
 Inside the template file, you can use `_self` to reference your panel.
@@ -123,14 +132,13 @@ Inside the template file, you can use `_self` to reference your panel.
 OSPF comes with different core panels that may suit your needs:
 - PanelViewer: displays another panel programatically.
 ```javascript
-let panelViewer = new PanelViewer(this);
-panelViewer.panel = new YourCustomPanel(this);
-panelViewer.refresh();
+let panelViewer = await PanelViewer.Create();
+panelViewer.setPanel(yourPanel);
 ```
 
-- PopupPanelViewer: displays another panel inside a popup (modal)
+- PopupPanelViewer: displays another panel inside a popup (modal). It is already defined inside your mainPanelViewer.
 ```javascript
-mainPanelViewer.popupPanelViewer.panel = new YourCustomPanel(this);
+await mainPanelViewer.popupPanelViewer.setPanel(await YourCustomPanel.Create());
 mainPanelViewer.popupPanelViewer.show(); //=> to show
 // mainPanelViewer.popupPanelViewer.hide(); //=> to hide
 ```

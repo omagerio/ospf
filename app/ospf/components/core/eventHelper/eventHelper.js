@@ -1,6 +1,6 @@
 class EventHelper extends Panel {
-	constructor(parent) {
-		super(parent);
+	constructor() {
+		super();
 		let _self = this;
 		this.panelName = "eventHelper";
 		this.eventListeners = {};

@@ -66,8 +66,8 @@ function loadCustomComponents() {
 	}
 }
 
-function frameworkLoadComplete() {
-	mainPanelViewer = new MainPanelViewer();
+async function frameworkLoadComplete() {
+	mainPanelViewer = await MainPanelViewer.Create();
 	document.querySelector("body").innerHTML += mainPanelViewer.getHtml();
 	appInit();
 }
@@ -186,7 +186,6 @@ function getQuerystringParameters(){
 }
 
 function getComponent(id, component){
-
 	if(component == undefined){
 		component = MainPanelViewer.getInstance();
 	}
@@ -194,11 +193,11 @@ function getComponent(id, component){
 	let toReturn = null;
 
 	for(let child of component._children){
-		if(child.id == id){
-			toReturn = child;
+		if(child.panel.id == id){
+			toReturn = child.panel;
 			break;
 		}else{
-			let childComp = getComponent(id, child);
+			let childComp = getComponent(id, child.panel);
 			if(childComp != null){
 				toReturn = childComp;
 			}

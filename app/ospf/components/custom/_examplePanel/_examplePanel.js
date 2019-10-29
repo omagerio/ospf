@@ -1,9 +1,8 @@
 class ExamplePanel extends Panel {
-	constructor(parent) {
-		/* required settings */
-		super(parent);
-		this.panelName = "examplePanel";
-		/* required settings */
+	static async Create() {
+		let pnl = new DemoPanel();
+		pnl.panelName = "examplePanel";
+		return pnl;
 	}
 
 	async databind() {
@@ -11,8 +10,8 @@ class ExamplePanel extends Panel {
 		super.databind();
 	}
 
-	validate() {
-		let validationInfo = super.validate();
+	async validate() {
+		let validationInfo = await super.validate();
 		/*
 		... your validation code here ...
 		validationInfo.valid = false;
