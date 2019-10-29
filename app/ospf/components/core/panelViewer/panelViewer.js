@@ -4,4 +4,8 @@ class PanelViewer extends Panel {
 		pnl.panelName = "panelViewer";
 		return pnl;
 	}
+
+	async setPanel(panel){
+		await this.addChild(panel, "panel", true);
+	}
 }

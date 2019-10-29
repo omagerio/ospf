@@ -2,9 +2,12 @@ class PopupPanelViewer extends Panel {
 	static async Create() {
 		let pnl = new PopupPanelViewer();
 		pnl.panelName = "popupPanelViewer";
-		pnl.panel = null;
 		pnl.visible = false;
 		return pnl;
+	}
+
+	async setPanel(panel){
+		await this.addChild(panel, "panel", true);
 	}
 
 	show() {

@@ -1,9 +1,8 @@
 class ExamplePanel extends Panel {
-	constructor() {
-		/* required settings */
-		super();
-		this.panelName = "examplePanel";
-		/* required settings */
+	static async Create() {
+		let pnl = new DemoPanel();
+		pnl.panelName = "examplePanel";
+		return pnl;
 	}
 
 	async databind() {
