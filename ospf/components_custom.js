@@ -1,0 +1,3 @@
+let customComponents = [
+    "custom/HelloWorld"
+];

@@ -1,0 +1,3 @@
+let coreComponents = [
+    "core/Component"
+];
