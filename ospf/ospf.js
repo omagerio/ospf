@@ -10,7 +10,7 @@ window.addEventListener("load", async () => {
         let components = coreComponents.concat(customComponents);
         for (let component of components) {
             let script = document.createElement("script");
-            let src = "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js";
+            let src = "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?v=" + VERSION;
             script.src = src;
             let p1 = new Promise((resolve) => {
                 script.onload = () => {
@@ -20,7 +20,7 @@ window.addEventListener("load", async () => {
             head.appendChild(script);
 
             let xhr = new XMLHttpRequest();
-            xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html");
+            xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?v=" + VERSION);
             xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             let p2 = new Promise(
                 (resolve) => {
@@ -39,7 +39,7 @@ window.addEventListener("load", async () => {
         }
     }else{
         let scriptComponents = document.createElement("script");
-        scriptComponents.src = "ospf/compiled_components.js";
+        scriptComponents.src = "ospf/compiled_components.js?v=" + VERSION;
         let p1 = new Promise(
             (resolve)=>{
                 scriptComponents.onload = ()=>{resolve()};
@@ -48,7 +48,7 @@ window.addEventListener("load", async () => {
         head.appendChild(scriptComponents);
 
         let scriptTemplates = document.createElement("script");
-        scriptTemplates.src = "ospf/compiled_templates.js";
+        scriptTemplates.src = "ospf/compiled_templates.js?v=" + VERSION;
         let p2 = new Promise(
             (resolve)=>{
                 scriptTemplates.onload = ()=>{resolve()};
