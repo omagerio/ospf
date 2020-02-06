@@ -7,7 +7,7 @@ https://github.com/omagerio/ospf
     Set to false if you want to test your application without compiling.
     Set to true and run node tools/compile.js to generate unified sources.
 */
-const PRODUCTION_MODE = false;
+const PRODUCTION_MODE = true;
 const VERSION = "0.1";
 
 /**

@@ -6,7 +6,7 @@ window.addEventListener("load", async () => {
     let body = document.querySelector("body");
     let head = document.querySelector("head");
 
-    if (PRODUCTION_MODE == true) {
+    if (PRODUCTION_MODE == false) {
         let components = coreComponents.concat(customComponents);
         for (let component of components) {
             let script = document.createElement("script");
