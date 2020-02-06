@@ -13,7 +13,10 @@ class HelloWorld extends Component {
     }
 
     async addNameClickHandler() {
-        this.names.push(qs("#" + this.createId("nameInput")).value);
+        let name = qs("#" + this.createId("nameInput")).value;
+        if(name != ""){
+            this.names.push(name);
+        }
         await this.refresh();
     }
 

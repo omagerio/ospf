@@ -1,3 +1,3 @@
-let customComponents = [
+var customComponents = [
     "custom/HelloWorld"
 ];

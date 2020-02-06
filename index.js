@@ -3,6 +3,11 @@ Thank you for using OSPF!
 https://github.com/omagerio/ospf
 */
 
+/*
+    Set to false if you want to test your application without compiling.
+    Set to true and run node tools/compile.js to generate unified sources.
+*/
+const PRODUCTION_MODE = false;
 const VERSION = "0.1";
 
 /**
