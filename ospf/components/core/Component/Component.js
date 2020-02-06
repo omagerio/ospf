@@ -2,7 +2,7 @@ class Component {
     constructor() {
         this.datasource = [];
         this._children = {};
-        this._id = "c" + lastComponentIndex++;
+        this._id = this.constructor.name + "_" + lastComponentIndex++;
         this._rendered = false;
         this._initialized = false;
     }
@@ -34,6 +34,7 @@ class Component {
 
     /**
      * Returns a reference to this component. To be used inside inline events.
+     * @returns {string}
      */
     self() {
         return "getComponentById(`" + this._id + "`)";
@@ -41,6 +42,7 @@ class Component {
 
     /**
      * Main initialization method. Always call it when creating new components.
+     * Always call "await super.init()" at the start of your method.
      */
     async init() {
         this._initialized = true;
@@ -63,7 +65,9 @@ class Component {
         let newHtml = this.render();
         let elem = document.getElementById(this._id);
         if (elem) {
-            document.getElementById(this._id).outerHTML = newHtml; // this causes flickering - use preloaded HTML
+            document.getElementById(this._id).outerHTML = newHtml; // this may cause flickering - use preloaded HTML
+        } else {
+            throw "Cannot refresh " + this.constructor.name + " because it is not rendered!";
         }
 
         /*
@@ -86,8 +90,8 @@ class Component {
      * Returns rendered template.
      */
     render() {
-        if(this._initialized == false){
-            throw "Cannot render() a component without init() it first. Did you call init()? " + this.constructor.name;
+        if (this._initialized == false) {
+            throw "Cannot render " + this.constructor.name + " because you have not called init(). Call init() first.";
         }
 
         let html = ejs.render(templates[this.constructor.name], { c: this });
@@ -98,7 +102,7 @@ class Component {
                 await sleep(100);
                 if (qs("#" + this._id)) {
                     if (this._rendered == false) {
-                        await this.onRender();
+                        await this.onFirstRender();
                         this._rendered = true;
                     }
                     await this.onRefresh();
@@ -112,23 +116,15 @@ class Component {
         return html;
     }
 
-    async require() {
-
-    }
-
     /**
      * Called when the component gets rendered the first time.
      */
-    async onRender() {
-
-    }
+    async onFirstRender() { }
 
     /**
      * Called everytime the component gets refreshed.
      */
-    async onRefresh() {
-
-    }
+    async onRefresh() { }
 
     /**
      * Create a child ID you can use to be unique.
