@@ -21,8 +21,8 @@ class HelloWorld extends Component {
     }
 
     async onRefresh(){
-        qs("#" + this.createId("addInput")).addEventListener("click", ()=>{
-            this.addNameClickHandler();
+        qs("#" + this.createId("addInput")).addEventListener("click", async ()=>{
+            await this.addNameClickHandler();
         });
 
         qs("#" + this.createId("createDollyInput")).addEventListener("click", async ()=>{

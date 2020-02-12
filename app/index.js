@@ -20,5 +20,4 @@ const VERSION = "0.1";
 async function appInit() {
     root = new HelloWorld();
     await root.init();
-    return root.render();
 }

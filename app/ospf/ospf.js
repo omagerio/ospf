@@ -64,8 +64,9 @@ window.addEventListener("load", async () => {
     preloader.style.display = "none";
     body.appendChild(preloader);
 
-    let rootElement = await appInit();
-    body.innerHTML += rootElement;
+    await appInit();
+    await root.parseTemplate();
+    body.innerHTML += root.render();
 });
 
 function sleep(ms) {

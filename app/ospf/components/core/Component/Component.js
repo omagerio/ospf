@@ -5,6 +5,7 @@ class Component {
         this._id = this.constructor.name + "_" + lastComponentIndex++;
         this._rendered = false;
         this._initialized = false;
+        this._parsedTemplate = null;
     }
 
     /**
@@ -62,10 +63,11 @@ class Component {
      * Refreshes the component template. This does not reload data! Use databind() or update() instead.
      */
     async refresh() {
-        let newHtml = this.render();
         let elem = document.getElementById(this._id);
         if (elem) {
-            document.getElementById(this._id).outerHTML = newHtml; // this may cause flickering - use preloaded HTML
+            await this.parseTemplate();
+            document.getElementById(this._id).outerHTML = this._parsedTemplate; // this may cause flickering - use preloaded HTML
+            await this.onRefresh();
         } else {
             throw "Cannot refresh " + this.constructor.name + " because it is not rendered!";
         }
@@ -87,6 +89,18 @@ class Component {
     }
 
     /**
+     * Parses the template of the component and children
+     */
+    async parseTemplate(){
+        for(let childName of Object.getOwnPropertyNames(this._children)){
+            await this._children[childName].parseTemplate();
+        }
+
+        let html = ejs.render(templates[this.constructor.name], { c: this });
+        this._parsedTemplate = html;
+    }
+
+    /**
      * Returns rendered template.
      */
     render() {
@@ -94,7 +108,7 @@ class Component {
             throw "Cannot render " + this.constructor.name + " because you have not called init(). Call init() first.";
         }
 
-        let html = ejs.render(templates[this.constructor.name], { c: this });
+        let html = this._parsedTemplate;
 
         let afterRender = async () => {
             let updated = false;
