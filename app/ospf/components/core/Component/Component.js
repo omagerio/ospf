@@ -66,7 +66,20 @@ class Component {
         let elem = document.getElementById(this._id);
         if (elem) {
             await this.parseTemplate();
-            document.getElementById(this._id).outerHTML = this._parsedTemplate; // this may cause flickering - use preloaded HTML
+
+            let preloader = qs("#htmlPreloader");
+            let target = document.getElementById(this._id);
+
+            let tempDiv = document.createElement("div");
+            tempDiv.id = this._id + "_preloader";
+            tempDiv.innerHTML = this._parsedTemplate;
+            preloader.appendChild(tempDiv);
+            await sleep(100);
+
+            target.outerHTML = tempDiv.innerHTML;
+            preloader.removeChild(tempDiv);
+            await sleep(100);
+
             await this.onRefresh();
         } else {
             throw "Cannot refresh " + this.constructor.name + " because it is not rendered!";

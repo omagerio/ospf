@@ -20,16 +20,10 @@ class HelloWorld extends Component {
         await this.refresh();
     }
 
-    async onRefresh(){
-        qs("#" + this.createId("addInput")).addEventListener("click", async ()=>{
-            await this.addNameClickHandler();
-        });
-
-        qs("#" + this.createId("createDollyInput")).addEventListener("click", async ()=>{
-            let dolly = new HelloWorld();
-            await dolly.init();
-            this.addChild(dolly, "dollyComponent");
-            await this.refresh();
-        });
+    async addDollyHandler(){
+        let dolly = new HelloWorld();
+        await dolly.init();
+        this.addChild(dolly, "dollyComponent");
+        await this.refresh();
     }
 }

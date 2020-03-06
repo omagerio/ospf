@@ -11,9 +11,7 @@
     </ul>
     <input id="<%= c.createId('nameInput') %>" placeholder="Add new name...">
     <input onclick="<%= c.self() %>.addNameClickHandler()" type="button" value="Add #1">
-    <input id="<%= c.createId('addInput') %>" type="button" value="Add #2">
-
-    <input type="button" id="<%= c.createId('createDollyInput') %>" value="Create dolly component">
+    <input onclick="<%= c.self() %>.addDollyHandler()" type="button" value="Add Dolly Component">
 
     <%
         if(c.getChild("dollyComponent")){
