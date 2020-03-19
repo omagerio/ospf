@@ -20,5 +20,5 @@ const VERSION = "0.1";
 async function appInit() {
     let main = new HelloWorld();
     await main.init();
-    root.addChild(main, "main");
+    root.addChild("main", main);
 }

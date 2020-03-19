@@ -13,7 +13,7 @@ class Component {
      * @param {Component} child
      * @param {string} name
      */
-    addChild(child, name) {
+    addChild(name, child) {
         this._children[name] = child;
     }
 
@@ -34,11 +34,41 @@ class Component {
     }
 
     /**
-     * Returns a reference to this component. To be used inside inline events.
+     * Returns a reference to this component.
      * @returns {string}
      */
     self() {
         return "getComponentById(`" + this._id + "`)";
+    }
+
+    /**
+     * Renders a event handler
+     * @param {string} event
+     * @param {string} parameter
+     */
+    renderEvent(event, parameter = null){
+        return this.self()+".handleEvent('"+event+"', '"+parameter+"')";
+    }
+
+    async handleEvent(event, parameter){
+        let formData = new FormData(document.querySelector("form"));
+        let childrenNames = Object.getOwnPropertyNames(root._children);
+
+        for (let childName of childrenNames) {
+            await root._children[childName].parseInput(formData);
+        }
+
+        await this[event](parameter);
+    }
+
+    /**
+     * Parse user input
+     */
+    async parseInput(formData){
+        let childrenNames = Object.getOwnPropertyNames(this._children);
+        for (let childName of childrenNames) {
+            await this._children[childName].parseInput(formData);
+        }
     }
 
     /**
@@ -63,6 +93,7 @@ class Component {
      * Refreshes the component template. This does not reload data! Use databind() or update() instead.
      */
     async refresh() {
+
         let elem = document.getElementById(this._id);
         if (elem) {
             await this.parseTemplate();
@@ -74,11 +105,11 @@ class Component {
             tempDiv.id = this._id + "_preloader";
             tempDiv.innerHTML = this._parsedTemplate;
             preloader.appendChild(tempDiv);
-            await sleep(100);
+            await sleep(50);
 
             target.outerHTML = tempDiv.innerHTML;
             preloader.removeChild(tempDiv);
-            await sleep(100);
+            await sleep(50);
 
             await this.onRefresh();
         } else {
@@ -159,5 +190,24 @@ class Component {
      */
     createId(string) {
         return this._id + "_" + string;
+    }
+
+
+    async loadFile(url){
+        let p1 = new Promise(
+            (resolve, reject)=>{
+                let xhr = new XMLHttpRequest();
+                xhr.open("get", url);
+                xhr.addEventListener("readystatechange", ()=>{
+                    if(xhr.readyState == 4){
+                        resolve(xhr.responseText);
+                    }
+                });
+                xhr.send();
+            }
+        );
+
+        let html = await p1;
+        return html;
     }
 }

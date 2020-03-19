@@ -1,3 +1,5 @@
 var customComponents = [
-    "custom/HelloWorld"
+    "custom/HelloWorld",
+    "custom/TextBox",
+    "custom/ListBox",
 ];
