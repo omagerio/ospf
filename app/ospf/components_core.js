@@ -1,3 +1,5 @@
 var coreComponents = [
-    "core/Component"
+    "core/Component",
+    "core/TextBox",
+    "core/ListBox",
 ];
