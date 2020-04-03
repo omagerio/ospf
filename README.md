@@ -25,10 +25,10 @@ async function appInit() {
 
 This code should be self explanatory.
 
-> The `root` is a special component, globally accessible, and it is the root of your application.
+The `root` is a special component, globally accessible, and it is the root of your application.
 The method "addChild" adds a child to the selected component, and accepts the component being created, and the key of the component.
 Read more about components below.
-"main" is the only possible child of the root component.
+`main` is the only possible child of the root component.
 
 Ok now the `HelloWorld` component will be rendered when you start the application.
 
@@ -103,6 +103,7 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 
 ### Component methods ###
 Components have different methods you must know:
+
 - `async init()`: this is a fundamental method of the components. Always call this method after creating a new component (be sure to call `await super.init()` inside)
 - `renderEvent()`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"`
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
@@ -128,11 +129,13 @@ You can use `tools/compile.js` to perform this operation (requires nodejs and an
 `node tools/compile.js`
 
 Now you have to tell OSPF to use the compiled version of your components. Open un `index.js` and set:
-`/*
+```javascript
+/*
     Set to "false" if you want to test your application without compiling or you don't have nodeJS.
     Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended.
 */
-const PRODUCTION_MODE = true`
+const PRODUCTION_MODE = true
+```
 
 ### That's all folks ###
 This is everything you must know if you want to start using OSPF!
