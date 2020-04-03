@@ -17,9 +17,9 @@ The application starts from the `index.js` file you can find in the root of the 
 
 ```javascript
 async function appInit() {
-    root = new HelloWorld();
-    await root.init();
-    return root.render();
+    let main = new HelloWorld();
+    await main.init();
+    root.addChild("main", main);
 }
 ```
 
@@ -28,6 +28,7 @@ This code should be self explanatory.
 > The `root` is a special component, globally accessible, and it is the root of your application.
 The method "addChild" adds a child to the selected component, and accepts the component being created, and the key of the component.
 Read more about components below.
+"main" is the only possible child of the root component.
 
 Ok now the `HelloWorld` component will be rendered when you start the application.
 
@@ -63,9 +64,9 @@ You can find it inside `ospf/components/custom/HelloWorld`.
 
 Inside this folder, you can find a JS and an HTML file. The js is, surprisingly, the logic of this component. The HTML is the template.
 
-- Rename both files to `myPanel.js` and `myPanel.htm`
+- Rename both files to `myComponent.js` and `myComponent.htm`
 
-- Open the `myPanel.js`
+- Open the `myComponent.js`
 
 Inside this file you can find a class extending the `Component` class.
 
@@ -77,7 +78,7 @@ class MyComponent extends Component {
 }
 ```
 
-You are almost there. Now we have to tell OSPF about your new panel, but do not worry, it is faster than you think.
+You are almost there. Now we have to tell OSPF about your new component, but do not worry, it is faster than you think.
 
 - Open `ospf/components_custom.js` and add `custom/MyComponent` the array.
 ```javascript
@@ -100,24 +101,40 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 
 > As you can see, this framework uses the extraordinary `ejs` library. Find more here: https://ejs.co/
 
-### Panel functions ###
+### Component methods ###
 Components have different methods you must know:
-- `init()`: this is a fundamental function of the components. Always call this function after creating a new component (be sure to call `await super.init()` inside)
-- `self()`: returns a unique reference of the component you can use in delayed actions. For example: `onclick="<%- c.self() %>.clickHandler()"`
+- `async init()`: this is a fundamental method of the components. Always call this method after creating a new component (be sure to call `await super.init()` inside)
+- `renderEvent()`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"`
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 - `render()`: returns the HTML of the component. Use this method inside your template to render children components.
-- `addChild(component, name)`: adds a child component to the current component.
+- `addChild(name, component)`: adds a child component to the current component.
 - `getChild(name)`: get the child of the current component by name.
 - `removeChild(name)`: get the child of the current component by name.
 
 Inside the template file, you can use `c` to reference your component.
 
+### Other methods ###
+- `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside.
+- `async onFirstRender()`: called when the component is rendered for the first time.
+- `async onRefresh()`: called every time the component is refreshed.
+- `createId(string)`: creates an unique id for this component based on `string`.
+- `async loadFile()`: loads an html file.
+
+### Compiling ###
+By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file.
+You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
+`node tools/compile.js`
+
+Now you have to tell OSPF to use the compiled version of your components. Open un `index.js` and set:
+`/*
+    Set to "false" if you want to test your application without compiling or you don't have nodeJS.
+    Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended.
+*/
+const PRODUCTION_MODE = true`
+
 ### That's all folks ###
 This is everything you must know if you want to start using OSPF!
 
 Happy coding
-
-> This README is work in progress
-
