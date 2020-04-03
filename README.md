@@ -1,9 +1,9 @@
 # OSPF, a blazing fast Javascript single-page framework
 
-## Overwiew ##
+## Overview ##
 OSPF makes easy to create single pages JavaScript apps, by using components as stand-alone rendered objects, in a MVC-way.
 
-## Get started ##
+## Getting started ##
 Clone this repository inside a folder accessible by your webserver:
 
 ` git clone https://github.com/omagerio/ospf.git `
@@ -134,7 +134,7 @@ Now you have to tell OSPF to use the compiled version of your components. Open u
     Set to "false" if you want to test your application without compiling or you don't have nodeJS.
     Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended.
 */
-const PRODUCTION_MODE = true
+const PRODUCTION_MODE = true;
 ```
 
 ### That's all folks ###
