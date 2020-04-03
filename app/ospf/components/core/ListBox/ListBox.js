@@ -18,7 +18,6 @@ class ListBox extends Component {
     async parseInput(formData){
         this.value = formData.get(this._id);
         await super.parseInput();
-        console.log(this);
     }
 
 }
