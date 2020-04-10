@@ -72,8 +72,6 @@ let appDir = __dirname + "/../app";
     await p1;
 
     console.log("Writing compiled files");
-    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource);
-    fs.writeFileSync(appDir + "/ospf/compiled_templates.js", templatesSource);
-
+    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource+"\n"+templatesSource);
     console.log("Compiled files created");
 })();

@@ -47,16 +47,7 @@ window.addEventListener("load", async () => {
         );
         head.appendChild(scriptComponents);
 
-        let scriptTemplates = document.createElement("script");
-        scriptTemplates.src = "ospf/compiled_templates.js?v=" + VERSION;
-        let p2 = new Promise(
-            (resolve)=>{
-                scriptTemplates.onload = ()=>{resolve()};
-            }
-        );
-        head.appendChild(scriptTemplates);
-
-        await Promise.all([p1, p2]);
+        await Promise.all([p1]);
     }
 
     let preloader = document.createElement("div");
