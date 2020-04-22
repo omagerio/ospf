@@ -1,0 +1,644 @@
+body
+{
+    font-family: 'Barlow', sans-serif;
+}
+
+a
+{
+    color:#4A9BF6;
+    font-size:14px;
+}
+
+[onclick]{
+cursor:pointer;
+}
+
+.ChatRoom
+{
+    width:100%;
+    height:100%;
+    display:grid;
+    background: #0a1116;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    color:white;
+}
+
+.ChatRoom_guestUi
+{
+    display:flex;
+    flex-direction: column;
+}
+
+.ChatRoom_guestUi_tools
+{
+    background-color:#0A1116;
+    padding:10px;
+    display:flex;
+    justify-content: center;
+}
+
+.ChatRoom_guestUi_tools-1
+{
+    background-color:transparent;
+}
+
+.ChatRoom_guestUi_toolbar
+{
+    display:flex;
+}
+
+.ChatRoom_guestUi_toolbar_contents
+{
+    width:400px;
+    height:100%;
+    display:none;
+}
+
+.ChatRoom_guestUi_toolbar_contents-1
+{
+    display:block;
+}
+
+.ChatRoom_guestUi_toolbar_buttons
+{
+    display:flex;
+    flex-direction: column;
+}
+
+.ChatRoom_guestUi_videos
+{
+    flex-grow:1;
+    display:flex;
+    background-color:#12191E;
+}
+
+.ChatRoom_guestUi_videos_items
+{
+    flex-grow:1;
+    position:relative;
+}
+
+.ChatRoom_guestUi_videos_items_self
+{
+    position:absolute;
+    right:20px;
+    top:20px;
+    width:220px;
+    background:#161C2D;
+    display:flex;
+    flex-direction: column;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.ChatRoom_guestUi_videos_items_self_name
+{
+    padding:10px;
+}
+
+.ChatRoom_guestUi_videos_items_self_video
+{
+    position:relative;
+    width:100%;
+    flex-grow:1;
+}
+
+.ChatRoom_guestUi_videos_items_hostess
+{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+.ChatRoom_sidebar
+{
+    width:400px;
+    grid-column:2;
+    grid-row: 2 / -1;
+    display:flex;
+    flex-direction:column;
+}
+
+.ChatRoom_sidebar_chat
+{
+    background-color:#1F3243;
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    /*height:100%;*/
+}
+
+.ChatRoom_sidebar_chat_send
+{
+    background-color:#16232C;
+    padding:20px;
+}
+
+.ChatRoom_sidebar_chat_send_input
+{
+    background-color:#F0F3F8;
+    border-radius:30px;
+    padding:10px;
+    color:#687791;
+    display:flex;
+    justify-content: space-between;
+}
+
+.ChatRoom_sidebar_chat_send_input_text
+{
+    flex-grow:1;
+    border:0;
+    background:transparent;
+}
+
+.ChatRoom_sidebar_chat_topwrapper
+{
+    flex-grow:1;
+    display:flex;
+    flex-direction: column;
+    padding:20px;
+}
+
+.ChatRoom_sidebar_chat_messages
+{
+    flex-grow:1;
+    overflow:auto;
+    height:0px;
+}
+
+.ChatRoom_sidebar_chat_messages_list
+{
+    display:flex;
+    flex-direction:column;
+}
+
+.ChatRoom_sidebar_chat_messages_list_itemwrapper
+{
+    display:flex;
+}
+
+.ChatRoom_sidebar_chat_messages_list_item
+{
+    background-color:#70AFF6;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+    margin-left:auto;
+    border-bottom-right-radius: 0;
+}
+
+.ChatRoom_sidebar_chat_messages_list_item-2
+{
+    background-color:#FFFFFF;
+    color:#3A3D44;
+    margin-left:0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 0;
+}
+
+.ChatRoom_sidebar_chat_messages_list_item_image
+{
+    margin-right:20px;
+}
+
+.ChatRoom_sidebar_meeting
+{
+    background-color:#15222c;
+    padding:20px;
+    display:flex;
+}
+
+.ChatRoom_sidebar_meeting_input
+{
+    flex-shrink: 0;
+    align-self: center;
+    display:block;
+    margin-left:5px;
+}
+
+.ChatRoom_sidebar_meeting_info
+{
+    margin-right:auto;
+}
+
+.ChatRoom_sidebar_meeting_info_title
+{
+    font-size:25px;
+}
+
+.ChatRoom_sidebar_meeting_info_title-2
+{
+    margin-bottom:20px;
+}
+
+.ChatRoom_tools
+{
+    height:300px;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    padding:10px;
+    grid-gap:3px;
+}
+
+.ChatRoom_tools_resizer
+{
+    grid-column: 1 / -1;
+    background-color:#1F3243;
+    border-radius: 20px 20px 0px 0px;
+    text-align: center;
+    height:20px;
+    cursor:row-resize;
+}
+
+.ChatRoom_tools_resizer_line
+{
+    height:2px;
+    border-radius:5px;
+    width:40px;
+    background-color:rgb(206, 206, 206);
+    margin:auto;
+    margin-top:10px;
+}
+
+.ChatRoom_tools_column
+{
+    background-color:#16232C;
+    padding:10px;
+    display:flex;
+    flex-direction: column;
+    height:100%;
+    overflow:hidden;
+}
+
+.ChatRoom_tools_column_list
+{
+    display:flex;
+    flex-direction: column;
+    overflow:auto;
+}
+
+.ChatRoom_tools_column_list_item
+{
+    display:flex;
+    align-items: center;
+    margin-bottom:10px;
+}
+
+.ChatRoom_tools_column_list_item_check
+{
+    margin-right:10px;
+}
+
+.ChatRoom_tools_column_list_item_info
+{
+    display:flex;
+    align-items: center;
+    padding:5px;
+    width:100%;
+    border-radius:10px;
+}
+
+.ChatRoom_tools_column_list_item_info-1
+{
+    background-color:#4A9BF6;
+}
+
+.ChatRoom_tools_column_list_item_info_text_description
+{
+    font-size:14px;
+    color:#ACC1D5;
+}
+
+.ChatRoom_tools_column_list_item_info_img
+{
+    margin-right:10px;
+}
+
+.ChatRoom_tools_column_list_item_info_img
+{
+    max-width:50px;
+    max-height:50px;
+    border-radius:5px;
+}
+
+.ChatRoom_tools_column_header
+{
+    display:flex;
+    justify-content: space-between;
+    margin-bottom:10px;
+}
+
+.ChatRoom_tools_column_header_title
+{
+    font-size:22px;
+}
+
+.ChatRoom_header
+{
+    grid-column: 1 / span 2;
+    width:100%;
+    height:100%;
+    min-height:86px;
+    padding:0px 20px;
+    display:grid;
+    grid-template-columns: 1fr auto auto auto auto;
+    column-gap:20px;
+    align-items: center;
+}
+
+.ChatRoom_header-2
+{
+    display:flex;
+    justify-content: space-between;
+}
+
+.ChatRoom_header_url
+{
+    padding:10px;
+    border-radius:10px;
+    width:500px;
+    border:0;
+    opacity:0.9;
+}
+
+.ChatRoom_header_onair
+{
+    background-color:#fd432a;
+    padding:5px 5px;
+    border-radius:5px;
+    font-size:12px;
+    font-weight: bold;
+}
+
+.ChatRoom_header_remaining
+{
+    font-size:18px;
+}
+
+.ChatRoom_videos
+{
+    width:100%;
+    height:100%;
+    display:flex;
+    padding:10px;
+}
+
+.ChatRoom_videos_hostess
+{
+    width:75%;
+    height:100%;
+    position:relative;
+}
+
+.ChatRoom_videos_hostess_product
+{
+    position:absolute;
+    top:20px;
+    left:20px;
+    background-color:#FE5000;
+    border-radius:22px;
+    width:280px;
+    overflow:auto;
+    max-height:95%;
+}
+
+.ChatRoom_videos_hostess_product-1
+{
+    animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop{
+    from {
+        transform:scale(0);
+    }
+    to{
+        transform:scale(1);
+    }
+}
+
+.ChatRoom_videos_hostess_product_img
+{
+    width:100%;
+}
+
+.ChatRoom_videos_hostess_product_description
+{
+    padding:20px;
+}
+
+.ChatRoom_videos_hostess_product_description_bar
+{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ChatRoom_videos_hostess_product_description_bar_img
+{
+    width:25px;
+}
+
+.ChatRoom_videos_hostess_product_description_bar_img-1
+{
+    animation: enlarge 0.5s;
+}
+
+@keyframes enlarge
+{
+    0% {
+        transform:scale(1);
+    }
+
+    50% {
+        transform:scale(2);
+    }
+
+    100% {
+        transform:scale(1);
+    }
+}
+
+.ChatRoom_videos_hostess_product_description_description
+{
+    font-size:14px;
+}
+
+.ChatRoom_videos_hostess_product_description_price
+{
+    font-size:30px;
+}
+
+.ChatRoom_videos_hostess_product_description_title
+{
+    font-size:27px;
+    margin-bottom:20px;
+}
+
+.ChatRoom_videos_hostess_popup
+{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+}
+
+.ChatRoom_videos_guests
+{
+    width:25%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.ChatRoom_videos_guests_guest_wrapper
+{
+    height:100%;
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius:20px;
+    background-color:#1f3243;
+    overflow:hidden;
+    max-height:50%;
+    margin-top:10px;
+}
+
+.ChatRoom_videos_guests_guest_wrapper_name
+{
+    padding:10px;
+    flex-shrink: 0;
+}
+
+.ChatRoom_videos_guests_guest
+{
+    position:relative;
+    flex-grow:1;
+}
+
+.video
+{
+    position:absolute;
+    top:0;
+    left:0;
+    display:block;
+    width:100%;
+    height:100%;
+    object-position: center;
+    transform:rotateY(180deg);
+}
+
+.video-1
+{
+    position:relative;
+    height:auto;
+}
+
+.LandingPage
+{
+
+}
+
+.button
+{
+    background-color:rgb(255, 168, 87);
+    padding:10px;
+    cursor:pointer;
+    display:inline-block;
+}
+
+.MeetingTypeSelectionPage_choices
+{
+    display:flex;
+    width:100%;
+    justify-content: space-evenly;
+}
+
+.title
+{
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+.MainLayout
+{
+padding:30px;
+}
+
+.HostessCampaignsView_meetinglist
+{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap:20px;
+}
+
+.HostessCampaignsView_meetinglist_item
+{
+    border:1px solid black;
+    padding:20px;
+    border-radius:10px;
+}
+
+.HostessCampaignsView_meetinglist_item_list
+{
+    display:flex;
+    flex-direction:column;
+}
+
+.HostessCampaignsView_meetinglist_item_list_item
+{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:#eee;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.ChatRoomVideoOverlay
+{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.rawHostessVideo
+{
+    position:absolute;
+    top:0;
+    left:0;
+    display:none;
+}
+
+.ChatRoomCameras
+{
+    display:flex;
+    flex-wrap: wrap;
+    /*flex-grow:1;*/
+    /*height:0;*/
+    max-height:200px;
+    overflow:auto;
+}
+
+.ChatRoomCameras_item
+{
+    width:50%;
+    height:100px;
+}
+
+.ChatRoomCameras_item-1
+{
+    border:2px solid lime;
+}
+
+.ChatRoomCameras_item_video
+{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit: cover;
+}

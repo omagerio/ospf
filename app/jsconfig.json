@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
-	"checkJs": true
-  }  
+    "target": "es6"
+  },
+  "exclude": ["**/compiled_*"]
 }

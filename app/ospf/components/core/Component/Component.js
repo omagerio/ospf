@@ -46,11 +46,11 @@ class Component {
      * @param {string} event
      * @param {string} parameter
      */
-    renderEvent(event, parameter = null){
-        return this.self()+".handleEvent('"+event+"', '"+parameter+"')";
+    renderEvent(event, parameter = null) {
+        return this.self() + ".handleEvent('" + event + "', '" + parameter + "', event)";
     }
 
-    async handleEvent(event, parameter){
+    async handleEvent(event, parameter, jsEvent) {
         let formData = new FormData(document.querySelector("form"));
         let childrenNames = Object.getOwnPropertyNames(root._children);
 
@@ -58,13 +58,13 @@ class Component {
             await root._children[childName].parseInput(formData);
         }
 
-        await this[event](parameter);
+        await this[event](parameter, jsEvent);
     }
 
     /**
      * Parse user input
      */
-    async parseInput(formData){
+    async parseInput(formData) {
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
             await this._children[childName].parseInput(formData);
@@ -77,6 +77,7 @@ class Component {
      */
     async init() {
         this._initialized = true;
+        this._classname = this.constructor.name;
     }
 
     /**
@@ -94,6 +95,8 @@ class Component {
      */
     async refresh() {
 
+        await this.onBeforeRefresh();
+
         let elem = document.getElementById(this._id);
         if (elem) {
             await this.parseTemplate();
@@ -105,23 +108,16 @@ class Component {
             tempDiv.id = this._id + "_preloader";
             tempDiv.innerHTML = this._parsedTemplate;
             preloader.appendChild(tempDiv);
-            await sleep(50);
+            await sleep(1);
 
             target.outerHTML = tempDiv.innerHTML;
             preloader.removeChild(tempDiv);
-            await sleep(50);
+            await sleep(1);
 
-            await this.onRefresh();
+            await this.onAfterRefresh();
         } else {
             throw "Cannot refresh " + this.constructor.name + " because it is not rendered!";
         }
-
-        /*
-        // This is not required
-        for(let childName of Object.getOwnPropertyNames(this._children)){
-            await this._children[childName].refresh();
-        }
-        */
     }
 
     /**
@@ -135,8 +131,8 @@ class Component {
     /**
      * Parses the template of the component and children
      */
-    async parseTemplate(){
-        for(let childName of Object.getOwnPropertyNames(this._children)){
+    async parseTemplate() {
+        for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].parseTemplate();
         }
 
@@ -163,7 +159,7 @@ class Component {
                         await this.onFirstRender();
                         this._rendered = true;
                     }
-                    await this.onRefresh();
+                    await this.onAfterRefresh();
                     updated = true;
                 }
 
@@ -182,7 +178,20 @@ class Component {
     /**
      * Called everytime the component gets refreshed.
      */
-    async onRefresh() { }
+    async onAfterRefresh() {
+        for(let childName of Object.getOwnPropertyNames(this._children)){
+            await this._children[childName].onAfterRefresh();
+        }
+    }
+
+    /**
+     * Called before the component gets refreshed.
+     */
+    async onBeforeRefresh() {
+        for(let childName of Object.getOwnPropertyNames(this._children)){
+            await this._children[childName].onBeforeRefresh();
+        }
+    }
 
     /**
      * Create a child ID you can use to be unique.
@@ -193,13 +202,13 @@ class Component {
     }
 
 
-    async loadFile(url){
+    async loadFile(url) {
         let p1 = new Promise(
-            (resolve, reject)=>{
+            (resolve, reject) => {
                 let xhr = new XMLHttpRequest();
                 xhr.open("get", url);
-                xhr.addEventListener("readystatechange", ()=>{
-                    if(xhr.readyState == 4){
+                xhr.addEventListener("readystatechange", () => {
+                    if (xhr.readyState == 4) {
                         resolve(xhr.responseText);
                     }
                 });
@@ -209,5 +218,9 @@ class Component {
 
         let html = await p1;
         return html;
+    }
+
+    renderString(string){
+        return ejs.render(string, { c: this });
     }
 }
