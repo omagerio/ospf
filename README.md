@@ -119,7 +119,8 @@ Inside the template file, you can use `c` to reference your component.
 ### Other methods ###
 - `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside.
 - `async onFirstRender()`: called when the component is rendered for the first time.
-- `async onRefresh()`: called every time the component is refreshed.
+- `async onBeforeRefresh()`: called before the component is refreshed.
+- `async onAfterRefresh()`: called after the component is refreshed.
 - `createId(string)`: creates an unique id for this component based on `string`.
 - `async loadFile()`: loads an html file.
 
