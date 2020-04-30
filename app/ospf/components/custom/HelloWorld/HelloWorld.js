@@ -4,11 +4,13 @@
 class HelloWorld extends Component {
     async init() {
         await super.init(); // always call init method of super component first
+        this.addNameClickCallback = emptyCallback;
 
         // TextBox example
         let nameControl = new TextBox();
         await nameControl.init(); // always call init method of every component after creation
         nameControl.placeholder = "Add some text here...";
+        nameControl.enterKeyCallback = callback(this, "enterKeyCallback");
         this.addChild("nameControl", nameControl);
 
         // ListBox example
@@ -19,6 +21,10 @@ class HelloWorld extends Component {
         this.addChild("listControl", listControl);
 
         await this.databind(); // we load data needed for this component
+    }
+
+    async enterKeyCallback(parameters, event){
+        console.log("You pressed: ", parameters, event);
     }
 
     async databind() {
@@ -33,6 +39,8 @@ class HelloWorld extends Component {
         }
         this.getChild("nameControl").value = "";
         await this.refresh();
+
+        await this.addNameClickCallback();
     }
 
     async addDollyHandler(){
