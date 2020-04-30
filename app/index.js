@@ -22,9 +22,8 @@ async function appInit() {
         root.dbManager = new DbManager();
         await root.dbManager.init();
 
-        let userRole = getQueryStringParameter("userRole") || "guest";
-        let main = new ChatRoom();
-        await main.init(userRole);
+        let main = new HelloWorld();
+        await main.init();
         root.addChild("main", main);
     } catch (e) {
         console.error(e);
