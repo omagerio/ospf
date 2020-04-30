@@ -18,7 +18,15 @@ const VERSION = "0.1";
  * Called when the framework is ready. Assing root to your main component.
  */
 async function appInit() {
-    let main = new HelloWorld();
-    await main.init();
-    root.addChild("main", main);
+    try {
+        root.dbManager = new DbManager();
+        await root.dbManager.init();
+
+        let userRole = getQueryStringParameter("userRole") || "guest";
+        let main = new ChatRoom();
+        await main.init(userRole);
+        root.addChild("main", main);
+    } catch (e) {
+        console.error(e);
+    }
 }

@@ -122,24 +122,15 @@ function getQueryStringParameter(nameTarget) {
     }
     return undefined;
 }
-/*
-class Callback {
-    static Create(object, method) {
-        let callbackFunction;
-        if (object != null && method != null) {
-            callbackFunction = async (...parameters) => {
-                await object[method](...parameters);
-            };
-        } else {
-            callbackFunction = async () => { };
-        }
-        return callbackFunction;
-    }
-}
-*/
+
 async function emptyCallback() { }
+
 function callback(object, method) {
     let callbackFunction = async (...parameters) => {
+        if(object[method] == undefined){
+            console.error(object.constructor.name + "."+method+"() is not defined");
+            return;
+        }
         await object[method](...parameters);
     };
     return callbackFunction;
