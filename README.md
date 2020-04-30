@@ -105,7 +105,7 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 Components have different methods you must know:
 
 - `async init()`: this is a fundamental method of the components. Always call this method after creating a new component (be sure to call `await super.init()` inside)
-- `renderEvent()`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"`
+- `renderEvent(string eventName, any parameters, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameters, javascriptEvent)`.
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
@@ -123,6 +123,15 @@ Inside the template file, you can use `c` to reference your component.
 - `async onAfterRefresh()`: called after the component is refreshed.
 - `createId(string)`: creates an unique id for this component based on `string`.
 - `async loadFile()`: loads an html file.
+
+### Core components ###
+```
+AjaxRequest
+Component
+Label
+ListBox
+TextBox
+```
 
 ### Compiling ###
 By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file.
