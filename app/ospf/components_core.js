@@ -4,5 +4,6 @@ var coreComponents = [
     "core/ListBox",
     "core/AjaxRequest",
     "core/Label",
-    "core/DbManager"
+    "core/DbManager",
+    "core/CheckBox",
 ];

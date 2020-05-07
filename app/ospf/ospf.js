@@ -3,22 +3,29 @@ let lastComponentIndex = 0;
 let root = null;
 let navigationHistory = [];
 
+function loadScript(scriptUrl){
+    return new Promise(
+        (resolve)=>{
+            let script = document.createElement("script");
+            script.src = scriptUrl;
+            script.onload = ()=>{resolve();};
+            document.querySelector("head").appendChild(script);
+        }
+    );
+}
+
 window.addEventListener("load", async () => {
     let body = document.querySelector("form");
     let head = document.querySelector("head");
 
     if (PRODUCTION_MODE == false) {
+
+        await loadScript("ospf/components_core.js?" + Date.now());
+        await loadScript("ospf/components_custom.js?" + Date.now());
+
         let components = coreComponents.concat(customComponents);
         for (let component of components) {
-            let script = document.createElement("script");
-            let src = "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4);
-            script.src = src;
-            let p1 = new Promise((resolve) => {
-                script.onload = () => {
-                    resolve();
-                }
-            });
-            head.appendChild(script);
+            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4))
 
             let xhr = new XMLHttpRequest();
             xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?t=" + Date.now().toString(16).substr(-4));
@@ -34,20 +41,12 @@ window.addEventListener("load", async () => {
             );
             xhr.send();
 
-            await Promise.all([p1, p2]);
+            await Promise.all([p2]);
 
             templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
         }
     } else {
-        let scriptComponents = document.createElement("script");
-        scriptComponents.src = "ospf/compiled_components.js?v=" + VERSION;
-        let p1 = new Promise(
-            (resolve) => {
-                scriptComponents.onload = () => { resolve() };
-            }
-        );
-        head.appendChild(scriptComponents);
-        await Promise.all([p1]);
+        await loadScript("ospf/compiled_components.js?v=" + VERSION);
     }
 
     let preloader = document.createElement("div");
