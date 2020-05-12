@@ -18,8 +18,7 @@ class TextBox extends Component {
 
     async keyDown(parameters, jsEvent){
         if(jsEvent.key == "Enter"){
-            jsEvent.preventDefault();
-            await this.enterKeyCallback(jsEvent.key, jsEvent);
+            await this.enterKeyCallback();
         }
     }
 }

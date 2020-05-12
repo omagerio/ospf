@@ -6,7 +6,9 @@ class ListBox extends Component {
         await super.init();
         this.value = null;
         this.options = [];
-    }
+		this.changeCallback = emptyCallback;
+        this.cssClass = "Listbox";
+        this.otherAttributes = "";    }
 
     addOption(name, value){
         this.options.push({
@@ -20,4 +22,6 @@ class ListBox extends Component {
         await super.parseInput();
     }
 
-}
+async change(){
+        await this.changeCallback(this);
+    }}

@@ -110,15 +110,15 @@ class Component {
             tempDiv.id = this._id + "_preloader";
             tempDiv.innerHTML = this._parsedTemplate;
             preloader.appendChild(tempDiv);
-            await sleep(1);
+            await sleep(10);
 
             target.outerHTML = tempDiv.innerHTML;
             preloader.removeChild(tempDiv);
-            await sleep(1);
+            await sleep(10);
 
             await this.onAfterRefresh();
         } else {
-            throw "Cannot refresh " + this.constructor.name + " because it is not rendered!";
+            throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
         }
     }
 
@@ -147,7 +147,7 @@ class Component {
      */
     render() {
         if (this._initialized == false) {
-            throw "Cannot render " + this.constructor.name + " because you have not called init(). Call init() first.";
+            throw new Error("Cannot render " + this.constructor.name + " because you have not called init(). Call init() first.");
         }
 
         let html = this._parsedTemplate;
@@ -155,7 +155,7 @@ class Component {
         let afterRender = async () => {
             let updated = false;
             while (updated == false) {
-                await sleep(100);
+                await sleep(10);
                 if (qs("#" + this._id)) {
                     if (this._rendered == false) {
                         await this.onFirstRender();
