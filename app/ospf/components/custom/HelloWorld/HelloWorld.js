@@ -2,20 +2,17 @@
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
 class HelloWorld extends Component {
-    async init() {
-        await super.init(); // always call init method of super component first
+    async onAfterInit() {
         this.addNameClickCallback = emptyCallback;
 
         // TextBox example
-        let nameControl = new TextBox();
-        await nameControl.init(); // always call init method of every component after creation
+        let nameControl = await TextBox.Create();
         nameControl.placeholder = "Add some text here...";
         nameControl.enterKeyCallback = callback(this, "enterKeyCallback");
         this.addChild("nameControl", nameControl);
 
         // ListBox example
-        let listControl = new ListBox();
-        await listControl.init(); // always call init method of every component after creation
+        let listControl = await ListBox.Create();
         listControl.addOption("opzione 1", "1");
         listControl.addOption("opzione 2", "2");
         this.addChild("listControl", listControl);
@@ -44,8 +41,7 @@ class HelloWorld extends Component {
     }
 
     async addDollyHandler(){
-        let dolly = new HelloWorld();
-        await dolly.init(); // always call init method of every component after creation
+        let dolly = await HelloWorld.Create();
         this.addChild("dollyComponent", dolly);
         await this.refresh();
     }

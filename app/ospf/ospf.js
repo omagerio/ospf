@@ -54,8 +54,7 @@ window.addEventListener("load", async () => {
     preloader.style.display = "none";
     body.appendChild(preloader);
 
-    root = new Component();
-    await root.init();
+    root = await Component.Create();
     await appInit();
     await root.parseTemplate();
     body.innerHTML += root.render();

@@ -6,6 +6,13 @@ class Component {
         this._rendered = false;
         this._initialized = false;
         this._parsedTemplate = null;
+        this._classname = this.constructor.name;
+    }
+
+    static async Create(){
+        let c = eval("new " + this.name + "()");
+        await c.init();
+        return c;
     }
 
     /**
@@ -79,7 +86,11 @@ class Component {
      */
     async init() {
         this._initialized = true;
-        this._classname = this.constructor.name;
+        await this.onAfterInit();
+    }
+
+    async onAfterInit(){
+
     }
 
     /**
