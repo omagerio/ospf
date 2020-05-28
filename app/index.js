@@ -19,7 +19,10 @@ const VERSION = "0.1";
  */
 async function appInit() {
     try {
-        root.dbManager = await DbManager.Create();
+        root.dbManager = await DbManager.Create({
+            blabla: "ramarr"
+        });
+
         let main = await HelloWorld.Create();
         root.addChild("main", main);
     } catch (e) {

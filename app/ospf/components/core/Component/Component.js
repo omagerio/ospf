@@ -9,9 +9,9 @@ class Component {
         this._classname = this.constructor.name;
     }
 
-    static async Create(){
+    static async Create(properties = {}){
         let c = eval("new " + this.name + "()");
-        await c.init();
+        await c.init(properties);
         return c;
     }
 
@@ -84,8 +84,13 @@ class Component {
      * Main initialization method. Always call it when creating new components.
      * Always call "await super.init()" at the start of your method.
      */
-    async init() {
+    async init(properties) {
         this._initialized = true;
+
+        for(let name of Object.getOwnPropertyNames(properties)){
+            this[name] = properties[name];
+        }
+
         await this.onAfterInit();
     }
 
