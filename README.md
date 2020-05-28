@@ -17,8 +17,7 @@ The application starts from the `index.js` file you can find in the root of the 
 
 ```javascript
 async function appInit() {
-    let main = new HelloWorld();
-    await main.init();
+    let main = await HelloWorld.Create();
     root.addChild("main", main);
 }
 ```
@@ -104,7 +103,7 @@ Here you place the HTML of your panel. Be sure to set the `id` attribute of the 
 ### Component methods ###
 Components have different methods you must know:
 
-- `async init()`: this is a fundamental method of the components. Always call this method after creating a new component (be sure to call `await super.init()` inside)
+- `static async Create()`: this is a fundamental method of the components. Always call this method to create a component.
 - `renderEvent(string eventName, any parameters, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameters, javascriptEvent)`.
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
