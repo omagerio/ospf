@@ -177,7 +177,7 @@ class Component {
                         await this.onFirstRender();
                         this._rendered = true;
                     }
-                    await this.onAfterRefresh();
+                    // await this.onAfterRefresh();
                     updated = true;
                 }
 
