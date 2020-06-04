@@ -128,7 +128,9 @@ class Component {
             preloader.appendChild(tempDiv);
             await sleep(10);
 
-            target.outerHTML = tempDiv.innerHTML;
+            if(target.parentNode != null){
+                target.outerHTML = tempDiv.innerHTML;
+            }
             preloader.removeChild(tempDiv);
             await sleep(10);
 
