@@ -6,4 +6,5 @@ var coreComponents = [
     "core/Label",
     "core/DbManager",
     "core/CheckBox",
+    "core/EventManager",
 ];

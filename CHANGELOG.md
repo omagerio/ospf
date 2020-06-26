@@ -1,3 +1,7 @@
+# 1.7
+- Added EventManager
+- Removed error when trying to refresh a not rendered component. Now it will silently fail.
+
 # 1.6
 - Refactored component creation. Component are now created with:
 ```javascript

@@ -136,7 +136,7 @@ class Component {
 
             await this.onAfterRefresh();
         } else {
-            throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
+            //throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
         }
     }
 
