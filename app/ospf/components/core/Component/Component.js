@@ -25,7 +25,10 @@ class Component {
      * @param {Component} child
      * @param {string} name
      */
-    addChild(name, child) {
+    async addChild(name, child) {
+        if(this._children[name] != undefined){
+            await this._children[name].destroy();
+        }
         this._children[name] = child;
     }
 
@@ -33,7 +36,8 @@ class Component {
      * Removes a child component from this component.
      * @param {string} name
      */
-    removeChild(name) {
+    async removeChild(name) {
+        await this._children[name].destroy();
         delete this._children[name];
     }
 
@@ -241,5 +245,20 @@ class Component {
 
     renderString(string){
         return ejs.render(string, { c: this });
+    }
+
+    /**
+     * Destroys the component
+     */
+    async destroy(){
+        await this.onBeforeDestroy();
+
+        for(let childName of Object.getOwnPropertyNames(this._children)){
+            await this._children[childName].destroy();
+        }
+    }
+
+    async onBeforeDestroy(){
+
     }
 }

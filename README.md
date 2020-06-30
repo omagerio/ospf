@@ -18,7 +18,7 @@ The application starts from the `index.js` file you can find in the root of the 
 ```javascript
 async function appInit() {
     let main = await HelloWorld.Create();
-    root.addChild("main", main);
+    await root.addChild("main", main);
 }
 ```
 

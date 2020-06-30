@@ -16,10 +16,8 @@ function loadScript(scriptUrl){
 
 window.addEventListener("load", async () => {
     let body = document.querySelector("form");
-    let head = document.querySelector("head");
 
     if (PRODUCTION_MODE == false) {
-
         await loadScript("ospf/components_core.js?" + Date.now());
         await loadScript("ospf/components_custom.js?" + Date.now());
 
@@ -64,7 +62,11 @@ window.addEventListener("load", async () => {
     root.dbManager = new DbManager();
     await root.dbManager.init();
 
-    await appInit();
+    try{
+        await appInit();
+    }catch(e){
+        console.error(e);
+    }
     await root.parseTemplate();
 
     body.innerHTML += root.render();

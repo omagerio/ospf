@@ -9,7 +9,7 @@ class HelloWorld extends Component {
         let nameControl = new TextBox();
         await nameControl.init();
         nameControl.placeholder = "Add some text here...";
-        this.addChild("nameControl", nameControl);
+        await this.addChild("nameControl", nameControl);
 
         await root.eventManager.addListener(
             "TextBox_enterKey",
@@ -22,17 +22,16 @@ class HelloWorld extends Component {
         await listControl.init();
         listControl.addOption("opzione 1", "1");
         listControl.addOption("opzione 2", "2");
-        this.addChild("listControl", listControl);
+        await this.addChild("listControl", listControl);
 
         await this.databind(); // we load data needed for this component
     }
 
     async onNameControlEnterKey(parameters, sender, listener){
-        console.log(parameters, sender, listener);
-        if(sender == this.getChild("nameControl")){ // is our textbox that sent it?
+        if(sender == this.getChild("nameControl")){ // did our textbox send the event?
             parameters.event.preventDefault();
             await this.addNameClickHandler();
-            // await root.eventManager.removeListener("TextBox_enterKey", listener.id); // remove listener after use?
+            // await root.eventManager.removeListener(listener.id); // remove listener after use?
         }
     }
 
@@ -56,7 +55,7 @@ class HelloWorld extends Component {
     async addDollyHandler(){
         let dolly = new HelloWorld();
         await dolly.init();
-        this.addChild("dollyComponent", dolly);
+        await this.addChild("dollyComponent", dolly);
         await this.refresh();
     }
 }
