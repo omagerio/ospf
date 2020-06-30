@@ -2,12 +2,12 @@
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
 class TextBox extends Component {
-    async onAfterInit() {
+    async init() {
+        await super.init();
         this.value = "";
         this.placeholder = "";
         this.type = "text";
         this.cssClass = "TextBox";
-        this.enterKeyCallback = emptyCallback;
     }
 
     async parseInput(formData){
@@ -17,7 +17,11 @@ class TextBox extends Component {
 
     async keyDown(parameters, jsEvent){
         if(jsEvent.key == "Enter"){
-            await this.enterKeyCallback();
+            await root.eventManager.fire("TextBox_enterKey", {
+                event: jsEvent
+            }, this);
+            jsEvent.preventDefault();
         }
+
     }
 }

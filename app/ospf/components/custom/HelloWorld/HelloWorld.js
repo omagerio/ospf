@@ -2,17 +2,24 @@
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
 class HelloWorld extends Component {
-    async onAfterInit() {
-        this.addNameClickCallback = emptyCallback;
+    async init() {
+        await super.init();
 
         // TextBox example
-        let nameControl = await TextBox.Create();
+        let nameControl = new TextBox();
+        await nameControl.init();
         nameControl.placeholder = "Add some text here...";
-        nameControl.enterKeyCallback = callback(this, "enterKeyCallback");
         this.addChild("nameControl", nameControl);
 
+        await root.eventManager.addListener(
+            "TextBox_enterKey",
+            callback(this, "onNameControlEnterKey"),
+            this
+        );
+
         // ListBox example
-        let listControl = await ListBox.Create();
+        let listControl = new ListBox();
+        await listControl.init();
         listControl.addOption("opzione 1", "1");
         listControl.addOption("opzione 2", "2");
         this.addChild("listControl", listControl);
@@ -20,8 +27,13 @@ class HelloWorld extends Component {
         await this.databind(); // we load data needed for this component
     }
 
-    async enterKeyCallback(parameters, event){
-        console.log("You pressed: ", parameters, event);
+    async onNameControlEnterKey(parameters, sender, listener){
+        console.log(parameters, sender, listener);
+        if(sender == this.getChild("nameControl")){ // is our textbox that sent it?
+            parameters.event.preventDefault();
+            await this.addNameClickHandler();
+            // await root.eventManager.removeListener("TextBox_enterKey", listener.id); // remove listener after use?
+        }
     }
 
     async databind() {
@@ -37,11 +49,13 @@ class HelloWorld extends Component {
         this.getChild("nameControl").value = "";
         await this.refresh();
 
-        await this.addNameClickCallback();
+        // fire event to signaling other components
+        await root.eventManager.fire("HelloWorld_addNameClickHandler", this, this);
     }
 
     async addDollyHandler(){
-        let dolly = await HelloWorld.Create();
+        let dolly = new HelloWorld();
+        await dolly.init();
         this.addChild("dollyComponent", dolly);
         await this.refresh();
     }

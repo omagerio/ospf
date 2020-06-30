@@ -2,7 +2,8 @@
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
 class DbManager extends Component {
-    async onAfterInit() {
+    async init() {
+        await super.init();
         this.obfuscate = true;
         this.rot = 7;
         await this.readFromStorage();

@@ -2,23 +2,33 @@
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
 class EventManager extends Component {
-    async onAfterInit() {
+    async init() {
+        await super.init();
         this.listeners = this.listeners || [];
     }
 
-    async fireEvent(eventName, parameters, sender){
+    async fire(eventName, parameters, sender){
         for(let listener of this.listeners){
             if(listener.eventName == eventName){
-                await listener.callback(parameters, sender, listener.staticData);
+                await listener.handler(parameters, sender, listener);
             }
         }
     }
 
-    async addListener(eventName, callback, staticData){
+    async addListener(eventName, handler){
+        let id = uuid();
         this.listeners.push({
+            id: id,
             eventName: eventName,
-            callback: callback,
-            staticData: staticData
+            handler: handler
         });
+        return id;
+    }
+
+    async removeListener(id){
+        this.listeners.splice(
+            this.listeners.indexOf(this.listeners.find(item => item.id == id)),
+            1
+        );
     }
 }

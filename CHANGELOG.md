@@ -1,3 +1,10 @@
+# 1.8
+- integrated dbManager and eventManager in root
+- restored old init() method instead of Create() until a better solution is found
+- implemented events instead of callbacks
+- fixed component refresh bug
+- updated HelloWorld example
+
 # 1.7
 - Added EventManager
 - Removed error when trying to refresh a not rendered component. Now it will silently fail.

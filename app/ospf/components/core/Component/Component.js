@@ -9,10 +9,15 @@ class Component {
         this._classname = this.constructor.name;
     }
 
-    static async Create(properties = {}){
-        let c = eval("new " + this.name + "()");
-        await c.init(properties);
-        return c;
+    static async PauseUntilRendered(id){
+        while(1){
+            let elem = document.querySelector("#" + id);
+            if(!elem){
+                await sleep(10);
+            }else{
+                return elem;
+            }
+        }
     }
 
     /**
@@ -84,19 +89,12 @@ class Component {
      * Main initialization method. Always call it when creating new components.
      * Always call "await super.init()" at the start of your method.
      */
-    async init(properties) {
+    async init() {
         this._initialized = true;
-
-        for(let name of Object.getOwnPropertyNames(properties)){
-            this[name] = properties[name];
-        }
-
         await this.onAfterInit();
     }
 
-    async onAfterInit(){
-
-    }
+    async onAfterInit(){}
 
     /**
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
@@ -126,13 +124,14 @@ class Component {
             tempDiv.id = this._id + "_preloader";
             tempDiv.innerHTML = this._parsedTemplate;
             preloader.appendChild(tempDiv);
-            await sleep(10);
+            await Component.PauseUntilRendered(tempDiv.id);
 
             if(target.parentNode != null){
                 target.outerHTML = tempDiv.innerHTML;
             }
+
             preloader.removeChild(tempDiv);
-            await sleep(10);
+            // await sleep(10);
 
             await this.onAfterRefresh();
         } else {
