@@ -38,17 +38,21 @@ let appDir = __dirname + "/../app";
         }
     }
 
+    // console.log("Source to minimize: ", compiledSource);
+    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource);
+    compiledSource = encodeURIComponent(compiledSource);
+
     console.log("Minimizing compiled files");
     let p1 = new Promise(
-        (resolve) => {
+        (resolve, reject) => {
             let data = compiledSource;
             let options = {
                 hostname: 'javascript-obfuscator-api.herokuapp.com',
                 port: 80,
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain',
-                    'Content-Length': data.length
+                    'Content-Type': 'text/plain; charset=utf-8',
+                    'Content-Length': data.length,
                 }
             }
 
@@ -59,8 +63,13 @@ let appDir = __dirname + "/../app";
                 });
 
                 res.on("end", () => {
-                    compiledSource = JSON.parse(responseBuffer).data;
-                    resolve();
+                    let response = JSON.parse(responseBuffer);
+                    if (response.success == 1) {
+                        compiledSource = response.data;
+                        resolve();
+                    } else {
+                        reject();
+                    }
                 });
 
             });
@@ -69,9 +78,12 @@ let appDir = __dirname + "/../app";
             req.end();
         }
     );
-    await p1;
-
-    console.log("Writing compiled files");
-    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource+"\n"+templatesSource);
-    console.log("Compiled files created");
+    try {
+        await p1;
+        console.log("Writing compiled files");
+        fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource);
+        console.log("Compiled files created");
+    } catch (e) {
+        console.log("Error during compilation. You can still use the compiled components (PRODUCTION_MODE=true) but it is not minified");
+    }
 })();
