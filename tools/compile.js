@@ -40,7 +40,7 @@ let appDir = __dirname + "/../app";
 
     // console.log("Source to minimize: ", compiledSource);
     fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource);
-    compiledSource = encodeURIComponent(compiledSource);
+    compiledSource = encodeURIComponent(compiledSource + "\n" + templatesSource);
 
     console.log("Minimizing compiled files");
     let p1 = new Promise(
@@ -81,7 +81,7 @@ let appDir = __dirname + "/../app";
     try {
         await p1;
         console.log("Writing compiled files");
-        fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource);
+        fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource);
         console.log("Compiled files created");
     } catch (e) {
         console.log("Error during compilation. You can still use the compiled components (PRODUCTION_MODE=true) but it is not minified");
