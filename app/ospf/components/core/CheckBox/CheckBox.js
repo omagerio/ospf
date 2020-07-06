@@ -12,6 +12,6 @@ class CheckBox extends Component {
     async click(){
         this.value = 1-this.value;
         await this.refresh();
-        await root.eventManager.fire("CheckBox_click", this, this);
+        await this.fireEvent("CheckBox_click", this);
     }
 }

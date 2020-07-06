@@ -11,10 +11,9 @@ class HelloWorld extends Component {
         nameControl.placeholder = "Add some text here...";
         await this.addChild("nameControl", nameControl);
 
-        await root.eventManager.addListener(
+        await this.addListener(
             "TextBox_enterKey",
-            callback(this, "onNameControlEnterKey"),
-            this
+            callback(this, "onNameControlEnterKey")
         );
 
         // ListBox example
@@ -49,7 +48,7 @@ class HelloWorld extends Component {
         await this.refresh();
 
         // fire event to signaling other components
-        await root.eventManager.fire("HelloWorld_addNameClickHandler", this, this);
+        await this.fireEvent("HelloWorld_addNameClickHandler", this);
     }
 
     async addDollyHandler(){

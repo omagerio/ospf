@@ -7,14 +7,15 @@ class Component {
         this._initialized = false;
         this._parsedTemplate = null;
         this._classname = this.constructor.name;
+        this._eventListenersIds = [];
     }
 
-    static async PauseUntilRendered(id){
-        while(1){
+    static async PauseUntilRendered(id) {
+        while (1) {
             let elem = document.querySelector("#" + id);
-            if(!elem){
+            if (!elem) {
                 await sleep(10);
-            }else{
+            } else {
                 return elem;
             }
         }
@@ -26,7 +27,7 @@ class Component {
      * @param {string} name
      */
     async addChild(name, child) {
-        if(this._children[name] != undefined){
+        if (this._children[name] != undefined) {
             await this._children[name].destroy();
         }
         this._children[name] = child;
@@ -98,7 +99,7 @@ class Component {
         await this.onAfterInit();
     }
 
-    async onAfterInit(){}
+    async onAfterInit() { }
 
     /**
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
@@ -130,7 +131,7 @@ class Component {
             preloader.appendChild(tempDiv);
             await Component.PauseUntilRendered(tempDiv.id);
 
-            if(target.parentNode != null){
+            if (target.parentNode != null) {
                 target.outerHTML = tempDiv.innerHTML;
             }
 
@@ -202,7 +203,7 @@ class Component {
      * Called everytime the component gets refreshed.
      */
     async onAfterRefresh() {
-        for(let childName of Object.getOwnPropertyNames(this._children)){
+        for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].onAfterRefresh();
         }
     }
@@ -211,7 +212,7 @@ class Component {
      * Called before the component gets refreshed.
      */
     async onBeforeRefresh() {
-        for(let childName of Object.getOwnPropertyNames(this._children)){
+        for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].onBeforeRefresh();
         }
     }
@@ -243,22 +244,39 @@ class Component {
         return html;
     }
 
-    renderString(string){
+    renderString(string) {
         return ejs.render(string, { c: this });
     }
 
     /**
      * Destroys the component
      */
-    async destroy(){
+    async destroy() {
         await this.onBeforeDestroy();
 
-        for(let childName of Object.getOwnPropertyNames(this._children)){
+        for(let listenerId of this._eventListenersIds){
+            await this.removeListener(listenerId);
+        }
+
+        for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].destroy();
         }
     }
 
-    async onBeforeDestroy(){
+    async onBeforeDestroy() { }
 
+    async addListener(eventName, handler) {
+        let id = await root.eventManager.addListener(eventName, handler);
+        this._eventListenersIds.push(id);
+        return id;
+    }
+
+    async fireEvent(eventName, parameters) {
+        return await root.eventManager.fire(eventName, parameters, this);
+    }
+
+    async removeListener(id) {
+        await root.eventManager.removeListener(id);
+        this._eventListenersIds.splice(this._eventListenersIds.indexOf(id), 1);
     }
 }

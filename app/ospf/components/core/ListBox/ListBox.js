@@ -23,6 +23,6 @@ class ListBox extends Component {
     }
 
     async change() {
-        await root.eventManager.fire("ListBox_change", this, this);
+        await this.fireEvent("ListBox_change", this);
     }
 }
