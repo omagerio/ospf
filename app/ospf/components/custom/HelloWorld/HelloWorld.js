@@ -30,7 +30,7 @@ class HelloWorld extends Component {
         if(sender == this.getChild("nameControl")){ // did our textbox send the event?
             parameters.event.preventDefault();
             await this.addNameClickHandler();
-            // await root.eventManager.removeListener(listener.id); // remove listener after use?
+            // await this.removeListener(listener.id); // remove listener after use?
         }
     }
 
