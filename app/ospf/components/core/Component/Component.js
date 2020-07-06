@@ -27,9 +27,9 @@ class Component {
      * @param {string} name
      */
     async addChild(name, child) {
-        if (this._children[name] != undefined) {
+        /*if (this._children[name] != undefined) {
             await this._children[name].destroy();
-        }
+        }*/
         this._children[name] = child;
     }
 
@@ -254,9 +254,7 @@ class Component {
     async destroy() {
         await this.onBeforeDestroy();
 
-        for(let listenerId of this._eventListenersIds){
-            await this.removeListener(listenerId);
-        }
+        await this.removeAllListeners();
 
         for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].destroy();
@@ -278,5 +276,11 @@ class Component {
     async removeListener(id) {
         await root.eventManager.removeListener(id);
         this._eventListenersIds.splice(this._eventListenersIds.indexOf(id), 1);
+    }
+
+    async removeAllListeners(){
+        for(let listenerId of this._eventListenersIds){
+            await this.removeListener(listenerId);
+        }
     }
 }
