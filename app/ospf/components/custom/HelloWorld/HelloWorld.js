@@ -11,10 +11,7 @@ class HelloWorld extends Component {
         nameControl.placeholder = "Add some text here...";
         await this.addChild("nameControl", nameControl);
 
-        await this.addListener(
-            "TextBox_enterKey",
-            callback(this, "onNameControlEnterKey")
-        );
+        await this.addListener("TextBox_enterKey","onNameControlEnterKey");
 
         // ListBox example
         let listControl = new ListBox();

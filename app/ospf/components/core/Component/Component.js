@@ -264,7 +264,7 @@ class Component {
     async onBeforeDestroy() { }
 
     async addListener(eventName, handler) {
-        let id = await root.eventManager.addListener(eventName, handler);
+        let id = await root.eventManager.addListener(eventName, callback(this, handler));
         this._eventListenersIds.push(id);
         return id;
     }
