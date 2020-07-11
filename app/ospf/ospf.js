@@ -144,7 +144,7 @@ function callback(object, method) {
             console.error(object.constructor.name + "."+method+"() is not defined");
             return;
         }
-        await object[method](...parameters);
+        return await object[method](...parameters);
     };
     return callbackFunction;
 }
