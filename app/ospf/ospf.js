@@ -22,8 +22,10 @@ window.addEventListener("load", async () => {
         await loadScript("ospf/components_custom.js?" + Date.now());
 
         let components = coreComponents.concat(customComponents);
+        let p = [];
         for (let component of components) {
-            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4))
+            let p1 = loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4));
+            p.push(p1);
 
             let xhr = new XMLHttpRequest();
             xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?t=" + Date.now().toString(16).substr(-4));
@@ -32,17 +34,18 @@ window.addEventListener("load", async () => {
                 (resolve) => {
                     xhr.onreadystatechange = () => {
                         if (xhr.readyState == 4) {
+                            templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
                             resolve();
                         }
                     }
                 }
             );
             xhr.send();
-
-            await Promise.all([p2]);
-
-            templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
+            p.push(p2);
         }
+
+        await Promise.all(p);
+
     } else {
         await loadScript("ospf/compiled_components.js?v=" + VERSION);
     }
