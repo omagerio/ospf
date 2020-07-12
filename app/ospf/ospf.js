@@ -23,10 +23,8 @@ window.addEventListener("load", async () => {
 
         let components = coreComponents.concat(customComponents);
         let p = [];
-        for (let component of components) {
-            let p1 = loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4));
-            p.push(p1);
 
+        for (let component of components) {
             let xhr = new XMLHttpRequest();
             xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?t=" + Date.now().toString(16).substr(-4));
             xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -42,6 +40,10 @@ window.addEventListener("load", async () => {
             );
             xhr.send();
             p.push(p2);
+        }
+
+        for (let component of components) {
+            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4));
         }
 
         await Promise.all(p);
