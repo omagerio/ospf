@@ -1,210 +1,154 @@
-let lastComponentId = 0;
-let templates = [];
-let mainPanelViewer = null;
+let templates = {};
+let lastComponentIndex = 0;
+let root = null;
+let navigationHistory = [];
 
-window.addEventListener("load", windowLoad);
-
-function windowLoad() {
-	loadLibs();
-	loadCoreComponents();
+function loadScript(scriptUrl){
+    return new Promise(
+        (resolve)=>{
+            let script = document.createElement("script");
+            script.src = scriptUrl;
+            script.onload = ()=>{resolve();};
+            document.querySelector("head").appendChild(script);
+        }
+    );
 }
 
-function loadLibs() {
-	for (let lib of libs) {
-		let script = document.createElement("script");
-		script.src = "ospf/assets/js/" + libs;
-		document.querySelector("head").appendChild(script);
-	}
+window.addEventListener("load", async () => {
+    let body = document.querySelector("form");
+
+    if (PRODUCTION_MODE == false) {
+        await loadScript("ospf/components_core.js?" + Date.now());
+        await loadScript("ospf/components_custom.js?" + Date.now());
+
+        let components = coreComponents.concat(customComponents);
+        let p = [];
+
+        for (let component of components) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?t=" + Date.now().toString(16).substr(-4));
+            xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            let p2 = new Promise(
+                (resolve) => {
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState == 4) {
+                            templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
+                            resolve();
+                        }
+                    }
+                }
+            );
+            xhr.send();
+            p.push(p2);
+        }
+
+        for (let component of components) {
+            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?t=" + Date.now().toString(16).substr(-4));
+        }
+
+        await Promise.all(p);
+
+    } else {
+        await loadScript("ospf/compiled_components.js?v=" + VERSION);
+    }
+
+    let preloader = document.createElement("div");
+    preloader.id = "htmlPreloader";
+    preloader.style.display = "none";
+    body.appendChild(preloader);
+
+    root = new Component();
+    await root.init();
+
+
+    root.eventManager = new EventManager();
+    await root.eventManager.init();
+
+    root.dbManager = new DbManager();
+    await root.dbManager.init();
+
+    try{
+        await appInit();
+    }catch(e){
+        console.error(e);
+    }
+    await root.parseTemplate();
+
+    body.innerHTML += root.render();
+});
+
+function sleep(ms) {
+    return new Promise(
+        (resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, ms)
+        }
+    );
 }
 
-function loadCoreComponents() {
-	let i = Object.keys(templates).length;
-	let script = document.createElement("script");
-	script.src = "ospf/components/core/" + components.core[i] + "/" + basename(components.core[i]) + ".js";
-	script.component = components.core[i];
-	script.addEventListener("load", function (event) {
-		let ajax = new AjaxRequest();
-		ajax.url = "ospf/components/core/" + event.target.component + "/" + basename(event.target.component) + ".htm";
-		ajax.component = event.target.component;
-		ajax.callback = function (response) {
-			templates[ajax.component] = response.responseText;
-			if (Object.keys(templates).length == components.core.length) {
-				loadCustomComponents();
-			} else {
-				loadCoreComponents();
-			}
-		}
-		ajax.send();
-	});
-	document.querySelector("head").appendChild(script);
-}
+function getComponentById(id, component) {
+    let children = [];
+    if (component == undefined) {
+        children = { root: root };
+    } else {
+        children = component._children;
+    }
 
+    for (let childName of Object.getOwnPropertyNames(children)) {
+        let child = children[childName];
+        if (child._id == id) {
+            return child;
+        } else {
+            let foundTemp = getComponentById(id, child);
+            if (foundTemp != null) {
+                return foundTemp;
+            }
+        }
+    }
 
-function loadCustomComponents() {
-	if (components.custom.length > 0) {
-		let i = Object.keys(templates).length - components.core.length;
-		let script = document.createElement("script");
-		script.src = "ospf/components/custom/" + components.custom[i] + "/" + basename(components.custom[i]) + ".js";
-		script.component = components.custom[i];
-		script.addEventListener("load", function (event) {
-			let ajax = new AjaxRequest();
-			ajax.url = "ospf/components/custom/" + event.target.component + "/" + basename(event.target.component) + ".htm";
-			ajax.component = event.target.component;
-			ajax.callback = function (response) {
-				templates[ajax.component] = response.responseText;
-				if (Object.keys(templates).length == components.custom.length + components.core.length) {
-					frameworkLoadComplete();
-				} else {
-					loadCustomComponents();
-				}
-			}
-			ajax.send();
-		});
-		document.querySelector("head").appendChild(script);
-	} else {
-		frameworkLoadComplete();
-	}
-}
-
-async function frameworkLoadComplete() {
-	mainPanelViewer = await MainPanelViewer.Create();
-	document.querySelector("body").innerHTML += mainPanelViewer.getHtml();
-	appInit();
-}
-
-function AjaxRequest() {
-	this.url = "";
-	this.method = "post";
-	this.callback = null;
-	this.parameters = [];
-
-	this.addParameter = function (name, value) {
-		this.parameters.push({
-			"name": name,
-			"value": value
-		});
-	};
-
-	this.send = function () {
-		let xhr = new XMLHttpRequest();
-		xhr.open(this.method, this.url);
-		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		let _self = this;
-		xhr.addEventListener("readystatechange", function () {
-			if (xhr.readyState == 4) {
-				if (typeof _self.callback !== "undefined") {
-					_self.callback(xhr);
-				}
-			}
-		});
-
-		let queryString = "";
-		for (let i = 0; i < this.parameters.length; i++) {
-			queryString += this.parameters[i].name + "=" + encodeURIComponent(this.parameters[i].value) + "&";
-		}
-
-		xhr.send(queryString);
-	}
-}
-
-function generateUuid() {
-	function s4() {
-		return Math.floor((1 + Math.random()) * 0x10000)
-			.toString(16)
-			.substring(1);
-	}
-	return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
-function basename(str) {
-	var base = new String(str).substring(str.lastIndexOf('/') + 1);
-	if (base.lastIndexOf(".") != -1)
-		base = base.substring(0, base.lastIndexOf("."));
-	return base;
-}
-
-function sanitizeTemplateName(string) {
-	return string.replace(/([^a-zA-Z0-9]+)/, "");
-}
-
-function chunkString(str, size) {
-	const numChunks = Math.ceil(str.length / size)
-	const chunks = new Array(numChunks)
-
-	for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-		chunks[i] = str.substr(o, size)
-	}
-
-	return chunks
+    return null;
 }
 
 function qs(selector) {
-	return document.querySelector(selector);
+    return document.querySelector(selector);
 }
 
-function addslashes(string) {
-
-	if(typeof string != "string"){
-		return string;
-	}
-	let jsoned = JSON.stringify(string);
-	let slashed = jsoned.substr(1, jsoned.length - 2);
-	slashed = slashed.replace("'", "''");
-	return slashed;
+function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
-function htmlspecialchars(text) {
-	if(text === null || text === undefined){
-		text = "";
-	}
-	if (typeof text != "string") {
-		text = "" + text;
-	}
-	var map = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		"'": '&#039;'
-	};
-
-	return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+function getQueryStringParameter(nameTarget) {
+    let qs = document.location.search.substr(1);
+    let pairs = qs.split("&");
+    for (let pair of pairs) {
+        let nameValue = pair.split("=");
+        let name = decodeURIComponent(nameValue[0]);
+        let value = "";
+        if (nameValue.length > 1) {
+            value = decodeURIComponent(nameValue[1]);
+        }
+        if (name == nameTarget) {
+            return value;
+        }
+    }
+    return undefined;
 }
 
-function getQuerystringParameters(){
-	let qs = window.location.search;
-	let params = {};
-	if(qs.length > 0){
-		qs = qs.substr(1);
-		let chunks = qs.split("&");
-		for(let chunk of chunks){
-			let parts = chunk.split("=");
-			params[parts[0]] = parts[1];
-		}
-	}
-	return params;
+async function emptyCallback() { }
+
+function callback(object, method) {
+    let callbackFunction = async (...parameters) => {
+        if(object[method] == undefined){
+            console.error(object.constructor.name + "."+method+"() is not defined");
+            return;
+        }
+        return await object[method](...parameters);
+    };
+    return callbackFunction;
 }
 
-function getComponent(id, component){
-	if(component == undefined){
-		component = MainPanelViewer.getInstance();
-	}
-
-	let toReturn = null;
-
-	for(let child of component._children){
-		if(child.panel.id == id){
-			toReturn = child.panel;
-			break;
-		}else{
-			let childComp = getComponent(id, child.panel);
-			if(childComp != null){
-				toReturn = childComp;
-			}
-		}
-	}
-
-	return toReturn;
-}
-
-function md5(d){return rstr2hex(binl2rstr(binl_md5(rstr2binl(d),8*d.length)))}function rstr2hex(d){for(var _,m="0123456789ABCDEF",f="",r=0;r<d.length;r++)_=d.charCodeAt(r),f+=m.charAt(_>>>4&15)+m.charAt(15&_);return f}function rstr2binl(d){for(var _=Array(d.length>>2),m=0;m<_.length;m++)_[m]=0;for(m=0;m<8*d.length;m+=8)_[m>>5]|=(255&d.charCodeAt(m/8))<<m%32;return _}function binl2rstr(d){for(var _="",m=0;m<32*d.length;m+=8)_+=String.fromCharCode(d[m>>5]>>>m%32&255);return _}function binl_md5(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;f=md5_ii(f=md5_ii(f=md5_ii(f=md5_ii(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_ff(f=md5_ff(f=md5_ff(f=md5_ff(f,r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,d[n+1],12,-389564586),m,f,d[n+2],17,606105819),i,m,d[n+3],22,-1044525330),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+4],7,-176418897),f,r,d[n+5],12,1200080426),m,f,d[n+6],17,-1473231341),i,m,d[n+7],22,-45705983),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+8],7,1770035416),f,r,d[n+9],12,-1958414417),m,f,d[n+10],17,-42063),i,m,d[n+11],22,-1990404162),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+12],7,1804603682),f,r,d[n+13],12,-40341101),m,f,d[n+14],17,-1502002290),i,m,d[n+15],22,1236535329),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+1],5,-165796510),f,r,d[n+6],9,-1069501632),m,f,d[n+11],14,643717713),i,m,d[n+0],20,-373897302),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+5],5,-701558691),f,r,d[n+10],9,38016083),m,f,d[n+15],14,-660478335),i,m,d[n+4],20,-405537848),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+9],5,568446438),f,r,d[n+14],9,-1019803690),m,f,d[n+3],14,-187363961),i,m,d[n+8],20,1163531501),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+13],5,-1444681467),f,r,d[n+2],9,-51403784),m,f,d[n+7],14,1735328473),i,m,d[n+12],20,-1926607734),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+5],4,-378558),f,r,d[n+8],11,-2022574463),m,f,d[n+11],16,1839030562),i,m,d[n+14],23,-35309556),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+1],4,-1530992060),f,r,d[n+4],11,1272893353),m,f,d[n+7],16,-155497632),i,m,d[n+10],23,-1094730640),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+13],4,681279174),f,r,d[n+0],11,-358537222),m,f,d[n+3],16,-722521979),i,m,d[n+6],23,76029189),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+9],4,-640364487),f,r,d[n+12],11,-421815835),m,f,d[n+15],16,530742520),i,m,d[n+2],23,-995338651),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+0],6,-198630844),f,r,d[n+7],10,1126891415),m,f,d[n+14],15,-1416354905),i,m,d[n+5],21,-57434055),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+12],6,1700485571),f,r,d[n+3],10,-1894986606),m,f,d[n+10],15,-1051523),i,m,d[n+1],21,-2054922799),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+8],6,1873313359),f,r,d[n+15],10,-30611744),m,f,d[n+6],15,-1560198380),i,m,d[n+13],21,1309151649),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+4],6,-145523070),f,r,d[n+11],10,-1120210379),m,f,d[n+2],15,718787259),i,m,d[n+9],21,-343485551),m=safe_add(m,h),f=safe_add(f,t),r=safe_add(r,g),i=safe_add(i,e)}return Array(m,f,r,i)}function md5_cmn(d,_,m,f,r,i){return safe_add(bit_rol(safe_add(safe_add(_,d),safe_add(f,i)),r),m)}function md5_ff(d,_,m,f,r,i,n){return md5_cmn(_&m|~_&f,d,_,r,i,n)}function md5_gg(d,_,m,f,r,i,n){return md5_cmn(_&f|m&~f,d,_,r,i,n)}function md5_hh(d,_,m,f,r,i,n){return md5_cmn(_^m^f,d,_,r,i,n)}function md5_ii(d,_,m,f,r,i,n){return md5_cmn(m^(_|~f),d,_,r,i,n)}function safe_add(d,_){var m=(65535&d)+(65535&_);return(d>>16)+(_>>16)+(m>>16)<<16|65535&m}function bit_rol(d,_){return d<<_|d>>>32-_}
+var md5=function(r){function n(r,n){return r<<n|r>>>32-n}function t(r,n){var t,o,e,u,f;return e=2147483648&r,u=2147483648&n,f=(1073741823&r)+(1073741823&n),(t=1073741824&r)&(o=1073741824&n)?2147483648^f^e^u:t|o?1073741824&f?3221225472^f^e^u:1073741824^f^e^u:f^e^u}function o(r,o,e,u,f,i,a){return r=t(r,t(t(function(r,n,t){return r&n|~r&t}(o,e,u),f),a)),t(n(r,i),o)}function e(r,o,e,u,f,i,a){return r=t(r,t(t(function(r,n,t){return r&t|n&~t}(o,e,u),f),a)),t(n(r,i),o)}function u(r,o,e,u,f,i,a){return r=t(r,t(t(function(r,n,t){return r^n^t}(o,e,u),f),a)),t(n(r,i),o)}function f(r,o,e,u,f,i,a){return r=t(r,t(t(function(r,n,t){return n^(r|~t)}(o,e,u),f),a)),t(n(r,i),o)}function i(r){var n,t="",o="";for(n=0;n<=3;n++)t+=(o="0"+(r>>>8*n&255).toString(16)).substr(o.length-2,2);return t}var a,c,C,g,h,d,v,S,m,l=Array();for(l=function(r){for(var n,t=r.length,o=t+8,e=16*((o-o%64)/64+1),u=Array(e-1),f=0,i=0;i<t;)f=i%4*8,u[n=(i-i%4)/4]=u[n]|r.charCodeAt(i)<<f,i++;return f=i%4*8,u[n=(i-i%4)/4]=u[n]|128<<f,u[e-2]=t<<3,u[e-1]=t>>>29,u}(r=function(r){r=r.replace(/\r\n/g,"\n");for(var n="",t=0;t<r.length;t++){var o=r.charCodeAt(t);o<128?n+=String.fromCharCode(o):o>127&&o<2048?(n+=String.fromCharCode(o>>6|192),n+=String.fromCharCode(63&o|128)):(n+=String.fromCharCode(o>>12|224),n+=String.fromCharCode(o>>6&63|128),n+=String.fromCharCode(63&o|128))}return n}(r)),d=1732584193,v=4023233417,S=2562383102,m=271733878,a=0;a<l.length;a+=16)c=d,C=v,g=S,h=m,d=o(d,v,S,m,l[a+0],7,3614090360),m=o(m,d,v,S,l[a+1],12,3905402710),S=o(S,m,d,v,l[a+2],17,606105819),v=o(v,S,m,d,l[a+3],22,3250441966),d=o(d,v,S,m,l[a+4],7,4118548399),m=o(m,d,v,S,l[a+5],12,1200080426),S=o(S,m,d,v,l[a+6],17,2821735955),v=o(v,S,m,d,l[a+7],22,4249261313),d=o(d,v,S,m,l[a+8],7,1770035416),m=o(m,d,v,S,l[a+9],12,2336552879),S=o(S,m,d,v,l[a+10],17,4294925233),v=o(v,S,m,d,l[a+11],22,2304563134),d=o(d,v,S,m,l[a+12],7,1804603682),m=o(m,d,v,S,l[a+13],12,4254626195),S=o(S,m,d,v,l[a+14],17,2792965006),d=e(d,v=o(v,S,m,d,l[a+15],22,1236535329),S,m,l[a+1],5,4129170786),m=e(m,d,v,S,l[a+6],9,3225465664),S=e(S,m,d,v,l[a+11],14,643717713),v=e(v,S,m,d,l[a+0],20,3921069994),d=e(d,v,S,m,l[a+5],5,3593408605),m=e(m,d,v,S,l[a+10],9,38016083),S=e(S,m,d,v,l[a+15],14,3634488961),v=e(v,S,m,d,l[a+4],20,3889429448),d=e(d,v,S,m,l[a+9],5,568446438),m=e(m,d,v,S,l[a+14],9,3275163606),S=e(S,m,d,v,l[a+3],14,4107603335),v=e(v,S,m,d,l[a+8],20,1163531501),d=e(d,v,S,m,l[a+13],5,2850285829),m=e(m,d,v,S,l[a+2],9,4243563512),S=e(S,m,d,v,l[a+7],14,1735328473),d=u(d,v=e(v,S,m,d,l[a+12],20,2368359562),S,m,l[a+5],4,4294588738),m=u(m,d,v,S,l[a+8],11,2272392833),S=u(S,m,d,v,l[a+11],16,1839030562),v=u(v,S,m,d,l[a+14],23,4259657740),d=u(d,v,S,m,l[a+1],4,2763975236),m=u(m,d,v,S,l[a+4],11,1272893353),S=u(S,m,d,v,l[a+7],16,4139469664),v=u(v,S,m,d,l[a+10],23,3200236656),d=u(d,v,S,m,l[a+13],4,681279174),m=u(m,d,v,S,l[a+0],11,3936430074),S=u(S,m,d,v,l[a+3],16,3572445317),v=u(v,S,m,d,l[a+6],23,76029189),d=u(d,v,S,m,l[a+9],4,3654602809),m=u(m,d,v,S,l[a+12],11,3873151461),S=u(S,m,d,v,l[a+15],16,530742520),d=f(d,v=u(v,S,m,d,l[a+2],23,3299628645),S,m,l[a+0],6,4096336452),m=f(m,d,v,S,l[a+7],10,1126891415),S=f(S,m,d,v,l[a+14],15,2878612391),v=f(v,S,m,d,l[a+5],21,4237533241),d=f(d,v,S,m,l[a+12],6,1700485571),m=f(m,d,v,S,l[a+3],10,2399980690),S=f(S,m,d,v,l[a+10],15,4293915773),v=f(v,S,m,d,l[a+1],21,2240044497),d=f(d,v,S,m,l[a+8],6,1873313359),m=f(m,d,v,S,l[a+15],10,4264355552),S=f(S,m,d,v,l[a+6],15,2734768916),v=f(v,S,m,d,l[a+13],21,1309151649),d=f(d,v,S,m,l[a+4],6,4149444226),m=f(m,d,v,S,l[a+11],10,3174756917),S=f(S,m,d,v,l[a+2],15,718787259),v=f(v,S,m,d,l[a+9],21,3951481745),d=t(d,c),v=t(v,C),S=t(S,g),m=t(m,h);return(i(d)+i(v)+i(S)+i(m)).toLowerCase()};

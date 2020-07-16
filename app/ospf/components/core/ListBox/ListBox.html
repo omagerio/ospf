@@ -1,0 +1,9 @@
+<select id="<%= c._id %>" name="<%= c._id %>" class="<%=c.cssClass%>" onchange="<%- c.renderEvent("change") %>" <%=c.otherAttributes%>>
+    <%
+        for(let option of c.options){
+            %>
+            <option value="<%= option.value %>" <% if(c.value == option.value){ %>selected<% } %>><%= option.name %></option>
+            <%
+        }
+    %>
+</select>

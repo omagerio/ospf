@@ -1,0 +1,22 @@
+<div id="<%= c._id %>" class="helloWorld">
+    <h1>Hello World!</h1>
+    <h3>This is a test component.</h3>
+    <p>Please look inside my code to see what you can do with OSPF!</p>
+
+    <div>Names: </div>
+    <ul>
+        <% for(let name of c.names){ %>
+        <li><%= name %></li>
+        <% } %>
+    </ul>
+    <%- c.getChild("nameControl").render() %>
+    <%- c.getChild("listControl").render() %>
+    <input onclick="<%= c.renderEvent("addNameClickHandler") %>" type="button" value="Add #1">
+    <input onclick="<%= c.renderEvent("addDollyHandler") %>" type="button" value="Add Dolly Component">
+
+    <%
+        if(c.getChild("dollyComponent")){
+            __append(c.getChild("dollyComponent").render());
+        }
+    %>
+</div>

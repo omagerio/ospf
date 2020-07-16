@@ -1,0 +1,3 @@
+var customComponents = [
+    "custom/HelloWorld",
+];
