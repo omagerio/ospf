@@ -27,11 +27,28 @@ class Component {
      * @param {string} name
      */
     async addChild(name, child) {
-        /*if (this._children[name] != undefined) {
-            await this._children[name].destroy();
-        }*/
+        if (this._children[name] != undefined) {
+            await this._children[name].replace();
+        }
         this._children[name] = child;
     }
+
+    /**
+     * Called when the component is replaced whith something else
+     */
+    async replace(){
+        await this.onBeforeReplace();
+
+        let childrenNames = Object.getOwnPropertyNames(this._children);
+        for (let childName of childrenNames) {
+            await this._children[childName].replace();
+        }
+
+        await this.onAfterReplace();
+    }
+
+    async onBeforeReplace(){}
+    async onAfterReplace(){}
 
     /**
      * Removes a child component from this component.

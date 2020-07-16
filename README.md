@@ -109,9 +109,9 @@ Components have different methods you must know:
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 - `render()`: returns the HTML of the component. Use this method inside your template to render children components.
-- `addChild(name, component)`: adds a child component to the current component.
+- `async addChild(name, component)`: adds a child component to the current component.
 - `getChild(name)`: get the child of the current component by name.
-- `removeChild(name)`: get the child of the current component by name.
+- `async removeChild(name)`: get the child of the current component by name.
 
 Inside the template file, you can use `c` to reference your component.
 

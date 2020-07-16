@@ -1,6 +1,8 @@
 # 1.9
 - Optimized loading in debug environment
 - Fixed compilation
+- addChild() and removeChild() are now ASYNC
+- added onBeforeReplace() and onAfterReplace() when the component is being replaced (addChild, removeChild)
 
 # 1.8
 - integrated dbManager and eventManager in root
