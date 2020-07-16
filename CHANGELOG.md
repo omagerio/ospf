@@ -1,3 +1,7 @@
+# 1.9
+- Optimized loading in debug environment
+- Fixed compilation
+
 # 1.8
 - integrated dbManager and eventManager in root
 - restored old init() method instead of Create() until a better solution is found
