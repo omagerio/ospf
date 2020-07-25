@@ -27,6 +27,9 @@ class Component {
      * @param {string} name
      */
     async addChild(name, child) {
+        if (child == null) {
+            return;
+        }
         if (this._children[name] != undefined) {
             await this._children[name].replace();
         }
@@ -36,7 +39,7 @@ class Component {
     /**
      * Called when the component is replaced whith something else
      */
-    async replace(){
+    async replace() {
         await this.onBeforeReplace();
 
         let childrenNames = Object.getOwnPropertyNames(this._children);
@@ -47,8 +50,8 @@ class Component {
         await this.onAfterReplace();
     }
 
-    async onBeforeReplace(){}
-    async onAfterReplace(){}
+    async onBeforeReplace() { }
+    async onAfterReplace() { }
 
     /**
      * Removes a child component from this component.
@@ -80,9 +83,9 @@ class Component {
      * @param {string} event
      * @param {string} parameter
      */
-    renderEvent(event, parameters = null) {
+    renderEvent(jsEvent, event, parameters = null) {
         let jsonParameters = escape(JSON.stringify(parameters));
-        return this.self() + ".handleEvent('" + event + "', '" + jsonParameters + "', event)";
+        return jsEvent + "=\"" + this.self() + ".handleEvent('" + event + "', '" + jsonParameters + "', event)\"";
     }
 
     async handleEvent(event, jsonParameters, jsEvent) {
@@ -113,10 +116,7 @@ class Component {
      */
     async init() {
         this._initialized = true;
-        await this.onAfterInit();
     }
-
-    async onAfterInit() { }
 
     /**
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
@@ -177,7 +177,15 @@ class Component {
             await this._children[childName].parseTemplate();
         }
 
-        let html = ejs.render(templates[this.constructor.name], { c: this });
+        let template;
+
+        if (templates[this.constructor.name] == "MISSING") {
+            template = templates[Object.getPrototypeOf(this.constructor.prototype).constructor.name]; // FIXME
+        } else {
+            template = templates[this.constructor.name];
+        }
+
+        let html = ejs.render(template, { c: this });
         this._parsedTemplate = html;
     }
 
@@ -295,8 +303,8 @@ class Component {
         this._eventListenersIds.splice(this._eventListenersIds.indexOf(id), 1);
     }
 
-    async removeAllListeners(){
-        for(let listenerId of this._eventListenersIds){
+    async removeAllListeners() {
+        for (let listenerId of this._eventListenersIds) {
             await this.removeListener(listenerId);
         }
     }

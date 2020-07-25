@@ -18,7 +18,7 @@ const VERSION = "0.1";
  * Called when the framework is ready. Assing root to your main component.
  */
 async function appInit() {
-    let main = new HelloWorld();
+    let main = new TabbedLayoutExample();
     await main.init();
     await root.addChild("main", main);
 }

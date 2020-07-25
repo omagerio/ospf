@@ -1,4 +1,4 @@
-<select id="<%= c._id %>" name="<%= c._id %>" class="<%=c.cssClass%>" onchange="<%- c.renderEvent("change") %>" <%=c.otherAttributes%>>
+<select id="<%= c._id %>" name="<%= c._id %>" class="<%=c.cssClass%>" <%- c.renderEvent("onchange", "change") %> <%=c.otherAttributes%>>
     <%
         for(let option of c.options){
             %>

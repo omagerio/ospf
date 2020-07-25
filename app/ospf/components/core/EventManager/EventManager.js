@@ -10,7 +10,12 @@ class EventManager extends Component {
     async fire(eventName, parameters, sender){
         for(let listener of this.listeners){
             if(listener.eventName == eventName){
-                await listener.handler(parameters, sender, listener);
+                await listener.handler({
+                    parameters: parameters,
+                    sender: sender,
+                    listener: listener,
+                    eventName: eventName
+                });
             }
         }
     }

@@ -32,7 +32,12 @@ window.addEventListener("load", async () => {
                 (resolve) => {
                     xhr.onreadystatechange = () => {
                         if (xhr.readyState == 4) {
-                            templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
+                            if(xhr.status != 200){
+                                templates[component.replace("core/", "").replace("custom/", "")] = "MISSING";
+                            }else{
+                                templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
+                            }
+
                             resolve();
                         }
                     }

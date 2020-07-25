@@ -1,7 +1,11 @@
-# OSPF, a blazing fast Javascript single-page framework
+# OSPF, an Event-Driven, asynchrounous, MVC, Vanilla Javascript single-page framework
 
 ## Overview ##
 OSPF makes easy to create single pages JavaScript apps, by using components as stand-alone rendered objects, in a MVC-way.
+It is pretty fast when it comes to development time, and has no external dependencies.
+In addition, it uses Vanilla Javascript only, allowing you to stard developing right away without any additional installation.
+You are right, you can start developing directly in your browser just by downloading the .zip file.
+It works on desktop, mobile, even on Electron.
 
 ## Getting started ##
 Clone this repository inside a folder accessible by your webserver:
@@ -17,17 +21,18 @@ The application starts from the `index.js` file you can find in the root of the 
 
 ```javascript
 async function appInit() {
-    let main = await HelloWorld.Create();
+    let main = new HelloWorld();
+    await main.init();
     await root.addChild("main", main);
 }
 ```
 
 This code should be self explanatory.
 
-The `root` is a special component, globally accessible, and it is the root of your application.
+The `root` var is a special component, globally accessible, and it is the root of your application.
 The method "addChild" adds a child to the selected component, and accepts the component being created, and the key of the component.
 Read more about components below.
-`main` is the only possible child of the root component.
+`main` is the only possible child of the root component, and you must start from here.
 
 Ok now the `HelloWorld` component will be rendered when you start the application.
 
@@ -96,48 +101,43 @@ The HTML file represents the template of the component. Let's see the default tp
 </div>
 ```
 
-Here you place the HTML of your panel. Be sure to set the `id` attribute of the tag (can be any tag you want, here is a `div`) to `<%- c.id %>` to allow the framework to recognize the component later on.
+Here you place the HTML of your panel. Be sure to set the `id` attribute of the tag (can be any tag you want, here is a `div`) to `<%- c._id %>` to allow the framework to recognize the component later on.
 
-> As you can see, this framework uses the extraordinary `ejs` library. Find more here: https://ejs.co/
+> As you can see, this framework uses the extraordinary `ejs` library. Find more here: https://ejs.co/. The library is already included and minimized, no need to install it again.
 
 ### Component methods ###
 Components have different methods you must know:
 
-- `static async Create()`: this is a fundamental method of the components. Always call this method to create a component.
+- `async init()`: this is a fundamental method of the components. Always call this method after you created your component. You can use this method to pass variables to your component. Always call `await super.init()` before your custom code.
 - `renderEvent(string eventName, any parameters, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameters, javascriptEvent)`.
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 - `render()`: returns the HTML of the component. Use this method inside your template to render children components.
 - `async addChild(name, component)`: adds a child component to the current component.
-- `getChild(name)`: get the child of the current component by name.
 - `async removeChild(name)`: get the child of the current component by name.
+- `getChild(name)`: get the child of the current component by name.
+- `(string) async addListener(string eventName, string handler)`: add a global event listener. `handler` is a method of `this`. Returns the listener's id. `handler` method receives an `event` object as the only parameter. The `event` object has 3 properties: `{any parameters, string eventName, Component sender, object listener}`
+- `async fireEvent(string eventName, any parameters)`: fires a global event with parameters.
 
-Inside the template file, you can use `c` to reference your component.
+Inside the template file, you can use `c` to reference your component (for example `c.name`).
 
 ### Other methods ###
-- `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside.
 - `async onFirstRender()`: called when the component is rendered for the first time.
-- `async onBeforeRefresh()`: called before the component is refreshed.
-- `async onAfterRefresh()`: called after the component is refreshed.
-- `createId(string)`: creates an unique id for this component based on `string`.
-- `async loadFile()`: loads an html file.
-
-### Core components ###
-```
-AjaxRequest
-Component
-Label
-ListBox
-TextBox
-```
+- `async onBeforeRefresh()`: called before the component is refreshed. Please note: render() does not count as a refresh.
+- `async onAfterRefresh()`: called after the component is refreshed. Please note: render() does not count as a refresh.
+- `async onBeforeReplace()`: called before a component is replaced (with addChild() to a new component for example);
+- `async onAfterReplace()`: called before a component is replaced (with addChild() to a new component for example);
+- `async onBeforeDestroy()`: called before a component is destroyed (removed with removeChild(), cascades to children);
+- `async removeListener(string id)`: removes a listener with specified id.
+- `async removeAllListeners()`: removes every listener attached to `this` component.
+- `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside. Use this method when you want to alter the state of the component based on user input.
 
 ### Compiling ###
-By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file.
-You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
-`node tools/compile.js`
+This step is optional.
+By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file. You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
+`node tools/compile.js`.
 
-Now you have to tell OSPF to use the compiled version of your components. Open un `index.js` and set:
 ```javascript
 /*
     Set to "false" if you want to test your application without compiling or you don't have nodeJS.

@@ -23,9 +23,10 @@ class HelloWorld extends Component {
         await this.databind(); // we load data needed for this component
     }
 
-    async onNameControlEnterKey(parameters, sender, listener){
-        if(sender == this.getChild("nameControl")){ // did our textbox send the event?
-            parameters.event.preventDefault();
+    async onNameControlEnterKey(event){
+        console.log(event);
+        if(event.sender == this.getChild("nameControl")){ // did our textbox send the event?
+            event.parameters.event.preventDefault();
             await this.addNameClickHandler();
             // await this.removeListener(listener.id); // remove listener after use?
         }

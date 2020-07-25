@@ -11,3 +11,40 @@ html, body, form, #Component_0
     width:100%;
     height:100%;
 }
+
+.TabbedLayout
+{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+}
+
+.TabbedLayout_content
+{
+    flex-grow:1;
+}
+
+.TabbedLayout_tabs
+{
+    height:50px;
+    border-top:1px solid grey;
+}
+
+.TabsBar
+{
+    width:100%;
+    display:flex;
+    overflow:auto;
+    height:100%;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.TabsBar_button
+{
+    height:100%;
+    display: flex;
+    align-items: center;
+    padding:10px;
+}

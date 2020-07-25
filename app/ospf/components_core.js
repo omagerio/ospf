@@ -7,4 +7,6 @@ var coreComponents = [
     "core/DbManager",
     "core/CheckBox",
     "core/EventManager",
+    "core/TabsBar",
+    "core/TabbedLayout",
 ];
