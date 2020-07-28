@@ -30,6 +30,11 @@ html, body, form, #Component_0
     overflow:auto;
 }
 
+.TabbedLayout_content-menu
+{
+    animation: none;
+}
+
 @keyframes fadeIn
 {
     0%{
@@ -83,11 +88,76 @@ html, body, form, #Component_0
     background-color:rgb(236, 248, 255);
 }
 
+.TabbedLayoutExample_content-menu
+{
+    padding:50px 20px;
+}
+
 .TabbedLayoutExample_content_title
 {
     font-size:26px;
     margin-bottom:10px;
 }
 
-.TabbedLayoutExample_content_description
-{}
+.MenuBar
+{
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    width:60%;
+    background-color:rgb(188, 206, 255);
+    margin-left:-60%;
+    animation: MenuBar_opening 0.3s forwards reverse;
+}
+
+.MenuBar-visible
+{
+    margin-left:0%;
+    animation: MenuBar_opening 0.3s forwards;
+}
+
+@keyframes MenuBar_opening
+{
+    0%{
+        margin-left:-60%;
+    }
+
+    100%{
+        margin-left:0%;
+    }
+}
+
+.MenuBar_icon
+{
+    position:absolute;
+    right:-30px;
+    width:30px;
+    height:30px;
+    top:0;
+    background-color:rgb(188, 206, 255);
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size:22px;
+    font-weight: bold;
+}
+
+.MenuBar_items
+{
+    display:flex;
+    flex-direction: column;
+}
+
+.MenuBar_item
+{
+    padding:5px;
+    border-bottom:1px solid rgba(255, 255, 255, 0.2);
+}
+
+.MenuLayout
+{
+    display:flex;
+    flex-direction: column;
+    height:100%;
+}

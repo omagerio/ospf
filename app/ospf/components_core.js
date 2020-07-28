@@ -10,4 +10,6 @@ var coreComponents = [
     "core/TabsBar",
     "core/TabbedLayout",
     "core/ComponentPlaceholder",
+    "core/MenuLayout",
+    "core/MenuBar",
 ];
