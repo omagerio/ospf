@@ -19,8 +19,6 @@ const VERSION = "0.1";
  */
 async function appInit() {
     let main = new TabbedLayoutExample(); // Simple example with bottom tabs layout
-    // let main = new MenuLayoutExample(); // Simple example with left menu layout
-
     await main.init();
     await root.addChild("main", main);
 }

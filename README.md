@@ -21,7 +21,7 @@ The application starts from the `index.js` file you can find in the root of the 
 
 ```javascript
 async function appInit() {
-    let main = new HelloWorld();
+    let main = new TabbedLayoutExample();
     await main.init();
     await root.addChild("main", main);
 }
@@ -34,7 +34,7 @@ The method "addChild" adds a child to the selected component, and accepts the co
 Read more about components below.
 `main` is the only possible child of the root component, and you must start from here.
 
-Ok now the `HelloWorld` component will be rendered when you start the application.
+Ok now the `TabbedLayoutExample` component will be rendered when you start the application.
 
 ## Folder structure ##
 ```text
