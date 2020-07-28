@@ -10,6 +10,7 @@ html, body, form, #Component_0
 {
     width:100%;
     height:100%;
+    font-family:arial;
 }
 
 .TabbedLayout
@@ -23,6 +24,22 @@ html, body, form, #Component_0
 .TabbedLayout_content
 {
     flex-grow:1;
+    animation: fadeIn 0.1s forwards;
+    width:100%;
+    height:0;
+    overflow:auto;
+}
+
+@keyframes fadeIn
+{
+    0%{
+        opacity:0.8;
+        transform:translateY(-200px);
+    }
+
+    100%{
+        opacity:1;
+    }
 }
 
 .TabbedLayout_tabs
@@ -47,4 +64,30 @@ html, body, form, #Component_0
     display: flex;
     align-items: center;
     padding:10px;
+    opacity:0.4;
+    flex-grow: 1;
+    justify-content: center;
 }
+
+.TabBar_button-2
+{
+    opacity:1;
+    border-bottom:2px solid black;
+}
+
+.TabbedLayoutExample_content
+{
+    width:100%;
+    min-height:100%;
+    padding:20px;
+    background-color:rgb(236, 248, 255);
+}
+
+.TabbedLayoutExample_content_title
+{
+    font-size:26px;
+    margin-bottom:10px;
+}
+
+.TabbedLayoutExample_content_description
+{}

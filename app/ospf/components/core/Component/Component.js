@@ -180,7 +180,7 @@ class Component {
         let template;
 
         if (templates[this.constructor.name] == "MISSING") {
-            template = templates[Object.getPrototypeOf(this.constructor.prototype).constructor.name]; // FIXME
+            template = templates[Object.getPrototypeOf(this.constructor).name]; // FIXME
         } else {
             template = templates[this.constructor.name];
         }

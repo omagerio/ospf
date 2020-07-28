@@ -5,7 +5,7 @@ https://github.com/omagerio/ospf
 
 /*
     Set to "false" if you want to test your application without compiling or you don't have nodeJS.
-    Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended.
+    Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended but not required.
 */
 const PRODUCTION_MODE = false;
 
@@ -18,7 +18,9 @@ const VERSION = "0.1";
  * Called when the framework is ready. Assing root to your main component.
  */
 async function appInit() {
-    let main = new TabbedLayoutExample();
+    let main = new TabbedLayoutExample(); // Simple example with bottom tabs layout
+    // let main = new MenuLayoutExample(); // Simple example with left menu layout
+
     await main.init();
     await root.addChild("main", main);
 }

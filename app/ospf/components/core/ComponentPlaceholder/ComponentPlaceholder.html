@@ -1,0 +1,5 @@
+<div id="<%= c._id %>" class="<%= c.className %>">
+    <%-
+        c.getChild("component") ? c.getChild("component").render() : null
+    %>
+</div>

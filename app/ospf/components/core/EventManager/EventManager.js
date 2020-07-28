@@ -14,7 +14,7 @@ class EventManager extends Component {
                     parameters: parameters,
                     sender: sender,
                     listener: listener,
-                    eventName: eventName
+                    name: eventName
                 });
             }
         }

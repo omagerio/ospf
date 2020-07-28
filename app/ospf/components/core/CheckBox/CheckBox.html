@@ -1,3 +1,9 @@
-<div id="<%= c._id %>" class="CheckBox">
-    <img src="<%- c.value == 0 ? c.inactiveImageUrl : c.activeImageUrl %>" <%- c.renderEvent("onclick", "click") %>>
+<div
+    id="<%= c._id %>"
+    class="CheckBox"
+>
+    <img
+        src="<%- c.value == 0 ? c.inactiveImageUrl : c.activeImageUrl %>"
+        <%- c.renderEvent("onclick", "click") %>
+    >
 </div>

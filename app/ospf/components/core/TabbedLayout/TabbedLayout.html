@@ -1,7 +1,7 @@
 <div id="<%= c._id %>" class="TabbedLayout">
-    <div class="TabbedLayout_content">
-        <%- c.getChild("content") ? c.getChild("content").render() : null %>
-    </div>
+
+    <%- c.getChild("content").render() %>
+
     <div class="TabbedLayout_tabs">
         <%- c.getChild("tabsBar").render() %>
     </div>

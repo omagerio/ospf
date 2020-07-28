@@ -9,4 +9,5 @@ var coreComponents = [
     "core/EventManager",
     "core/TabsBar",
     "core/TabbedLayout",
+    "core/ComponentPlaceholder",
 ];
