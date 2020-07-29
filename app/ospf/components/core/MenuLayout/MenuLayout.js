@@ -18,8 +18,7 @@ class MenuLayout extends Component {
     }
 
     async setContent(component){
-        this.getChild("content").setComponent(component);
-        await this.getChild("content").refresh();
+        await this.getChild("content").setComponent(component);
     }
 
     async createTab({component, name, icon, key}){
@@ -44,7 +43,6 @@ class MenuLayout extends Component {
         if(event.sender == this.getChild("tabsBar")){
             let component = this.contents.find(item => item.key == event.parameters.key);
             await this.setContent(component.component);
-            await this.refresh();
         }
     }
 }
