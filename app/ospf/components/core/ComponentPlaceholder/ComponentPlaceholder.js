@@ -9,9 +9,9 @@ class ComponentPlaceholder extends Component {
 
     async setComponent(component){
         if(component){
-            this.addChild("component", component);
+            await this.addChild("component", component);
         }else{
-            this.removeChild("component");
+            await this.removeChild("component");
         }
         await this.update();
     }

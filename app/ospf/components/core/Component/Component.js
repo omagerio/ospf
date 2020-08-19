@@ -42,6 +42,8 @@ class Component {
     async replace() {
         await this.onBeforeReplace();
 
+        await this.removeAllListeners();
+
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
             await this._children[childName].replace();
@@ -304,7 +306,8 @@ class Component {
     }
 
     async removeAllListeners() {
-        for (let listenerId of this._eventListenersIds) {
+        let listenersClone = this._eventListenersIds.slice();
+        for (let listenerId of listenersClone) {
             await this.removeListener(listenerId);
         }
     }
