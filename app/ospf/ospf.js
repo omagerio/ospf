@@ -2,6 +2,7 @@ let templates = {};
 let lastComponentIndex = 0;
 let root = null;
 let navigationHistory = [];
+let worker = new Worker("ospf/worker.js");
 
 function loadScript(scriptUrl){
     return new Promise(
@@ -33,7 +34,7 @@ window.addEventListener("load", async () => {
                     xhr.onreadystatechange = () => {
                         if (xhr.readyState == 4) {
                             if(xhr.status != 200){
-                                templates[component.replace("core/", "").replace("custom/", "")] = "MISSING";
+                                templates[component.replace("core/", "").replace("custom/", "")] = "";
                             }else{
                                 templates[component.replace("core/", "").replace("custom/", "")] = xhr.responseText;
                             }
@@ -52,7 +53,6 @@ window.addEventListener("load", async () => {
         }
 
         await Promise.all(p);
-
     } else {
         await loadScript("ospf/compiled_components.js?v=" + VERSION);
     }

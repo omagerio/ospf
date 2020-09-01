@@ -1,10 +1,12 @@
-This tools are handy to release your app.
+This tools are handy to release your app and for developing.
 
-=== obfuscate.js ===
-This tools lets you obfuscate/minify/uglyfy your source code. PLEASE NOTE: OBFUSCATION IS NOT A SAFE WAY TO SECURE YOUR CODE. It will still be visible, but harder to read.
+=== INSTALL ==
+run "npm install" in this folder
 
-Usage: node obfuscate.js
+=== server.js ===
+Use this to spin up a local webserver for you to develop.
+Usage: node server.js
 
 === compile.js ===
 Use this tool to merge all your component in a single file to speed up boot time.
-Usage: node obfuscate.js
+Usage: node compile.js
