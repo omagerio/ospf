@@ -7,14 +7,14 @@ class Component {
         this._initialized = false;
         this._parsedTemplate = null;
         this._classname = this.constructor.name;
-        this._eventListenersIds = [];
+        this._eventListeners = [];
     }
 
     static async PauseUntilRendered(id) {
         while (1) {
             let elem = document.querySelector("#" + id);
             if (!elem) {
-                await sleep(10);
+                await sleep(1);
             } else {
                 return elem;
             }
@@ -30,9 +30,11 @@ class Component {
         if (child == null) {
             return;
         }
+
         if (this._children[name] != undefined) {
             await this._children[name].replace();
         }
+
         this._children[name] = child;
     }
 
@@ -41,8 +43,6 @@ class Component {
      */
     async replace() {
         await this.onBeforeReplace();
-
-        await this.removeAllListeners();
 
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
@@ -72,6 +72,14 @@ class Component {
         return this._children[name];
     }
 
+    getChildren(){
+        let children = [];
+        for(let childName of Object.getOwnPropertyNames(this._children)){
+            children.push({name: childName, component: this._children[childName]});
+        }
+        return children;
+    }
+
     /**
      * Returns a reference to this component.
      * @returns {string}
@@ -91,6 +99,7 @@ class Component {
     }
 
     async handleEvent(event, jsonParameters, jsEvent) {
+
         let formData = new FormData(document.querySelector("form"));
         let childrenNames = Object.getOwnPropertyNames(root._children);
 
@@ -99,6 +108,7 @@ class Component {
         }
 
         let parameters = JSON.parse(unescape(jsonParameters));
+
         await this[event](parameters, jsEvent);
     }
 
@@ -204,7 +214,7 @@ class Component {
         let afterRender = async () => {
             let updated = false;
             while (updated == false) {
-                await sleep(10);
+                await sleep(1);
                 if (qs("#" + this._id)) {
                     if (this._rendered == false) {
                         await this.onFirstRender();
@@ -281,8 +291,6 @@ class Component {
     async destroy() {
         await this.onBeforeDestroy();
 
-        await this.removeAllListeners();
-
         for (let childName of Object.getOwnPropertyNames(this._children)) {
             await this._children[childName].destroy();
         }
@@ -291,24 +299,41 @@ class Component {
     async onBeforeDestroy() { }
 
     async addListener(eventName, handler) {
-        let id = await root.eventManager.addListener(eventName, callback(this, handler));
-        this._eventListenersIds.push(id);
-        return id;
+        let listener = {
+            id: uuid(),
+            eventName: eventName,
+            handler: callback(this, handler)
+        };
+        this._eventListeners.push(listener);
     }
 
-    async fireEvent(eventName, parameters) {
-        return await root.eventManager.fire(eventName, parameters, this);
+    async fireEvent(eventName, parameter) {
+        await root._executeEvent(eventName, parameter, this);
     }
 
     async removeListener(id) {
-        await root.eventManager.removeListener(id);
-        this._eventListenersIds.splice(this._eventListenersIds.indexOf(id), 1);
+        let listener = this._eventListeners.find(item => item.id == id);
+        this._eventListeners.splice(this._eventListeners.indexOf(listener), 1);
     }
 
     async removeAllListeners() {
-        let listenersClone = this._eventListenersIds.slice();
-        for (let listenerId of listenersClone) {
-            await this.removeListener(listenerId);
+        this._eventListeners = [];
+    }
+
+    async _executeEvent(eventName, parameter, sender){
+        for(let listener of this._eventListeners){
+            if(listener.eventName == eventName){
+                await listener.handler({
+                    parameters: parameter,
+                    sender: sender,
+                    listener: listener,
+                    name: eventName
+                });
+            }
+        }
+
+        for(let child of this.getChildren()){
+            await child.component._executeEvent(eventName, parameter, sender);
         }
     }
 }
