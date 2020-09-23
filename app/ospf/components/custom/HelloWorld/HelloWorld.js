@@ -11,8 +11,6 @@ class HelloWorld extends Component {
         nameControl.placeholder = "Add some text here...";
         await this.addChild("nameControl", nameControl);
 
-        await this.addListener("TextBox_enterKey","onNameControlEnterKey");
-
         // ListBox example
         let listControl = new ListBox();
         await listControl.init();
@@ -23,12 +21,10 @@ class HelloWorld extends Component {
         await this.databind(); // we load data needed for this component
     }
 
-    async onNameControlEnterKey(event){
-        console.log(event);
-        if(event.sender == this.getChild("nameControl")){ // did our textbox send the event?
+    async onEvent(event){
+        if(event.name == "TextBox_enterKey" && event.sender == this.getChild("nameControl")){
             event.parameters.event.preventDefault();
             await this.addNameClickHandler();
-            // await this.removeListener(listener.id); // remove listener after use?
         }
     }
 

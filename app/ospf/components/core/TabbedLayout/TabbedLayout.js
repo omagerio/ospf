@@ -13,8 +13,14 @@ class TabbedLayout extends Component {
 
         await this.addChild("content", contentPlaceholder);
         await this.addChild("tabsBar", tabsBar);
+    }
 
-        await this.addListener("TabsBar_tabClick", "onTabsBar_tabClick");
+    async onEvent(event){
+        if(event.name == "TabsBar_tabClick" && event.sender == this.getChild("tabsBar")){
+            let component = this.contents.find(item => item.key == event.parameters.key);
+            // await this.addChild("content", component.component);
+            await this.setContent(component.component);
+        }
     }
 
     async setContent(component){
@@ -37,13 +43,5 @@ class TabbedLayout extends Component {
     async setActiveTabByKey(key){
         let tab = this.getChild("tabsBar").tabs.find(item => item.key == key);
         await this.getChild("tabsBar").tabClick(tab.id);
-    }
-
-    async onTabsBar_tabClick(event){
-        if(event.sender == this.getChild("tabsBar")){
-            let component = this.contents.find(item => item.key == event.parameters.key);
-            // await this.addChild("content", component.component);
-            await this.setContent(component.component);
-        }
     }
 }

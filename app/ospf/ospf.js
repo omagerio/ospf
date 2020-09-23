@@ -65,10 +65,6 @@ window.addEventListener("load", async () => {
     root = new Component();
     await root.init();
 
-
-    root.eventManager = new EventManager();
-    await root.eventManager.init();
-
     root.dbManager = new DbManager();
     await root.dbManager.init();
 

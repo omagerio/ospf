@@ -72,10 +72,10 @@ class Component {
         return this._children[name];
     }
 
-    getChildren(){
+    getChildren() {
         let children = [];
-        for(let childName of Object.getOwnPropertyNames(this._children)){
-            children.push({name: childName, component: this._children[childName]});
+        for (let childName of Object.getOwnPropertyNames(this._children)) {
+            children.push({ name: childName, component: this._children[childName] });
         }
         return children;
     }
@@ -298,42 +298,40 @@ class Component {
 
     async onBeforeDestroy() { }
 
-    async addListener(eventName, handler) {
-        let listener = {
-            id: uuid(),
-            eventName: eventName,
-            handler: callback(this, handler)
-        };
-        this._eventListeners.push(listener);
-    }
-
     async fireEvent(eventName, parameter) {
-        await root._executeEvent(eventName, parameter, this);
+        let event = {
+            name: eventName,
+            parameters: parameter,
+            sender: this
+        };
+
+        await root._execOnBeforeEvent(event);
+        await root._execOnEvent(event);
+        await root._execOnAfterEvent(event);
     }
 
-    async removeListener(id) {
-        let listener = this._eventListeners.find(item => item.id == id);
-        this._eventListeners.splice(this._eventListeners.indexOf(listener), 1);
-    }
-
-    async removeAllListeners() {
-        this._eventListeners = [];
-    }
-
-    async _executeEvent(eventName, parameter, sender){
-        for(let listener of this._eventListeners){
-            if(listener.eventName == eventName){
-                await listener.handler({
-                    parameters: parameter,
-                    sender: sender,
-                    listener: listener,
-                    name: eventName
-                });
-            }
-        }
-
-        for(let child of this.getChildren()){
-            await child.component._executeEvent(eventName, parameter, sender);
+    async _execOnBeforeEvent(event) {
+        await this.onBeforeEvent(event);
+        for (let child of this.getChildren()) {
+            await child.component._execOnBeforeEvent(event);
         }
     }
+
+    async _execOnEvent(event) {
+        await this.onEvent(event);
+        for (let child of this.getChildren()) {
+            await child.component._execOnEvent(event);
+        }
+    }
+
+    async _execOnAfterEvent(event){
+        await this.onAfterEvent(event);
+        for (let child of this.getChildren()) {
+            await child.component._execOnAfterEvent(event);
+        }
+    }
+
+    async onBeforeEvent(event) { }
+    async onEvent(event) { }
+    async onAfterEvent(event) { }
 }
