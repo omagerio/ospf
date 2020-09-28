@@ -1,3 +1,19 @@
+# 1.11
+- Added animations for menus
+- Fixed placeholder bugs
+- Refactored event listeners:
+    Added a new method "onEvent" at component level. When an event is fired this method is called with the event as the only parameter.
+    Added new methods:
+    ```javascript
+    async onBeforeEvent(event) { }
+    async onEvent(event) { }
+    async onAfterEvent(event) { }
+    ```
+- Added "getChildren" core method
+- Removed "Event Manager" component
+- Added worker for future implementation
+- Updated README
+
 # 1.10
 - Added TabbedLayoutExample
 - `renderEvent(domEventName, eventName, parameters)` has been reworked to automatically print the domEventName

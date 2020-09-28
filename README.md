@@ -5,7 +5,7 @@ OSPF makes easy to create single pages JavaScript apps, by using components as s
 It is pretty fast when it comes to development time, and has no external dependencies.
 In addition, it uses Vanilla Javascript only, allowing you to stard developing right away without any additional installation.
 You are right, you can start developing directly in your browser just by downloading the .zip file.
-It works on desktop, mobile, even on Electron.
+It works on desktop, mobile, Cordova, Electron.
 
 ## Getting started ##
 Clone this repository inside a folder accessible by your webserver:
@@ -117,7 +117,7 @@ Components have different methods you must know:
 - `async addChild(name, component)`: adds a child component to the current component.
 - `async removeChild(name)`: get the child of the current component by name.
 - `getChild(name)`: get the child of the current component by name.
-- `(string) async addListener(string eventName, string handler)`: add a global event listener. `handler` is a method of `this`. Returns the listener's id. `handler` method receives an `event` object as the only parameter. The `event` object has 3 properties: `{any parameters, string eventName, Component sender, object listener}`
+- `getChildren()`: get all the children of the component.
 - `async fireEvent(string eventName, any parameters)`: fires a global event with parameters.
 
 Inside the template file, you can use `c` to reference your component (for example `c.name`).
@@ -132,6 +132,11 @@ Inside the template file, you can use `c` to reference your component (for examp
 - `async removeListener(string id)`: removes a listener with specified id.
 - `async removeAllListeners()`: removes every listener attached to `this` component.
 - `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside. Use this method when you want to alter the state of the component based on user input.
+
+### Handling events ###
+- `async onBeforeEvent(event)`: called when an event is fired, but before other calls.
+- `async onEvent(event)`: called when an event is fired. Handle your logic here.
+- `async onAfterEvent(event)`: called after an event is fired.
 
 ### Compiling ###
 This step is optional.
