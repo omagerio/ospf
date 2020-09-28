@@ -129,8 +129,6 @@ Inside the template file, you can use `c` to reference your component (for examp
 - `async onBeforeReplace()`: called before a component is replaced (with addChild() to a new component for example);
 - `async onAfterReplace()`: called before a component is replaced (with addChild() to a new component for example);
 - `async onBeforeDestroy()`: called before a component is destroyed (removed with removeChild(), cascades to children);
-- `async removeListener(string id)`: removes a listener with specified id.
-- `async removeAllListeners()`: removes every listener attached to `this` component.
 - `async parseInput()`: parses user input to update components status. It is automatically called when an event is handled. Must call `await super.parseInput()` inside. Use this method when you want to alter the state of the component based on user input.
 
 ### Handling events ###
