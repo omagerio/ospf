@@ -140,6 +140,7 @@ Inside the template file, you can use `c` to reference your component (for examp
 
 ### Compiling ###
 > This step is optional.
+
 By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file. You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
 `node tools/compile.js`.
 
