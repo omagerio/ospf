@@ -1,4 +1,4 @@
-# OSPF, an Event-Driven, asynchrounous, MVC, Vanilla Javascript single-page framework
+# OSPF, an Event-Driven, asynchrounous, Promise-based, single-page, MVC, Vanilla Javascript framework aimed at developing speed.
 
 ## Overview ##
 OSPF makes easy to create single pages JavaScript apps, by using components as stand-alone rendered objects, in a MVC-way.
@@ -139,7 +139,7 @@ Inside the template file, you can use `c` to reference your component (for examp
 - `async onAfterEvent(event)`: called after an event is fired.
 
 ### Compiling ###
-This step is optional.
+> This step is optional.
 By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file. You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
 `node tools/compile.js`.
 
@@ -151,7 +151,14 @@ By default, components are loaded one by one when the application start. You can
 const PRODUCTION_MODE = true;
 ```
 
+### Testing environment ###
+You can start a local webserver by running:
+`node tools/server.js`
+
 ### That's all folks ###
 This is everything you must know if you want to start using OSPF!
 
 Happy coding
+
+
+> This framework is under heavy development and it may change or break at every update. Please check back frequently.
