@@ -12,7 +12,7 @@ const PRODUCTION_MODE = false;
 /*
     The version is used to force a refresh of all files. Update accordingly to your app release.
 */
-const VERSION = "0.1";
+const VERSION = "0.1.0";
 
 /*
 appInit has been removed.

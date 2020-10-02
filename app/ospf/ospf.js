@@ -1,7 +1,6 @@
 let templates = {};
 let lastComponentIndex = 0;
 let app = null;
-let navigationHistory = [];
 let worker = new Worker("ospf/worker.js");
 
 function loadScript(scriptUrl){
