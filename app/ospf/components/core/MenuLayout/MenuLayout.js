@@ -3,16 +3,13 @@ class MenuLayout extends Component {
         await super.init();
         this.contents = [];
 
-        let contentPlaceholder = new ComponentPlaceholder();
+        let contentPlaceholder = await this.addChild("content", new ComponentPlaceholder());
         await contentPlaceholder.init({
             className: "TabbedLayout_content TabbedLayout_content-menu"
         });
 
-        await this.addChild("content", contentPlaceholder);
-
-        let tabsBar = new MenuBar();
+        let tabsBar = await this.addChild("tabsBar", new MenuBar());
         await tabsBar.init();
-        await this.addChild("tabsBar", tabsBar);
     }
 
     async onEvent(event){
@@ -29,7 +26,7 @@ class MenuLayout extends Component {
     }
 
     async createTab({component, name, icon, key}){
-        this.getChild("tabsBar").createTab({
+        await this.getChild("tabsBar").createTab({
             name: name,
             icon: icon,
             key: key

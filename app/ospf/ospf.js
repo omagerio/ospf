@@ -1,6 +1,6 @@
 let templates = {};
 let lastComponentIndex = 0;
-let root = null;
+let app = null;
 let navigationHistory = [];
 let worker = new Worker("ospf/worker.js");
 
@@ -16,7 +16,8 @@ function loadScript(scriptUrl){
 }
 
 window.addEventListener("load", async () => {
-    let body = document.querySelector("form");
+    let body = document.createElement("form");
+    document.querySelector("body").appendChild(body);
 
     if (PRODUCTION_MODE == false) {
         await loadScript("ospf/components_core.js?" + Date.now());
@@ -27,7 +28,7 @@ window.addEventListener("load", async () => {
 
         for (let component of components) {
             let xhr = new XMLHttpRequest();
-            xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html");
+            xhr.open("get", "ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".html?" + Date.now());
             xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             let p2 = new Promise(
                 (resolve) => {
@@ -49,7 +50,7 @@ window.addEventListener("load", async () => {
         }
 
         for (let component of components) {
-            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js");
+            await loadScript("ospf/components/" + component.replace(".js", "") + "/" + component.replace("core/", "").replace("custom/", "") + ".js?" + Date.now());
         }
 
         await Promise.all(p);
@@ -62,20 +63,15 @@ window.addEventListener("load", async () => {
     preloader.style.display = "none";
     body.appendChild(preloader);
 
-    root = new Component();
-    await root.init();
+    app = new App();
+    await app.init();
 
-    root.dbManager = new DbManager();
-    await root.dbManager.init();
+    app.dbManager = new DbManager();
+    await app.dbManager.init();
 
-    try{
-        await appInit();
-    }catch(e){
-        console.error(e);
-    }
-    await root.parseTemplate();
+    await app.parseTemplate();
 
-    body.innerHTML += root.render();
+    body.innerHTML += app.render();
 });
 
 function sleep(ms) {
@@ -91,7 +87,7 @@ function sleep(ms) {
 function getComponentById(id, component) {
     let children = [];
     if (component == undefined) {
-        children = { root: root };
+        children = { app: app };
     } else {
         children = component._children;
     }

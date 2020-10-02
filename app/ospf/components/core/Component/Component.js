@@ -36,6 +36,7 @@ class Component {
         }
 
         this._children[name] = child;
+        return child;
     }
 
     /**
@@ -69,6 +70,9 @@ class Component {
      * @param {string} name
      */
     getChild(name) {
+        if(this._initialized == false){
+            console.warn("This component is not initialized:", this);
+        }
         return this._children[name];
     }
 
@@ -101,10 +105,10 @@ class Component {
     async handleEvent(event, jsonParameters, jsEvent) {
 
         let formData = new FormData(document.querySelector("form"));
-        let childrenNames = Object.getOwnPropertyNames(root._children);
+        let childrenNames = Object.getOwnPropertyNames(app._children);
 
         for (let childName of childrenNames) {
-            await root._children[childName].parseInput(formData);
+            await app._children[childName].parseInput(formData);
         }
 
         let parameters = JSON.parse(unescape(jsonParameters));
@@ -207,6 +211,7 @@ class Component {
     render() {
         if (this._initialized == false) {
             throw new Error("Cannot render " + this.constructor.name + " because you have not called init(). Call init() first.");
+            return;
         }
 
         let html = this._parsedTemplate;
@@ -305,9 +310,9 @@ class Component {
             sender: this
         };
 
-        await root._execOnBeforeEvent(event);
-        await root._execOnEvent(event);
-        await root._execOnAfterEvent(event);
+        await app._execOnBeforeEvent(event);
+        await app._execOnEvent(event);
+        await app._execOnAfterEvent(event);
     }
 
     async _execOnBeforeEvent(event) {

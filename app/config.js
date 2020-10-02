@@ -14,12 +14,7 @@ const PRODUCTION_MODE = false;
 */
 const VERSION = "0.1";
 
-/**
- * Called when the framework is ready. Assing root to your main component.
- */
-async function appInit() {
-    let main = new TabbedLayoutExample(); // Simple example with bottom tabs layout
-    // let main = new MenuLayoutExample(); // Simple example with bottom tabs layout
-    await main.init();
-    await root.addChild("main", main);
-}
+/*
+appInit has been removed.
+The app will always start from the custom component "App"
+*/

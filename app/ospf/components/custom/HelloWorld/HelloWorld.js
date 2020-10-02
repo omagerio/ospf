@@ -6,17 +6,15 @@ class HelloWorld extends Component {
         await super.init();
 
         // TextBox example
-        let nameControl = new TextBox();
+        let nameControl = await this.addChild("nameControl", new TextBox());
         await nameControl.init();
         nameControl.placeholder = "Add some text here...";
-        await this.addChild("nameControl", nameControl);
 
         // ListBox example
-        let listControl = new ListBox();
+        let listControl = await this.addChild("listControl", new ListBox());
         await listControl.init();
         listControl.addOption("opzione 1", "1");
         listControl.addOption("opzione 2", "2");
-        await this.addChild("listControl", listControl);
 
         await this.databind(); // we load data needed for this component
     }
@@ -46,9 +44,8 @@ class HelloWorld extends Component {
     }
 
     async addDollyHandler(){
-        let dolly = new HelloWorld();
+        let dolly = await this.addChild("dollyComponent", new HelloWorld());
         await dolly.init();
-        await this.addChild("dollyComponent", dolly);
         await this.refresh();
     }
 }
