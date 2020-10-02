@@ -28,9 +28,4 @@ class MenuLayoutExample extends MenuLayout {
         // Select the first tab by default
         await this.setActiveTabByKey("menu0");
     }
-
-    async onFirstRender() {
-
-    }
-
 }

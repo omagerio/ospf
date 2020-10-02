@@ -82,7 +82,7 @@ let appDir = __dirname + "/../app";
         await p1;
         console.log("Writing compiled files");
         fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource);
-        console.log("Compiled files created");
+        console.log("Compiled files created. Set PRODUCTION_MODE=true in config.js. You can delete 'ospf/components' folder in the release package to hide source files.");
     } catch (e) {
         console.log("Error during compilation. You can still use the compiled components (PRODUCTION_MODE=true) but it is not minified");
     }
