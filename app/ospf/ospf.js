@@ -1,7 +1,6 @@
 let templates = {};
 let lastComponentIndex = 0;
 let app = null;
-let worker = new Worker("ospf/worker.js");
 
 function loadScript(scriptUrl){
     return new Promise(
@@ -50,10 +49,7 @@ window.addEventListener("load", async () => {
     await loadScript("ospf/assets/libs/ejs.min.js");
 
     if (config.productionMode == false) {
-        await loadScript("ospf/components_core.js?" + Date.now());
-        await loadScript("ospf/components_custom.js?" + Date.now());
-
-        let components = coreComponents.concat(customComponents);
+        let components = config.coreComponents.concat(config.customComponents);
         let p = [];
 
         for (let component of components) {

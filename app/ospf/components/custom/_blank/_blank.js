@@ -5,4 +5,13 @@ class Blank extends Component {
     async init({}={}) {
         await super.init(); // always call super.init() first
     }
+
+    /*
+    Events
+
+    async onBeforeReplace(){
+        await super.onBeforeReplace();
+    }
+
+    */
 }

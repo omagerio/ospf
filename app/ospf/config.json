@@ -1,4 +1,24 @@
 {
     "productionMode": false,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coreComponents": [
+        "core/Component",
+        "core/TextBox",
+        "core/ListBox",
+        "core/AjaxRequest",
+        "core/Label",
+        "core/DbManager",
+        "core/CheckBox",
+        "core/TabsBar",
+        "core/TabbedLayout",
+        "core/ComponentPlaceholder",
+        "core/MenuLayout",
+        "core/MenuBar"
+    ],
+    "customComponents": [
+        "custom/App",
+        "custom/HelloWorld",
+        "custom/TabbedLayoutExample",
+        "custom/MenuLayoutExample"
+    ]
 }
