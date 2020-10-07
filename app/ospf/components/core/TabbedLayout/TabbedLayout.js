@@ -14,7 +14,7 @@ class TabbedLayout extends Component {
 
     async onEvent(event){
         if(event.name == "TabsBar_tabClick" && event.sender == this.getChild("tabsBar")){
-            let component = this.contents.find(item => item.key == event.parameters.key);
+            let component = this.contents.find(item => item.key == event.parameter.key);
             // await this.addChild("content", component.component);
             await this.setContent(component.component);
         }

@@ -21,7 +21,7 @@ class HelloWorld extends Component {
 
     async onEvent(event){
         if(event.name == "TextBox_enterKey" && event.sender == this.getChild("nameControl")){
-            event.parameters.event.preventDefault();
+            event.parameter.event.preventDefault();
             await this.addNameClickHandler();
         }
     }

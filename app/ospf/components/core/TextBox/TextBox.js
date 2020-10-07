@@ -15,7 +15,7 @@ class TextBox extends Component {
         await super.parseInput();
     }
 
-    async keyDown(parameters, jsEvent){
+    async keyDown(parameter, jsEvent){
         if(jsEvent.key == "Enter"){
             await this.fireEvent("TextBox_enterKey", {
                 event: jsEvent

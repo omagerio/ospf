@@ -99,12 +99,12 @@ class Component {
      * @param {string} event
      * @param {string} parameter
      */
-    renderEvent(jsEvent, event, parameters = null) {
-        let jsonParameters = escape(JSON.stringify(parameters));
-        return jsEvent + "=\"" + this.self() + ".handleEvent('" + event + "', '" + jsonParameters + "', event)\"";
+    renderEvent(jsEvent, event, parameter = null) {
+        let jsonParameter = escape(JSON.stringify(parameter));
+        return jsEvent + "=\"" + this.self() + ".handleEvent('" + event + "', '" + jsonParameter + "', event)\"";
     }
 
-    async handleEvent(event, jsonParameters, jsEvent) {
+    async handleEvent(event, jsonParameter, jsEvent) {
 
         let formData = new FormData(document.querySelector("form"));
         let childrenNames = Object.getOwnPropertyNames(app._children);
@@ -113,9 +113,9 @@ class Component {
             await app._children[childName].parseInput(formData);
         }
 
-        let parameters = JSON.parse(unescape(jsonParameters));
+        let parameter = JSON.parse(unescape(jsonParameter));
 
-        await this[event](parameters, jsEvent);
+        await this[event](parameter, jsEvent);
     }
 
     /**
@@ -308,7 +308,7 @@ class Component {
     async fireEvent(eventName, parameter) {
         let event = {
             name: eventName,
-            parameters: parameter,
+            parameter: parameter,
             sender: this
         };
 

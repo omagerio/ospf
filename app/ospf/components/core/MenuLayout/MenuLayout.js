@@ -15,7 +15,7 @@ class MenuLayout extends Component {
     async onEvent(event){
         if(event.name == "TabsBar_tabClick"){
             if(event.sender == this.getChild("tabsBar")){
-                let component = this.contents.find(item => item.key == event.parameters.key);
+                let component = this.contents.find(item => item.key == event.parameter.key);
                 await this.setContent(component.component);
             }
         }

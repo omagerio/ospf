@@ -85,7 +85,7 @@ You are almost there. Now we have to tell OSPF about your new component, but do 
         "custom/HelloWorld",
         "custom/TabbedLayoutExample",
 		"custom/MenuLayoutExample",
-		"custom/MyComponent" // add your component here
+		"custom/MyComponent" /* add your component here */
 ]
 ```
 
@@ -106,7 +106,7 @@ Here you place the HTML of your component. Be sure to set the `id` attribute of 
 Components have different methods you must know:
 
 - `async init()`: this is a fundamental method of the components. Always call this method after you created your component. You can use this method to pass variables to your component. Always call `await super.init()` before your custom code.
-- `renderEvent(string eventName, any parameters, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameters, javascriptEvent)`.
+- `renderEvent(string eventName, any parameter, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameter, javascriptEvent)`.
 - `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
@@ -115,7 +115,7 @@ Components have different methods you must know:
 - `async removeChild(name)`: get the child of the current component by name.
 - `getChild(name)`: get the child of the current component by name.
 - `getChildren()`: get all the children of the component.
-- `async fireEvent(string eventName, any parameters)`: fires a global event with parameters.
+- `async fireEvent(string eventName, any parameter)`: fires a global event with parameter.
 
 Inside the template file, you can use `c` to reference your component (for example `c.name`).
 
