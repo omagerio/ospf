@@ -3,7 +3,7 @@
 ## Overview ##
 OSPF makes easy to create single pages JavaScript apps, by using components as stand-alone rendered objects, in a MVC-way.
 It is pretty fast when it comes to development time, and has no external dependencies.
-In addition, it uses Vanilla Javascript only, allowing you to stard developing right away without any additional installation.
+In addition, it uses Vanilla Javascript only, allowing you to start developing right away without any additional installation.
 You are right, you can start developing directly in your browser just by downloading the .zip file.
 It works on desktop, mobile, Cordova, Electron.
 
