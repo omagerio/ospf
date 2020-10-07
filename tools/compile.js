@@ -8,11 +8,9 @@ let appDir = __dirname + "/../app";
     let compiledSource = "";
     let templatesSource = "";
 
-    let componentsCoreSource = fs.readFileSync(appDir + "/ospf/components_core.js", { encoding: "utf8" });
-    let componentsCustomSource = fs.readFileSync(appDir + "/ospf/components_custom.js", { encoding: "utf8" });
-
-    eval(componentsCoreSource);
-    eval(componentsCustomSource);
+    let config = JSON.parse(fs.readFileSync(appDir + "/ospf/config.json", { encoding: "utf8" }));
+    let coreComponents = config.coreComponents;
+    let customComponents = config.customComponents;
 
     for (let component of coreComponents) {
         console.log("Compiling " + component);

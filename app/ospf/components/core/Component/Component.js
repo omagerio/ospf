@@ -197,7 +197,7 @@ class Component {
 
         let template;
 
-        if (templates[this.constructor.name] == "") {
+        if (templates[this.constructor.name] == undefined || templates[this.constructor.name] == "") {
             template = templates[Object.getPrototypeOf(this.constructor).name]; // FIXME
         } else {
             template = templates[this.constructor.name];

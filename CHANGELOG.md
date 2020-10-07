@@ -1,3 +1,11 @@
+# 1.12
+- Refactored html structure and assets loading:
+  - Components are now listed inside the `ospf/config.json` config file
+  - Libraries and css are added dinamically at page load
+  - `index.js` has been removed. The app always starts with an instance of `App` component (first located in custom components)
+- Removed empy web worker. Will be reintroduced in the future.
+- Updated readme
+
 # 1.11
 - Added animations for menus
 - Fixed placeholder bugs

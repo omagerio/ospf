@@ -3,7 +3,7 @@
  */
 class HelloWorld extends Component {
     async init() {
-        await super.init();
+        await super.init(); // always do this first
 
         // TextBox example
         let nameControl = await this.addChild("nameControl", new TextBox());

@@ -1,5 +1,5 @@
 {
-    "productionMode": false,
+    "productionMode": true,
     "version": "0.1.0",
     "coreComponents": [
         "core/Component",
