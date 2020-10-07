@@ -73,7 +73,9 @@ class Component {
         if(this._initialized == false){
             console.warn("This component is not initialized:", this);
         }
-        return this._children[name];
+
+        let child = this._children[name];
+        return child;
     }
 
     getChildren() {
