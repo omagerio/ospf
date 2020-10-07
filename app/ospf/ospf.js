@@ -14,11 +14,42 @@ function loadScript(scriptUrl){
     );
 }
 
+function loadFile(url, contentType = ""){
+    return new Promise(
+        (resolve)=>{
+            let xhr = new XMLHttpRequest();
+            xhr.open("get", url);
+            xhr.addEventListener("readystatechange", ()=>{
+                if(xhr.readyState == 4){
+                    resolve(xhr.response);
+                }
+            });
+            xhr.setRequestHeader("Content-type", "application/json;charset=utf8");
+            xhr.send();
+        }
+    );
+}
+
 window.addEventListener("load", async () => {
     let body = document.createElement("form");
     document.querySelector("body").appendChild(body);
 
-    if (PRODUCTION_MODE == false) {
+    let configResponse = await loadFile("ospf/config.json");
+    let config = JSON.parse(configResponse);
+
+    // adding CSS
+    let cssUrls = ["ospf/assets/css/core.css", "ospf/assets/css/custom.css"];
+    for(let cssUrl of cssUrls){
+        let link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = cssUrl;
+        document.querySelector("head").appendChild(link);
+    }
+
+    // adding EJS
+    await loadScript("ospf/assets/libs/ejs.min.js");
+
+    if (config.productionMode == false) {
         await loadScript("ospf/components_core.js?" + Date.now());
         await loadScript("ospf/components_custom.js?" + Date.now());
 
@@ -54,7 +85,7 @@ window.addEventListener("load", async () => {
 
         await Promise.all(p);
     } else {
-        await loadScript("ospf/compiled_components.js?v=" + VERSION);
+        await loadScript("ospf/compiled_components.js?v=" + config.version);
     }
 
     let preloader = document.createElement("div");
@@ -64,6 +95,7 @@ window.addEventListener("load", async () => {
 
     app = new App();
     await app.init();
+    app.config = config;
 
     app.dbManager = new DbManager();
     await app.dbManager.init();
