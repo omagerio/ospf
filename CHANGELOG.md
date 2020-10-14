@@ -5,6 +5,7 @@
   - `index.js` has been removed. The app always starts with an instance of `App` component (first located in custom components)
 - Removed empy web worker. Will be reintroduced in the future.
 - Updated readme
+- Added IndexedDB database integration (DEXIE) with dbManager
 
 # 1.11
 - Added animations for menus
