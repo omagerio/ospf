@@ -8,13 +8,14 @@ class Component {
         this._parsedTemplate = null;
         this._classname = this.constructor.name;
         this._eventListeners = [];
+        this._dom = null;
     }
 
     static async PauseUntilRendered(id) {
         while (1) {
             let elem = document.querySelector("#" + id);
             if (!elem) {
-                await sleep(1);
+                await sleep(100);
             } else {
                 return elem;
             }
@@ -171,7 +172,9 @@ class Component {
             }
 
             preloader.removeChild(tempDiv);
-            // await sleep(10);
+            await sleep(100);
+
+            this._dom = document.getElementById(this._id);
 
             await this.onAfterRefresh();
         } else {
@@ -222,7 +225,9 @@ class Component {
             let updated = false;
             while (updated == false) {
                 await sleep(1);
-                if (qs("#" + this._id)) {
+                let elem = qs("#" + this._id);
+                if (elem) {
+                    this._dom = elem;
                     if (this._rendered == false) {
                         await this.onFirstRender();
                         this._rendered = true;
