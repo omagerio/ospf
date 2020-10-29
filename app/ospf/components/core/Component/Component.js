@@ -143,6 +143,10 @@ class Component {
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
      */
     async databind() {
+        await this.databindChildren();
+    }
+
+    async databindChildren(){
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
             await this._children[childName].databind();

@@ -107,7 +107,7 @@ Components have different methods you must know:
 
 - `async init()`: this is a fundamental method of the components. Always call this method after you created your component. You can use this method to pass variables to your component. Always call `await super.init()` before your custom code.
 - `renderEvent(string eventName, any parameter, Event javascriptEvent)`: renders an event, for example: `onclick="<%- c.renderEvent("clickHandler") %>"` will call `component.clickHandler(parameter, javascriptEvent)`.
-- `async databind()`: loads panel data. You _must_ override this function (and call `super.databind()`) inside your component when you have to load data required from your tpl.
+- `async databind()`: loads panel data. You _must_ override this function (and call `this.databindChildren()`) inside your component when you have to load data required from your tpl.
 - `async refresh()`: refreshes the component's template. You should never override this method.
 - `async update()`: calls `refresh()` and `databind()` sequentially. You should never override this method.
 - `render()`: returns the HTML of the component. Use this method inside your template to render children components.
