@@ -11,6 +11,7 @@
     </ul>
     <%- c.getChild("nameControl").render() %>
     <%- c.getChild("listControl").render() %>
+
     <input <%= c.renderEvent("onclick", "addNameClickHandler") %> type="button" value="Add #1">
     <input <%= c.renderEvent("onclick", "addDollyHandler") %> type="button" value="Add Dolly Component">
 

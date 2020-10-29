@@ -26,9 +26,8 @@ class HelloWorld extends Component {
         }
     }
 
-    async databind() {
+    async onDatabind() {
         this.names = ["Mario", "Luigi", "Yoshi"];
-        await this.databindChildren();  // Always call this.databindChildren() to databind children components before ending
     }
 
     async addNameClickHandler() {

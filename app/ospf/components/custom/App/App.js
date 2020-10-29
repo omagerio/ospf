@@ -10,7 +10,8 @@ class App extends Component {
         await app.dbManager.setDbStructure({});
 
         // Create the first component to be rendered inside the app
-        let layout = await this.addChild("layout", new MenuLayoutExample());
+        // let layout = await this.addChild("layout", new MenuLayoutExample());
+        let layout = await this.addChild("layout", new HelloWorld());
         await layout.init();
     }
 }
