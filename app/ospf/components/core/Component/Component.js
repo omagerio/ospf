@@ -1,3 +1,5 @@
+let isRefreshing = false;
+
 class Component {
     constructor() {
         this.datasource = [];
@@ -152,6 +154,12 @@ class Component {
      */
     async refresh() {
 
+        while(isRefreshing == true){
+            await(sleep(100));
+        }
+
+        isRefreshing = true;
+
         await this.onBeforeRefresh();
 
         let elem = document.getElementById(this._id);
@@ -180,6 +188,8 @@ class Component {
         } else {
             //throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
         }
+
+        isRefreshing = false;
     }
 
     /**
