@@ -1,3 +1,6 @@
+# 1.13
+- Removed `databind()` function from custom components. Now databind in components must be handled with `onDatabind()`.
+
 # 1.12
 - Refactored html structure and assets loading:
   - Components are now listed inside the `ospf/config.json` config file
