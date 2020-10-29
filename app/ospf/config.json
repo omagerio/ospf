@@ -1,6 +1,7 @@
 {
     "productionMode": false,
     "version": "0.0.1",
+
     "coreComponents": [
         "core/Component",
         "core/TextBox",
@@ -15,6 +16,7 @@
         "core/MenuLayout",
         "core/MenuBar"
     ],
+
     "customComponents": [
         "custom/App",
         "custom/HelloWorld",
