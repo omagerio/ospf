@@ -1,5 +1,5 @@
 /**
- * Example component. Add your custom components to ospf/components_custom.js to use them.
+ * Example component. Add your custom components to ospf/config.json to use them.
  */
 class Blank extends Component {
     async init({}={}) {
@@ -7,9 +7,9 @@ class Blank extends Component {
     }
 
     // async onDatabind(){}
-    // async onBeforeEvent(){}
-    // async onEvent(){}
-    // async onAfterEvent(){}
+    // async onBeforeEvent(event){}
+    // async onEvent(event){}
+    // async onAfterEvent(event){}
     // async onBeforeRefresh(){}
     // async onAfterRefresh(){}
     // async onFirstRender(){}
