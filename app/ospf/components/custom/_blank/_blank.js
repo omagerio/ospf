@@ -6,12 +6,11 @@ class Blank extends Component {
         await super.init(); // always call super.init() first
     }
 
-    /*
-    Events
-
-    async onBeforeReplace(){
-        await super.onBeforeReplace();
-    }
-
-    */
+    // async onDatabind(){}
+    // async onBeforeEvent(){}
+    // async onEvent(){}
+    // async onAfterEvent(){}
+    // async onBeforeRefresh(){}
+    // async onAfterRefresh(){}
+    // async onFirstRender(){}
 }

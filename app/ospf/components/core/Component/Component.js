@@ -1,5 +1,3 @@
-let isRefreshing = false;
-
 class Component {
     constructor() {
         this.datasource = [];
@@ -11,6 +9,8 @@ class Component {
         this._classname = this.constructor.name;
         this._eventListeners = [];
         this._dom = null;
+        this._isRefreshing = false;
+        this._isDatabinding = false;
     }
 
     static async PauseUntilRendered(id) {
@@ -143,8 +143,13 @@ class Component {
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
      */
     async databind() {
+        while(this._isDatabinding == true){
+            await sleep(100);
+        }
+        this._isDatabinding = true;
         await this.onDatabind();
         await this.databindChildren();
+        this._isDatabinding = false;
     }
 
     async onDatabind(){}
@@ -161,11 +166,11 @@ class Component {
      */
     async refresh() {
 
-        while(isRefreshing == true){
-            await(sleep(100));
+        while(this._isRefreshing == true){
+            await sleep(100);
         }
 
-        isRefreshing = true;
+        this._isRefreshing = true;
 
         await this.onBeforeRefresh();
 
@@ -196,7 +201,7 @@ class Component {
             //throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
         }
 
-        isRefreshing = false;
+        this._isRefreshing = false;
     }
 
     /**
