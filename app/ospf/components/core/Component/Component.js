@@ -3,6 +3,7 @@ class Component {
         this.datasource = [];
         this._children = {};
         this._id = this.constructor.name + "_" + lastComponentIndex++;
+        this._name = "Component";
         this._rendered = false;
         this._initialized = false;
         this._parsedTemplate = null;
@@ -39,6 +40,7 @@ class Component {
         }
 
         this._children[name] = child;
+        child._name = name;
         return child;
     }
 
@@ -73,7 +75,7 @@ class Component {
      * @param {string} name
      */
     getChild(name) {
-        if(this._initialized == false){
+        if (this._initialized == false) {
             console.warn("This component is not initialized:", this);
         }
 
@@ -143,7 +145,7 @@ class Component {
      * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
      */
     async databind() {
-        while(this._isDatabinding == true){
+        while (this._isDatabinding == true) {
             await sleep(100);
         }
         this._isDatabinding = true;
@@ -152,9 +154,9 @@ class Component {
         this._isDatabinding = false;
     }
 
-    async onDatabind(){}
+    async onDatabind() { }
 
-    async databindChildren(){
+    async databindChildren() {
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
             await this._children[childName].databind();
@@ -166,7 +168,7 @@ class Component {
      */
     async refresh() {
 
-        while(this._isRefreshing == true){
+        while (this._isRefreshing == true) {
             await sleep(100);
         }
 
@@ -229,7 +231,21 @@ class Component {
         }
 
         let html = ejs.render(template, { c: this });
-        this._parsedTemplate = html;
+
+        if (app.config.productionMode == false) {
+            let domParser = new DOMParser();
+            let dom = domParser.parseFromString(html, "text/html");
+            let children = dom.querySelector("body").children;
+            if (children.length > 1) {
+                throw new Error("Template component must have only one wrapper! (" + this._classname + ")");
+            }
+            if (children[0].id != this._id) {
+                throw new Error("Component wrapper must have the ID attribute set to the component ID! (" + this._classname + ")");
+            }
+            this._parsedTemplate = html.replace(">", " ospf-componentName='" + this._classname + "' ospf-childName='" + this._name + "' >");
+        } else {
+            this._parsedTemplate = html;
+        }
     }
 
     /**
@@ -358,7 +374,7 @@ class Component {
         }
     }
 
-    async _execOnAfterEvent(event){
+    async _execOnAfterEvent(event) {
         await this.onAfterEvent(event);
         for (let child of this.getChildren()) {
             await child.component._execOnAfterEvent(event);
