@@ -17,11 +17,10 @@ class TextBox extends Component {
 
     async keyDown(parameter, jsEvent){
         if(jsEvent.key == "Enter"){
+            jsEvent.preventDefault();
             await this.fireEvent("TextBox_enterKey", {
                 event: jsEvent
             });
-            jsEvent.preventDefault();
         }
-
     }
 }
