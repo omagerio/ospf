@@ -1,6 +1,23 @@
 
 let fs = require("fs");
-let http = require("http");
+let JavaScriptObfuscator = require('javascript-obfuscator');
+let obfuscationOptions = {
+    compact: true,
+    controlFlowFlattening: false,
+    deadCodeInjection: false,
+    debugProtection: false,
+    debugProtectionInterval: false,
+    disableConsoleOutput: true,
+    identifierNamesGenerator: 'mangled',
+    log: false,
+    renameGlobals: false,
+    rotateStringArray: true,
+    selfDefending: true,
+    stringArray: true,
+    stringArrayEncoding: false,
+    stringArrayThreshold: 1,
+    unicodeEscapeSequence: false
+};
 
 let appDir = __dirname + "/../app";
 
@@ -15,71 +32,45 @@ let appDir = __dirname + "/../app";
     for (let component of coreComponents) {
         console.log("Compiling " + component);
         let name = component.replace("core/", "");
-        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js");
+        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
         compiledSource += "\n\n";
 
         if (fs.existsSync(appDir + "/ospf/components/" + component + "/" + name + ".html")) {
             console.log("Compiling " + component + " template");
-            templatesSource += "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n";
+            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
+            templatesSource += componentTemplate;
         }
     }
 
     for (let component of customComponents) {
         console.log("Compiling " + component);
         let name = component.replace("custom/", "");
-        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js");
+        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
         compiledSource += "\n\n";
 
         if (fs.existsSync(appDir + "/ospf/components/" + component + "/" + name + ".html")) {
             console.log("Compiling " + component + " template");
-            templatesSource += "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n";;
+            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
+            templatesSource += componentTemplate;
         }
     }
 
     // console.log("Source to minimize: ", compiledSource);
-    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource);
-    compiledSource = encodeURIComponent(compiledSource + "\n" + templatesSource);
+    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource, { encoding: "utf8" });
+    // compiledSource = encodeURIComponent(compiledSource + "\n" + templatesSource);
+    compiledSource = compiledSource + "\n" + templatesSource;
+
+    var obfuscationResult;
 
     console.log("Minimizing compiled files");
-    let p1 = new Promise(
-        (resolve, reject) => {
-            let data = compiledSource;
-            let options = {
-                hostname: 'javascript-obfuscator-api.herokuapp.com',
-                port: 80,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain; charset=utf-8',
-                    'Content-Length': data.length,
-                }
-            }
-
-            let responseBuffer = "";
-            let req = http.request(options, (res) => {
-                res.on('data', (d) => {
-                    responseBuffer += d;
-                });
-
-                res.on("end", () => {
-                    let response = JSON.parse(responseBuffer);
-                    if (response.success == 1) {
-                        compiledSource = response.data;
-                        resolve();
-                    } else {
-                        reject();
-                    }
-                });
-
-            });
-
-            req.write(data);
-            req.end();
-        }
-    );
     try {
-        await p1;
+        obfuscationResult = JavaScriptObfuscator.obfuscate(
+            compiledSource,
+            obfuscationOptions
+        );
+
         console.log("Writing compiled files");
-        fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource);
+        fs.writeFileSync(appDir + "/ospf/compiled_components.js", obfuscationResult, {encoding: "utf8"});
         console.log("Compiled files created. Set PRODUCTION_MODE=true in config.js. You can delete 'ospf/components' folder in the release package to hide source files.");
     } catch (e) {
         console.log("Error during compilation. You can still use the compiled components (PRODUCTION_MODE=true) but it is not minified");
