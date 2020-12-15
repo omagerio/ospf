@@ -14,13 +14,13 @@
         "core/TabbedLayout",
         "core/ComponentPlaceholder",
         "core/MenuLayout",
-        "core/MenuBar"
+        "core/MenuBar",
+        "core/HelloWorld",
+        "core/TabbedLayoutExample",
+        "core/MenuLayoutExample"
     ],
 
     "customComponents": [
-        "custom/App",
-        "custom/HelloWorld",
-        "custom/TabbedLayoutExample",
-        "custom/MenuLayoutExample"
+        "custom/App"
     ]
 }
