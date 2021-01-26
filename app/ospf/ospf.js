@@ -97,6 +97,9 @@ window.addEventListener("load", async () => {
     app.dbManager.setDbName("demoApp");
     await app.dbManager.setDbStructure({});
 
+    app.modalContainer = await app.addChild("modalContainer", new ModalContainer());
+    await app.modalContainer.init();
+
     await app.init();
     await app.parseTemplate();
 

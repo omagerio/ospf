@@ -5,6 +5,7 @@ class DbManager extends Component {
     async init() {
         await super.init();
         this.db = new Dexie("ospf");
+        this.dexie = this.db; // alias
     }
 
     setDbName(name){
