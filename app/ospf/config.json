@@ -1,5 +1,5 @@
 {
-    "productionMode": true,
+    "productionMode": false,
     "version": "0.0.1",
 
     "coreComponents": [
@@ -17,7 +17,8 @@
         "core/MenuBar",
         "core/HelloWorld",
         "core/TabbedLayoutExample",
-        "core/MenuLayoutExample"
+        "core/MenuLayoutExample",
+        "core/ModalContainer"
     ],
 
     "customComponents": [

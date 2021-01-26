@@ -384,4 +384,8 @@ class Component {
     async onBeforeEvent(event) { }
     async onEvent(event) { }
     async onAfterEvent(event) { }
+
+    renderChild(childName){
+        return this.getChild(childName).render();
+    }
 }

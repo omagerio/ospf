@@ -12,5 +12,9 @@ class App extends Component {
         // Create the first component to be rendered inside the app
         let layout = await this.addChild("myFirstComponent", new MenuLayoutExample());
         await layout.init();
+
+        // Modal helper
+        let modalContainer = await this.addChild("modalContainer", new ModalContainer());
+        await modalContainer.init();
     }
 }

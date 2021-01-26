@@ -1,0 +1,5 @@
+<div id="<%= c._id %>" class="ModalContainer <%- c.isVisible ? "" : "ModalContainer-2" %>">
+    <div class="ModalContainer_content">
+        <%- c.getChild("modal") ? c.renderChild("modal") : null %>
+    </div>
+</div>
