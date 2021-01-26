@@ -1,5 +1,11 @@
 # 1.13
 - Removed `databind()` function from custom components. Now databind in components must be handled with `onDatabind()`.
+- Renamed ComponentPlaceholder in ComponentWrapper
+- Renamed `parseInput` in `onParseInput`
+- Added `ModalContainer` as as core class
+- Added `pushChild` and `popChild` methods to allow component navigation
+- Moved superflous custom components into core
+- Fixed server script with utf8 support
 
 # 1.12
 - Refactored html structure and assets loading:
