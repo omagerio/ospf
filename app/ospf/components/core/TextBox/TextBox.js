@@ -10,9 +10,8 @@ class TextBox extends Component {
         this.cssClass = "TextBox";
     }
 
-    async parseInput(formData){
+    async onParseInput(formData){
         this.value = formData.get(this._id);
-        await super.parseInput();
     }
 
     async keyDown(parameter, jsEvent){

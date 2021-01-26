@@ -142,7 +142,7 @@ class Component {
         let childrenNames = Object.getOwnPropertyNames(app._children);
 
         for (let childName of childrenNames) {
-            await app._children[childName].parseInput(formData);
+            await app._children[childName]._execOnParseInput(formData);
         }
 
         let parameter = JSON.parse(unescape(jsonParameter));
@@ -150,15 +150,17 @@ class Component {
         await this[event](parameter, jsEvent);
     }
 
+    async _execOnParseInput(formData){
+        await this.onParseInput(formData);
+        for(let child of this.getChildren()){
+            await child.component._execOnParseInput(formData);
+        }
+    }
+
     /**
      * Parse user input
      */
-    async parseInput(formData) {
-        let childrenNames = Object.getOwnPropertyNames(this._children);
-        for (let childName of childrenNames) {
-            await this._children[childName].parseInput(formData);
-        }
-    }
+    async onParseInput(formData) {}
 
     /**
      * Main initialization method. Always call it when creating new components.
