@@ -1,7 +1,7 @@
 /**
  * Example component. Add your custom components to ospf/components_custom.js to use them.
  */
-class ComponentPlaceholder extends Component {
+class ComponentWrapper extends Component {
     async init({className} = {}) {
         await super.init(); // always call init method of super component first
         this.className = className;

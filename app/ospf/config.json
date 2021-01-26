@@ -12,7 +12,7 @@
         "core/CheckBox",
         "core/TabsBar",
         "core/TabbedLayout",
-        "core/ComponentPlaceholder",
+        "core/ComponentWrapper",
         "core/MenuLayout",
         "core/MenuBar",
         "core/HelloWorld",

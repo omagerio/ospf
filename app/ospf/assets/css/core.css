@@ -162,6 +162,10 @@ html, body, form, #App_0
     height:100%;
 }
 
+.MenuLayout > *:nth-child(1){
+    flex-grow: 1;
+}
+
 .ModalContainer
 {
     display:flex;

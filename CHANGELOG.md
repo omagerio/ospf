@@ -31,7 +31,7 @@
 - `renderEvent(domEventName, eventName, parameter)` has been reworked to automatically print the domEventName
 - fixed an error with `addChild(null)`
 - fixed styling errors with names
-- added ComponentPlaceholder to core components
+- added ComponentWrapper to core components
 
 # 1.9
 - Optimized loading in debug environment

@@ -6,7 +6,7 @@ class TabbedLayout extends Component {
         let tabsBar = await this.addChild("tabsBar", new TabsBar());
         await tabsBar.init();
 
-        let contentPlaceholder = await this.addChild("content", new ComponentPlaceholder());
+        let contentPlaceholder = await this.addChild("content", new ComponentWrapper());
         await contentPlaceholder.init({
             className: "TabbedLayout_content"
         });
