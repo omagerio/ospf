@@ -16,10 +16,10 @@ async function init() {
             let path = __dirname + "/../app" + url;
 
             if (fs.existsSync(path)) {
-                response.setHeader("Content-Type", mime.lookup(path));
+                response.setHeader("Content-Type", mime.lookup(path) +";charset=utf8");
                 response.setHeader("Cache-Control", "no-cache");
-                let fileContent = fs.readFileSync(path);
-                response.write(fileContent, "utf-8");
+                let fileContent = fs.readFileSync(path, {encoding: "utf-8"});
+                response.write(fileContent, "utf8");
             } else {
                 console.log("Not found", path);
                 response.write("", "utf-8");
