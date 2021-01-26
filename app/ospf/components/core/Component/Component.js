@@ -2,6 +2,7 @@ class Component {
     constructor() {
         this.datasource = [];
         this._children = {};
+        this._childrenHistory = {};
         this._id = this.constructor.name + "_" + lastComponentIndex++;
         this._name = "Component";
         this._rendered = false;
@@ -42,6 +43,32 @@ class Component {
         this._children[name] = child;
         child._name = name;
         return child;
+    }
+
+    /**
+     * Add child to history
+     * @param {*} name
+     * @param {*} newChild
+     */
+    async pushChild(name, newChild) {
+        let child = await this.addChild(name, newChild);
+        if (this._childrenHistory[name] == undefined) {
+            this._childrenHistory[name] = [];
+        }
+
+        this._childrenHistory[name].push(newChild);
+        return child;
+    }
+
+    /**
+     * Remove child from history and set previous one
+     * @param {} name
+     */
+    async popChild(name) {
+        if (this._childrenHistory[name] != undefined && this._childrenHistory[name].length > 1) {
+            this._childrenHistory[name].pop();
+            return await this.addChild(name, this._childrenHistory[name][this._childrenHistory[name].length - 1]);
+        }
     }
 
     /**
@@ -198,7 +225,7 @@ class Component {
 
             this._dom = document.getElementById(this._id);
 
-            await this.onAfterRefresh();
+            await this._execOnAfterRefresh();
         } else {
             //throw new Error("Cannot refresh " + this.constructor.name + " because it is not rendered!");
         }
@@ -267,10 +294,9 @@ class Component {
                 if (elem) {
                     this._dom = elem;
                     if (this._rendered == false) {
-                        await this.onFirstRender();
+                        await this._execOnFirstRender();
                         this._rendered = true;
                     }
-                    // await this.onAfterRefresh();
                     updated = true;
                 }
 
@@ -281,28 +307,41 @@ class Component {
         return html;
     }
 
+    async _execOnFirstRender() {
+        await this.onFirstRender();
+        for (let child of this.getChildren()) {
+            await child.component._execOnFirstRender();
+        }
+    }
+
     /**
      * Called when the component gets rendered the first time.
      */
     async onFirstRender() { }
 
+    async _execOnAfterRefresh() {
+        await this.onAfterRefresh();
+        for (let child of this.getChildren()) {
+            await child.component._execOnAfterRefresh();
+        }
+    }
+
     /**
      * Called everytime the component gets refreshed.
      */
-    async onAfterRefresh() {
-        for (let childName of Object.getOwnPropertyNames(this._children)) {
-            await this._children[childName].onAfterRefresh();
+    async onAfterRefresh() { }
+
+    async _execOnBeforeRefresh() {
+        await this.onAfterRefresh();
+        for (let child of this.getChildren()) {
+            await child.component._execOnBeforeRefresh();
         }
     }
 
     /**
      * Called before the component gets refreshed.
      */
-    async onBeforeRefresh() {
-        for (let childName of Object.getOwnPropertyNames(this._children)) {
-            await this._children[childName].onBeforeRefresh();
-        }
-    }
+    async onBeforeRefresh() { }
 
     /**
      * Create a child ID you can use to be unique.
@@ -339,10 +378,13 @@ class Component {
      * Destroys the component
      */
     async destroy() {
-        await this.onBeforeDestroy();
+        await this._execOnBeforeDestroy();
+    }
 
-        for (let childName of Object.getOwnPropertyNames(this._children)) {
-            await this._children[childName].destroy();
+    async _execOnBeforeDestroy() {
+        await this.onBeforeDestroy();
+        for (let child of this.getChildren()) {
+            await child.component._execOnBeforeDestroy();
         }
     }
 
@@ -385,7 +427,7 @@ class Component {
     async onEvent(event) { }
     async onAfterEvent(event) { }
 
-    renderChild(childName){
+    renderChild(childName) {
         return this.getChild(childName).render();
     }
 }
