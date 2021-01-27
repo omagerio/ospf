@@ -1,3 +1,6 @@
+# 1.14
+- Removed unused "form" element
+
 # 1.13
 - Removed `databind()` function from custom components. Now databind in components must be handled with `onDatabind()`.
 - Renamed ComponentPlaceholder in ComponentWrapper

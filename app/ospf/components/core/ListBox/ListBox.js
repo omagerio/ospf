@@ -17,8 +17,8 @@ class ListBox extends Component {
         });
     }
 
-    async onParseInput(formData) {
-        this.value = formData.get(this._id);
+    async onParseInput() {
+        this.value = document.querySelector("#" + this._id).value;
     }
 
     async change() {

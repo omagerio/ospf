@@ -137,30 +137,22 @@ class Component {
     }
 
     async handleEvent(event, jsonParameter, jsEvent) {
-
-        let formData = new FormData(document.querySelector("form"));
-        let childrenNames = Object.getOwnPropertyNames(app._children);
-
-        for (let childName of childrenNames) {
-            await app._children[childName]._execOnParseInput(formData);
-        }
-
+        await app._execOnParseInput();
         let parameter = JSON.parse(unescape(jsonParameter));
-
         await this[event](parameter, jsEvent);
     }
 
-    async _execOnParseInput(formData){
-        await this.onParseInput(formData);
+    async _execOnParseInput(){
+        await this.onParseInput();
         for(let child of this.getChildren()){
-            await child.component._execOnParseInput(formData);
+            await child.component._execOnParseInput();
         }
     }
 
     /**
      * Parse user input
      */
-    async onParseInput(formData) {}
+    async onParseInput() {}
 
     /**
      * Main initialization method. Always call it when creating new components.

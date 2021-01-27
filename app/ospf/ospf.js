@@ -30,8 +30,7 @@ function loadFile(url, contentType = ""){
 }
 
 window.addEventListener("load", async () => {
-    let body = document.createElement("form");
-    document.querySelector("body").appendChild(body);
+    let body = document.querySelector("body");
 
     let configResponse = await loadFile("ospf/config.json");
     let config = JSON.parse(configResponse);
