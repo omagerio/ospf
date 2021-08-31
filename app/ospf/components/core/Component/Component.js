@@ -303,9 +303,9 @@ class Component {
 
     async _execOnFirstRender() {
         await this.onFirstRender();
-        for (let child of this.getChildren()) {
+        /*for (let child of this.getChildren()) {
             await child.component._execOnFirstRender();
-        }
+        }*/
     }
 
     /**
