@@ -24,8 +24,8 @@ class App extends Component {
     async init({}={}) {
         await super.init(); // always call super.init() first
 
-        let layout = await this.addChild("layout", new TabbedLayoutExample());
-        await layout.init();
+        let view = await this.addChild("view", new TabbedLayoutExample());
+        await view.init();
     }
 }
 ```
@@ -60,15 +60,13 @@ README.md				This file
 ```
 
 ## Creating components ##
-An example component was made for you to start with, you can find it inside `ospf/components/custom/HelloWorld`.
+An example component was made for you to start with, you can find it inside `ospf/components/custom/_blank`.
 
-- Duplicate the `HelloWorld` folder to `MyComponent`
-- Rename `HelloWorld.js` and `HelloWorld.html` to `MyComponent.js` and `MyComponent.html`
-- Open `HelloWorld.js`
+- Duplicate the `_blank` folder to `MyComponent`
+- Rename `HelloWorld.js` and `HelloWorld.html` to `_blank.js` and `_blank.html`
+- Open `_blank.js`
 
 This file is, not surprisingly, the logic of your new component. Every component class must extend the `Component` class, or any direct child of it.
-
-> For a quick component creation, you can duplicate the `_blank` component folder.
 
 ```javascript
 class MyComponent extends Component {
@@ -82,19 +80,13 @@ You are almost there. Now we have to tell OSPF about your new component, but do 
 ```json
 "customComponents": [
         "custom/App",
-        "custom/HelloWorld",
-        "custom/TabbedLayoutExample",
-		"custom/MenuLayoutExample",
 		"custom/MyComponent" /* add your component here */
 ]
 ```
 
 The HTML file represents the template of the component. Let's see the default tpl:
 ```html
-<div id="<%= c._id %>" class="helloWorld">
-    <h1>Hello World!</h1>
-    <h3>This is a test component.</h3>
-    ...
+<div id="<%= c._id %>" class="_blank">
 </div>
 ```
 

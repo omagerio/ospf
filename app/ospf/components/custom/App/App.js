@@ -2,15 +2,18 @@
  * App entry point
  */
 class App extends Component {
-    async init({}={}) {
-        await super.init(); // always call super.init() first
+    async init({ } = {}) {
+        await super.init();
 
-        // Setting up local database. See: https://dexie.org/
-        app.dbManager.setDbName("demoApp");
-        await app.dbManager.setDbStructure({});
+        let view = await this.pushChild("view", new MenuLayoutExample());
+        await view.init();
+    }
 
-        // Create the first component to be rendered inside the app
-        let layout = await this.pushChild("myFirstComponent", new MenuLayoutExample());
-        await layout.init();
+    onEvent(event) {
+        /*
+        if(event.name == "myEvent"){
+
+        }
+        */
     }
 }
