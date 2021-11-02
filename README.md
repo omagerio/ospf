@@ -131,12 +131,16 @@ Inside the template file, you can use `c` to reference your component (for examp
 By default, components are loaded one by one when the application start. You can speed up the startup process by compiling your components in one single file. You can use `tools/compile.js` to perform this operation (requires nodejs and an internet connection):
 `node tools/compile.js`.
 
-```javascript
+Then, set up the production mode in the `config.json` file:
+
+```json
 /*
     Set to "false" if you want to test your application without compiling or you don't have nodeJS.
     Set to "true" and run "node tools/compile.js" to generate unified sources. Recommended.
 */
-const PRODUCTION_MODE = true;
+{
+	"productionMode": true
+}
 ```
 
 ### Testing environment ###
