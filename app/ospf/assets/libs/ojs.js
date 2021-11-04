@@ -40,7 +40,8 @@ class ojs {
 
         eval(
             [
-                `fun = function(` + names + `){let __parsed = [];`,
+                Object.keys({fun})[0],
+                ` = function(` + names + `){let __parsed = [];`,
                 code.join("\n"),
                 `return __parsed.join("");}`
             ].join("")
@@ -51,7 +52,7 @@ class ojs {
             funParameters.push("parameter." + name);
         }
         let html = "";
-        eval(["html = fun(", funParameters.join(","), ")"].join(""));
+        eval([Object.keys({html})[0], " = fun(", funParameters.join(","), ")"].join(""));
         fun = null;
         return html;
 
