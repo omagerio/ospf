@@ -32,6 +32,12 @@ function loadFile(url, contentType = ""){
 window.addEventListener("load", async () => {
     let body = document.querySelector("body");
 
+    // adding LIBS
+    // await loadScript("ospf/assets/libs/bluebird.min.js");
+    await loadScript("ospf/assets/libs/ejs.min.js");
+    // await loadScript("ospf/assets/libs/ojs.js");
+    await loadScript("ospf/assets/libs/dexie.min.js");
+
     let configResponse = await loadFile("ospf/config.json");
     let config = JSON.parse(configResponse);
 
@@ -43,10 +49,6 @@ window.addEventListener("load", async () => {
         link.href = cssUrl;
         document.querySelector("head").appendChild(link);
     }
-
-    // adding LIBS
-    await loadScript("ospf/assets/libs/ejs.min.js");
-    await loadScript("ospf/assets/libs/dexie.min.js");
 
     if (config.productionMode == false) {
         let components = config.coreComponents.concat(config.customComponents);

@@ -1,4 +1,4 @@
-<div id="<%= c._id %>" class="helloWorld">
+<div id="<%- c._id %>" class="helloWorld">
     <h1>Hello World!</h1>
     <h3>This is a test component.</h3>
     <p>Please look inside my code to see what you can do with OSPF!</p>
@@ -6,7 +6,7 @@
     <div>Names: </div>
     <ul>
         <% for(let name of c.names){ %>
-        <li><%= name %></li>
+        <li><%- name %></li>
         <% } %>
     </ul>
     <%- c.getChild("nameControl").render() %>

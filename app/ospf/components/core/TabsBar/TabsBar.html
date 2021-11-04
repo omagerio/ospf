@@ -1,12 +1,12 @@
-<div id="<%= c._id %>" class="TabsBar">
+<div id="<%- c._id %>" class="TabsBar">
     <%
         for(let tab of c.tabs){
             %>
             <div
-                class="TabsBar_button <%= tab.id == c.activeTabId ? "TabBar_button-2" : "" %>"
+                class="TabsBar_button <%- tab.id == c.activeTabId ? "TabBar_button-2" : "" %>"
                 <%- c.renderEvent("onclick", "tabClick", tab.id) %>
                 >
-                <%= tab.name %>
+                <%- tab.name %>
             </div>
             <%
         }

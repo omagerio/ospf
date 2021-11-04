@@ -1,9 +1,9 @@
-<div id="<%= c._id %>" class="MenuBar <%= c.visible ? "MenuBar-visible" : "" %>">
+<div id="<%- c._id %>" class="MenuBar <%- c.visible ? "MenuBar-visible" : "" %>">
     <div class="MenuBar_items">
         <%
         for(let tab of c.tabs){
             %>
-                <div class="MenuBar_item" <%- c.renderEvent("onclick", "tabClick", tab.id) %>><%= tab.name %></div>
+                <div class="MenuBar_item" <%- c.renderEvent("onclick", "tabClick", tab.id) %>><%- tab.name %></div>
             <%
         }
         %>

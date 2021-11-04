@@ -16,4 +16,10 @@ class App extends Component {
         }
         */
     }
+
+    onFirstRender(){
+        setInterval(()=>{
+            this.refresh()
+        }, 100);
+    }
 }
