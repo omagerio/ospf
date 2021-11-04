@@ -40,19 +40,18 @@ class ojs {
 
         eval(
             [
-                Object.keys({fun})[0],
-                ` = function(` + names + `){let __parsed = [];`,
+                `fun = function(` + names + `){let __parsed = [];`,
                 code.join("\n"),
                 `return __parsed.join("");}`
             ].join("")
         );
 
         let funParameters = [];
-        for (let name of names) {
+        for (let name of Object.getOwnPropertyNames(parameter)) {
             funParameters.push("parameter." + name);
         }
         let html = "";
-        eval([Object.keys({html})[0], " = fun(", funParameters.join(","), ")"].join(""));
+        eval(["html = fun(", funParameters.join(","), ")"].join(""));
         fun = null;
         return html;
 
