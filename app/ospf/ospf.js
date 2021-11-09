@@ -34,8 +34,8 @@ window.addEventListener("load", async () => {
 
     // adding LIBS
     // await loadScript("ospf/assets/libs/bluebird.min.js");
-    await loadScript("ospf/assets/libs/ejs.min.js");
-    // await loadScript("ospf/assets/libs/ojs.js");
+    // await loadScript("ospf/assets/libs/ejs.min.js");
+    await loadScript("ospf/assets/libs/ojs.js");
     await loadScript("ospf/assets/libs/dexie.min.js");
 
     let configResponse = await loadFile("ospf/config.json");
