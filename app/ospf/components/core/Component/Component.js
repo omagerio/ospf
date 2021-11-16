@@ -11,8 +11,10 @@ class Component {
         this._classname = this.constructor.name;
         this._eventListeners = [];
         this._dom = null;
+        this._needsRefresh = false;
         this._isRefreshing = false;
         this._isDatabinding = false;
+        this._lastRefreshTime = 0;
     }
 
     static async PauseUntilRendered(id) {
@@ -142,9 +144,9 @@ class Component {
         await this[event](parameter, jsEvent);
     }
 
-    async _execOnParseInput(){
+    async _execOnParseInput() {
         await this.onParseInput();
-        for(let child of this.getChildren()){
+        for (let child of this.getChildren()) {
             await child.component._execOnParseInput();
         }
     }
@@ -152,7 +154,7 @@ class Component {
     /**
      * Parse user input
      */
-    async onParseInput() {}
+    async onParseInput() { }
 
     /**
      * Main initialization method. Always call it when creating new components.
@@ -184,10 +186,38 @@ class Component {
         }
     }
 
+    _setNeedsRefresh(needsRefresh) {
+        this._needsRefresh = needsRefresh;
+        let children = this.getChildren();
+        for (let child of children) {
+            child.component._setNeedsRefresh(needsRefresh);
+        }
+    }
+
+    async refreshChildrenIfNeeded() {
+        let refreshed = false;
+        let children = this.getChildren();
+        for (let child of children) {
+            if (child.component._needsRefresh) {
+                await child.component._refresh();
+                child.component._lastRefreshTime = Date.now();
+                refreshed = true;
+            }else{
+                refreshed = await child.component.refreshChildrenIfNeeded() || refreshed;
+            }
+        }
+        return refreshed;
+    }
+
+    async refresh() {
+        this._needsRefresh = true;
+        // this._refresh();
+    }
+
     /**
      * Refreshes the component template. This does not reload data! Use databind() or update() instead.
      */
-    async refresh() {
+    async _refresh() {
 
         while (this._isRefreshing == true) {
             await sleep(100);
@@ -195,7 +225,7 @@ class Component {
 
         this._isRefreshing = true;
 
-        await this.onBeforeRefresh();
+        await this._execOnBeforeRefresh();
 
         let elem = document.getElementById(this._id);
         if (elem) {
@@ -218,6 +248,8 @@ class Component {
             await sleep(100);
 
             this._dom = document.getElementById(this._id);
+
+            this._setNeedsRefresh(false);            
 
             await this._execOnAfterRefresh();
         } else {
@@ -326,7 +358,7 @@ class Component {
     async onAfterRefresh() { }
 
     async _execOnBeforeRefresh() {
-        await this.onAfterRefresh();
+        await this.onBeforeRefresh();
         for (let child of this.getChildren()) {
             await child.component._execOnBeforeRefresh();
         }

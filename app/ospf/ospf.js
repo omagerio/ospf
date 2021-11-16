@@ -34,8 +34,8 @@ window.addEventListener("load", async () => {
 
     // adding LIBS
     // await loadScript("ospf/assets/libs/bluebird.min.js");
-    // await loadScript("ospf/assets/libs/ejs.min.js");
-    await loadScript("ospf/assets/libs/ojs.js");
+    await loadScript("ospf/assets/libs/ejs.min.js");
+    // await loadScript("ospf/assets/libs/ojs.js");
     await loadScript("ospf/assets/libs/dexie.min.js");
 
     let configResponse = await loadFile("ospf/config.json");
@@ -104,8 +104,21 @@ window.addEventListener("load", async () => {
     await app.init();
     await app.parseTemplate();
 
-    body.innerHTML += app.render();
+    body.innerHTML += app.render();   
+    
+    ojsRefresh();
 });
+
+async function ojsRefresh() {
+    if (app._needsRefresh == true) {
+        await app._refresh();
+    } else {
+        await app.refreshChildrenIfNeeded();
+    }
+
+    setTimeout(ojsRefresh, 150);     
+    console.log(app._lastRefreshTime);   
+}
 
 function sleep(ms) {
     return new Promise(
