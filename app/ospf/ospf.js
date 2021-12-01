@@ -116,8 +116,7 @@ async function ojsRefresh() {
         await app.refreshChildrenIfNeeded();
     }
 
-    setTimeout(ojsRefresh, 150);     
-    console.log(app._lastRefreshTime);   
+    setTimeout(ojsRefresh, 150);         
 }
 
 function sleep(ms) {
