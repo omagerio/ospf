@@ -1,5 +1,5 @@
 
-let fs = require("fs");
+let fs = require("fs-extra");
 let JavaScriptObfuscator = require('javascript-obfuscator');
 let obfuscationOptions = {
     compact: true,
@@ -19,25 +19,30 @@ let obfuscationOptions = {
     unicodeEscapeSequence: false
 };
 
-let appDir = __dirname + "/../app";
+let buildConfig = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
+
+let appFolder = __dirname + "/" + buildConfig.appFolder;
+let distFolder = __dirname + "/" + buildConfig.distFolder;
+
+fs.copySync(appFolder, distFolder);
 
 (async () => {
     let compiledSource = "";
     let templatesSource = "";
 
-    let config = JSON.parse(fs.readFileSync(appDir + "/ospf/config.json", { encoding: "utf8" }));
+    let config = JSON.parse(fs.readFileSync(distFolder + "/ospf/config.json", { encoding: "utf8" }));
     let coreComponents = config.coreComponents;
     let customComponents = config.customComponents;
 
     for (let component of coreComponents) {
         console.log("Compiling " + component);
         let name = component.replace("core/", "");
-        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
+        compiledSource += fs.readFileSync(distFolder + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
         compiledSource += "\n\n";
 
-        if (fs.existsSync(appDir + "/ospf/components/" + component + "/" + name + ".html")) {
+        if (fs.existsSync(distFolder + "/ospf/components/" + component + "/" + name + ".html")) {
             console.log("Compiling " + component + " template");
-            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
+            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(distFolder + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
             templatesSource += componentTemplate;
         }
     }
@@ -45,19 +50,17 @@ let appDir = __dirname + "/../app";
     for (let component of customComponents) {
         console.log("Compiling " + component);
         let name = component.replace("custom/", "");
-        compiledSource += fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
+        compiledSource += fs.readFileSync(distFolder + "/ospf/components/" + component + "/" + name + ".js", { encoding: "utf8" });
         compiledSource += "\n\n";
 
-        if (fs.existsSync(appDir + "/ospf/components/" + component + "/" + name + ".html")) {
+        if (fs.existsSync(distFolder + "/ospf/components/" + component + "/" + name + ".html")) {
             console.log("Compiling " + component + " template");
-            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(appDir + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
+            let componentTemplate = "templates[\"" + name + "\"] = " + JSON.stringify(fs.readFileSync(distFolder + "/ospf/components/" + component + "/" + name + ".html", { encoding: "utf8" })).replace('"', '\"') + ";\n"
             templatesSource += componentTemplate;
         }
     }
 
-    // console.log("Source to minimize: ", compiledSource);
-    fs.writeFileSync(appDir + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource, { encoding: "utf8" });
-    // compiledSource = encodeURIComponent(compiledSource + "\n" + templatesSource);
+    fs.writeFileSync(distFolder + "/ospf/compiled_components.js", compiledSource + "\n" + templatesSource, { encoding: "utf8" });
     compiledSource = compiledSource + "\n" + templatesSource;
 
     var obfuscationResult;
@@ -69,11 +72,15 @@ let appDir = __dirname + "/../app";
             obfuscationOptions
         );
 
-        console.log(obfuscationResult);
-
         console.log("Writing compiled files");
-        fs.writeFileSync(appDir + "/ospf/compiled_components.js", obfuscationResult._obfuscatedCode, {encoding: "utf8"});
-        console.log("Compiled files created. Set PRODUCTION_MODE=true in config.js. You can delete 'ospf/components' folder in the release package to hide source files.");
+        fs.writeFileSync(distFolder + "/ospf/compiled_components.js", obfuscationResult._obfuscatedCode, { encoding: "utf8" });
+        config.productionMode = true;
+        fs.writeFileSync(distFolder + "/ospf/config.json", JSON.stringify(config,null,4));
+
+        fs.rmdirSync(distFolder + "/ospf/components", {recursive: true, force: true});
+
+        console.log("Build completed. See your " + distFolder + " folder");
+
     } catch (e) {
         console.log("Error during compilation. You can still use the compiled components (PRODUCTION_MODE=true) but it is not minified");
     }

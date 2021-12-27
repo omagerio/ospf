@@ -5,10 +5,14 @@
   "main": "compile.js",
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
+    "fs-extra": "^10.0.0",
+    "javascript-obfuscator": "1.3.0",
     "mime-types": "^2.1.27",
-    "open": "^7.2.1",
-    "javascript-obfuscator": "1.3.0"
+    "open": "^7.2.1"
+  },
+  "scripts": {
+    "build": "node ./build.js",
+    "serve": "node ./server.js"
   }
 }
