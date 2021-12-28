@@ -18,7 +18,8 @@
         "core/HelloWorld",
         "core/TabbedLayoutExample",
         "core/MenuLayoutExample",
-        "core/ModalContainer"
+        "core/ModalContainer",
+        "core/Table"
     ],
 
     "customComponents": [

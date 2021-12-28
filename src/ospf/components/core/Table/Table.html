@@ -1,0 +1,29 @@
+<table class="<%- c.cssClass %>" id="<%- c._id %>">
+    <thead>
+        <tr>
+            <% for(let column of c.columns){ %>
+            <td>
+                <%- column.title %>
+            </td>
+            <% } %>
+        </tr>
+    </thead>
+
+    <tbody>
+        <%
+            for(let item of c.datasource){
+                %>
+                <tr>
+                    <%
+                    for(let column of c.columns){
+                        %>
+                        <td><%- column.getHtml(item) %></td>
+                        <%
+                    }
+                    %>
+                </tr>
+                <%
+            }
+        %>
+    </tbody>
+</table>
