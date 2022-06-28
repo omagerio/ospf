@@ -1,3 +1,6 @@
+# 1.18
+- General improvements
+
 # 1.14
 - Removed unused "form" element
 
