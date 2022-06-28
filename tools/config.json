@@ -1,4 +1,4 @@
 {
-    "appFolder": "../app",
+    "devFolder": "../src",
     "distFolder": "../dist"
 }

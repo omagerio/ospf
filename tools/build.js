@@ -21,10 +21,10 @@ let obfuscationOptions = {
 
 let buildConfig = JSON.parse(fs.readFileSync(__dirname + "/config.json"));
 
-let appFolder = __dirname + "/" + buildConfig.appFolder;
+let devFolder = __dirname + "/" + buildConfig.devFolder;
 let distFolder = __dirname + "/" + buildConfig.distFolder;
 
-fs.copySync(appFolder, distFolder);
+fs.copySync(devFolder, distFolder);
 
 (async () => {
     let compiledSource = "";

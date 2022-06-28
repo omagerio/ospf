@@ -13,7 +13,7 @@ async function init() {
             if (qsPosition > -1) {
                 url = url.substr(0, qsPosition);
             }
-            let path = __dirname + "/../app" + url;
+            let path = __dirname + "/../src" + url;
 
             if (fs.existsSync(path)) {
                 response.setHeader("Content-Type", mime.lookup(path) +";charset=utf8");
