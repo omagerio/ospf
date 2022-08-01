@@ -11,7 +11,10 @@ class TextBox extends Component {
     }
 
     async onParseInput(){
-        this.value = document.querySelector("#" + this._id).value;
+        let dom = document.querySelector("#" + this._id);
+        if(dom){
+            this.value = document.querySelector("#" + this._id).value;
+        }
     }
 
     async keyDown(parameter, jsEvent){
