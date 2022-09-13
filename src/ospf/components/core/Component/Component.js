@@ -15,6 +15,7 @@ class Component {
         this._isRefreshing = false;
         this._isDatabinding = false;
         this._lastRefreshTime = 0;
+        this._parent = null;
     }
 
     static async PauseUntilRendered(id) {
@@ -44,6 +45,7 @@ class Component {
 
         this._children[name] = child;
         child._name = name;
+        child._parent = this;
         return child;
     }
 
@@ -161,6 +163,10 @@ class Component {
      * Always call "await super.init()" at the start of your method.
      */
     async init() {
+        if(this._parent == null){
+            console.error("This component is orphan. Call addChild() before calling init().", this);
+            throw new Error("orphan_component");
+        }
         this._initialized = true;
     }
 
@@ -249,7 +255,7 @@ class Component {
 
             this._dom = document.getElementById(this._id);
 
-            this._setNeedsRefresh(false);            
+            this._setNeedsRefresh(false);
 
             await this._execOnAfterRefresh();
         } else {

@@ -90,8 +90,10 @@ window.addEventListener("load", async () => {
     body.appendChild(preloader);
 
     app = new App();
+    app._parent = window;
     app.config = config;
     app.dbManager = new DbManager();
+    app.addChild("dbManager", app.dbManager);
     await app.dbManager.init();
     app.dbManager.setDbName("demoApp");
     await app.dbManager.setDbStructure({});
