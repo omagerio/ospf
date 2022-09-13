@@ -19,10 +19,16 @@
         "core/TabbedLayoutExample",
         "core/MenuLayoutExample",
         "core/ModalContainer",
-        "core/Table"
+        "core/Table",
+        "core/ApiHelper"
     ],
 
     "customComponents": [
-        "custom/App"
+        "custom/App",
+        "custom/ItemList",
+        "custom/ItemListView",
+        "custom/ItemEdit",
+        "custom/ItemEditView",
+        "custom/Menu"
     ]
 }

@@ -1,0 +1,13 @@
+<div id="<%- c._id %>" class="ItemListView">
+
+    <%- c.renderChild("menu") %>
+
+    <div class="page">
+        <div class="page_title">Lista Utenti</div>
+        <%- c.renderChild("item_list") %>
+
+        <div class="actions">
+            <div class="button" <%- c.renderEvent("onclick", "newClick" ) %> >Nuovo</div>
+        </div>
+    </div>
+</div>

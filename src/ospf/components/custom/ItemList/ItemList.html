@@ -1,0 +1,32 @@
+<div id="<%- c._id %>" class="ItemList">
+    <table>
+
+        <tr class="ItemList_header">
+            <td>ID</td>
+            <td>
+                EMAIL
+            </td>
+            <td>
+                NOME
+            </td>
+            <td>
+
+            </td>
+        </tr>
+
+        <% for(let item of c.items){ %>
+            <tr>
+                <td><%= item.id %></td>
+                <td>
+                    <%= item.email %>
+                </td>
+                <td>
+                    <%= item.full_name %>
+                </td>
+                <td>
+                    <div class="button button_small" <%- c.renderEvent("onclick", "editClick", item.id) %>>Edit</div>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+<div id="<%- c._id %>" class="ItemList">
+    <table>
+        <tr>
+            <td>ID</td>
+            <td><%= c.item.id %></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><%- c.renderChild("email_input") %></td>
+        </tr>
+        <tr>
+            <td>Nome</td>
+            <td><%- c.renderChild("name_input") %></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><%- c.renderChild("password_input") %> <i>lascia vuota per non modificare</i></td>
+        </tr>
+    </table>
+</div>

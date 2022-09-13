@@ -1,0 +1,14 @@
+<div id="<%- c._id %>" class="ItemListView">
+
+    <%- c.renderChild("menu") %>
+
+        <div class="page">
+            <div class="page_title">Crea/Modifica item</div>
+            <%- c.renderChild("item_edit") %>
+
+                <div class="actions">
+                    <div class="button button_cancel" <%- c.renderEvent("onclick", "cancelClick") %>>Annulla</div>
+                    <div class="button" <%- c.renderEvent("onclick", "saveClick") %>>Salva</div>
+                </div>
+        </div>
+</div>
