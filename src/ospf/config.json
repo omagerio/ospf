@@ -1,7 +1,7 @@
 {
     "productionMode": false,
     "version": "0.0.1",
-
+    "buildTime": 0,
     "coreComponents": [
         "core/Component",
         "core/TextBox",

@@ -36,7 +36,7 @@ window.addEventListener("load", async () => {
     await loadScript("ospf/assets/libs/ejs.min.js");
     await loadScript("ospf/assets/libs/dexie.min.js");
 
-    let configResponse = await loadFile("ospf/config.json");
+    let configResponse = await loadFile("ospf/config.json?t=" + Date.now());
     let config = JSON.parse(configResponse);
 
     // adding CSS
@@ -81,7 +81,7 @@ window.addEventListener("load", async () => {
 
         await Promise.all(p);
     } else {
-        await loadScript("ospf/compiled_components.js?v=" + config.version);
+        await loadScript("ospf/compiled_components.js?t=" + config.buildTime);
     }
 
     let preloader = document.createElement("div");
