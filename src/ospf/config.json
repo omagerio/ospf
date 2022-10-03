@@ -19,7 +19,8 @@
         "core/TabbedLayoutExample",
         "core/MenuLayoutExample",
         "core/ModalContainer",
-        "core/Table"
+        "core/Table",
+        "core/Crypt"
     ],
 
     "customComponents": [
