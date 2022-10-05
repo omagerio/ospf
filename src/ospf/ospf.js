@@ -40,7 +40,7 @@ window.addEventListener("load", async () => {
     let config = JSON.parse(configResponse);
 
     // adding CSS
-    let cssUrls = ["ospf/assets/css/core.css", "ospf/assets/css/custom.css"];
+    let cssUrls = ["ospf/assets/css/core.css?t=" + config.buildTime, "ospf/assets/css/custom.css?t=" + config.buildTime];
     for(let cssUrl of cssUrls){
         let link = document.createElement("link");
         link.rel = "stylesheet";
