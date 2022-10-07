@@ -2,6 +2,7 @@ class ItemList extends Component {
     async init({}={}) {
         await super.init();
         this.items = [];
+        this.filters = {};
     }
 
     async onDatabind(){
@@ -13,6 +14,8 @@ class ItemList extends Component {
         if(response.errors.length == 0){
             this.items = response.results;
         }*/
+
+        console.log(this);
     }
 
     async editClick(item_id){

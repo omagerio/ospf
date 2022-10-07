@@ -102,3 +102,11 @@ input[type="text"]
 *[onclick]{
     cursor:pointer;
 }
+
+.ItemListView_filters
+{
+    display:flex;
+    flex-wrap: wrap;
+    grid-gap:20px;
+    margin-bottom:20px;
+}

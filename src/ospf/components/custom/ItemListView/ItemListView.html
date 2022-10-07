@@ -4,6 +4,17 @@
 
     <div class="page">
         <div class="page_title">Lista Utenti</div>
+
+        <div class="ItemListView_filters">
+            <div class="ItemListView_filters_item">
+                <div>ID</div>
+                <div><%- c.renderChild("filter_id") %></div>
+            </div>
+
+            <div class="button button_cancel" <%- c.renderEvent("onclick", "resetClick") %>>Reset</div>
+            <div class="button" <%- c.renderEvent("onclick", "filterClick") %>>Filtra</div>
+        </div>
+
         <%- c.renderChild("item_list") %>
 
         <div class="actions">
