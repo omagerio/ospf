@@ -15,6 +15,15 @@
 .ItemList_header
 {
     font-weight: bold;
+    background-color:#eee;
+    color:black;
+}
+
+.ItemList_table td:nth-child(1)
+{
+    font-weight: bold;
+    background-color:#eee;
+    color:black;
 }
 
 .menu

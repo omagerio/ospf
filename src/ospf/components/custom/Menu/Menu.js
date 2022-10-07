@@ -3,6 +3,10 @@ class Menu extends Component {
         await super.init();
     }
 
+    async menuItemClick(parameter){
+        await this.fireEvent("intent_openItemListView", {type: "item"});
+    }
+
     // async onDatabind(){}
     // async onBeforeEvent(event){}
     // async onEvent(event){}

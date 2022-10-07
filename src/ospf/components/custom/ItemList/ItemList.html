@@ -2,6 +2,9 @@
     <table>
 
         <tr class="ItemList_header">
+            <td>
+                <%- c.renderChild("check_all") %>
+            </td>
             <td>ID</td>
             <td>
                 EMAIL
@@ -16,6 +19,7 @@
 
         <% for(let item of c.items){ %>
             <tr>
+                <td><input id="checkbox_item_<%- item.id %>" type="checkbox"></td>
                 <td><%= item.id %></td>
                 <td>
                     <%= item.email %>

@@ -3,30 +3,36 @@ class ItemList extends Component {
         await super.init();
         this.items = [];
         this.filters = {};
+
+        let check_all = await this.addChild("check_all", new CheckBoxBase());
+        await check_all.init();
+    }
+
+    async onEvent(event){
+        if(event.sender == this.getChild("check_all")){
+            let checks = document.querySelectorAll("input");
+            for(let check of checks){
+                if(check.id.indexOf("checkbox_item_") > -1){
+                    check.checked = this.getChild("check_all").value;
+                }
+            }
+        }
     }
 
     async onDatabind(){
-        /*let response = await app.api.get({
-            action: "item_list",
-            admin_token: "ea4b40de-32b2-11ed-ba5d-0800277dcd5e"
+        let response = await app.api.get({
+            action: "restaurant_search",
+            auth: {
+                login_token: "2fdcfd9c-44ba-11ed-8d48-0800277dcd5e"
+            }
         });
 
         if(response.errors.length == 0){
             this.items = response.results;
-        }*/
-
-        console.log(this);
+        }
     }
 
     async editClick(item_id){
-        await this.fireEvent("intent_openItemEditView", {type: "user", item: this.items.find(a => a.id == item_id)});
+        await this.fireEvent("intent_openItemEditView", {type: "item", item: this.items.find(a => a.id == item_id)});
     }
-
-    // async onDatabind(){}
-    // async onBeforeEvent(event){}
-    // async onEvent(event){}
-    // async onAfterEvent(event){}
-    // async onBeforeRefresh(){}
-    // async onAfterRefresh(){}
-    // async onFirstRender(){}
 }

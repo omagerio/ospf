@@ -16,7 +16,8 @@ class App extends Component {
 
         this.env = (await this.loadFile("env")).trim();
 
-        this.api = new ApiHelper("");
+        let api_url = "http://greenmeal-api.omar.idspace.it/api/index.php";
+        this.api = new ApiHelper(api_url);
         this.auth = { admin_token: "ea4b40de-32b2-11ed-ba5d-0800277dcd5e" };
 
         let view = await this.pushChild("view", new ItemListView());
