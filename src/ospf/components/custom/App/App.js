@@ -4,6 +4,7 @@
 class App extends Component {
     async init({ } = {}) {
         await super.init();
+		this.env = (await this.loadFile("env")).trim();
 
         /* prevents browser back button */
         history.pushState(null, null, document.URL);

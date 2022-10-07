@@ -75,6 +75,7 @@ fs.copySync(devFolder, distFolder);
         console.log("Writing compiled files");
         fs.writeFileSync(distFolder + "/ospf/compiled_components.js", obfuscationResult._obfuscatedCode, { encoding: "utf8" });
         config.productionMode = true;
+        config.buildTime = Date.now();
         fs.writeFileSync(distFolder + "/ospf/config.json", JSON.stringify(config,null,4));
 
         fs.rmdirSync(distFolder + "/ospf/components", {recursive: true, force: true});
