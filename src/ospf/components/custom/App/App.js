@@ -20,7 +20,7 @@ class App extends Component {
         this.api = new ApiHelper(api_url);
         this.auth = { admin_token: "ea4b40de-32b2-11ed-ba5d-0800277dcd5e" };
 
-        let view = await this.pushChild("view", new ItemListView());
+        let view = await this.pushChild("view", new LoginView());
         await view.init();
 
         await view.databind();

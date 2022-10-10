@@ -1,0 +1,12 @@
+<div id="<%- c._id %>" class="LoginView">
+    <div class="page_title">Esempio - Pannello di Amministrazione</div>
+    <div>Email</div>
+    <div>
+        <%- c.renderChild("email_input") %>
+    </div>
+    <div>Password</div>
+    <div>
+        <%- c.renderChild("password_input") %>
+    </div>
+    <div class="button" <%- c.renderEvent("onclick", "loginClick") %>>Login</div>
+</div>
