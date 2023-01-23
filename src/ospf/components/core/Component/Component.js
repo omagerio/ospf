@@ -172,9 +172,11 @@ class Component {
     /**
      * Reload all the data (data only). This does not update the template! Use refresh() to refresh the template.
      */
-    async databind() {
+    async databind({recursive = true}  = {}) {
         await this.onDatabind();
-        await this.databindChildren();
+        if(recursive){
+            await this.databindChildren();
+        }
     }
 
     async onDatabind() { }
