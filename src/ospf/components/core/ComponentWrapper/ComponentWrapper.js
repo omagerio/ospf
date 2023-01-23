@@ -13,6 +13,5 @@ class ComponentWrapper extends Component {
         }else{
             await this.removeChild("component");
         }
-        await this.update();
     }
 }

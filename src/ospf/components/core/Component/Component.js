@@ -13,7 +13,6 @@ class Component {
         this._dom = null;
         this._needsRefresh = false;
         this._isRefreshing = false;
-        this._isDatabinding = false;
         this._lastRefreshTime = 0;
         this._parent = null;
     }
@@ -171,25 +170,22 @@ class Component {
     }
 
     /**
-     * Reload all the data (data only). This does not update the template! Use refresh() or update() to refresh the template.
+     * Reload all the data (data only). This does not update the template! Use refresh() to refresh the template.
      */
     async databind() {
-        while (this._isDatabinding == true) {
-            await sleep(100);
-        }
-        this._isDatabinding = true;
         await this.onDatabind();
         await this.databindChildren();
-        this._isDatabinding = false;
     }
 
     async onDatabind() { }
 
     async databindChildren() {
+        let ps = [];
         let childrenNames = Object.getOwnPropertyNames(this._children);
         for (let childName of childrenNames) {
-            await this._children[childName].databind();
+            ps.push(this._children[childName].databind());
         }
+        await Promise.all(ps);
     }
 
     _setNeedsRefresh(needsRefresh) {
@@ -221,7 +217,7 @@ class Component {
     }
 
     /**
-     * Refreshes the component template. This does not reload data! Use databind() or update() instead.
+     * Refreshes the component template. This does not reload data! Use databind() instead.
      */
     async _refresh() {
 
@@ -263,14 +259,6 @@ class Component {
         }
 
         this._isRefreshing = false;
-    }
-
-    /**
-     * First reloads data and then refreshes the template.
-     */
-    async update() {
-        await this.databind();
-        await this.refresh();
     }
 
     /**
