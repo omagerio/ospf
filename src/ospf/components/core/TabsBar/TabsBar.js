@@ -5,8 +5,8 @@ class TabsBar extends Component {
         this.activeTabId = 0;
     }
 
-    async createTab({ name, icon, key }) {
-        let tab = { name: name, id: uuid(), icon: icon, key: key };
+    async addTab({ name, icon, key }) {
+        let tab = { name, id: uuid(), icon, key };
         this.tabs.push(tab);
     }
 

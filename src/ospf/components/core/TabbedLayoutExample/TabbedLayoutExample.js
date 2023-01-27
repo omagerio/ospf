@@ -8,8 +8,6 @@ class TabbedLayoutExample extends TabbedLayout {
             // Create a component that will be shown at the relative tab
             // Here we are using a Label only for testing purposes. Create your component instead!
             let tabContent = new Label();
-            await this.addChild("tabContent" + i, tabContent);
-            await tabContent.init();
             tabContent.text = `
             <div class="TabbedLayoutExample_content">
                 <div class="TabbedLayoutExample_content_title">Tab `+ (i) + `</div>
@@ -19,7 +17,7 @@ class TabbedLayoutExample extends TabbedLayout {
             </div>`;
 
             // Create a tab
-            await this.createTab({
+            await this.addTab({
                 component: tabContent,
                 name: "Tab " + i,
                 key: "tab" + i

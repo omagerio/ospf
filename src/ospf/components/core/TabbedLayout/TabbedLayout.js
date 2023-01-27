@@ -1,7 +1,7 @@
 class TabbedLayout extends Component {
     async init({}={}) {
         await super.init();
-        this.contents = [];
+        this.tabs = [];
 
         let tabsBar = await this.addChild("tabsBar", new TabsBar());
         await tabsBar.init();
@@ -14,24 +14,19 @@ class TabbedLayout extends Component {
 
     async onEvent(event){
         if(event.name == "TabsBar_tabClick" && event.sender == this.getChild("tabsBar")){
-            let component = this.contents.find(item => item.key == event.parameter.key);
-            // await this.addChild("content", component.component);
-            await this.setContent(component.component);
+            let tab = this.tabs.find(item => item.key == event.parameter.key);
+            await this.getChild("content").setComponent(tab.component);
         }
     }
 
-    async setContent(component){
-        await this.getChild("content").setComponent(component);
-    }
-
-    async createTab({component, name, icon, key}){
-        this.getChild("tabsBar").createTab({
+    async addTab({component, name, icon, key}){
+        this.getChild("tabsBar").addTab({
             name: name,
             icon: icon,
             key: key
         });
 
-        this.contents.push({
+        this.tabs.push({
             component: component,
             key: key
         });

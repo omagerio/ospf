@@ -1,5 +1,10 @@
 class Blank extends Component {
-    async init({}={}) {
+
+    constructor() {
+
+    }
+
+    async init({ } = {}) {
         await super.init();
     }
 

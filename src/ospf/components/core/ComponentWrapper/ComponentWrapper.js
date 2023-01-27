@@ -10,8 +10,15 @@ class ComponentWrapper extends Component {
     async setComponent(component){
         if(component){
             await this.addChild("component", component);
+
+            if(component._initialized == false){
+                await component.init();
+            }
+
         }else{
             await this.removeChild("component");
         }
+        await this.databind();
+        await this.refresh();
     }
 }

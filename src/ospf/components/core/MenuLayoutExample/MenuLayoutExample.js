@@ -8,8 +8,6 @@ class MenuLayoutExample extends MenuLayout {
             // Create a component that will be shown at the relative menu entry
             // Here we are using a Label only for testing purposes. Create your component instead!
             let content = new Label();
-            await this.addChild("label"+i, content);
-            await content.init();
             content.text = `
             <div class="TabbedLayoutExample_content TabbedLayoutExample_content-menu">
                 <div class="TabbedLayoutExample_content_title">Tab `+ (i) + `</div>
@@ -19,7 +17,7 @@ class MenuLayoutExample extends MenuLayout {
             </div>`;
 
             // Create a tab
-            await this.createTab({
+            await this.addTab({
                 component: content,
                 name: "Menu " + i,
                 key: "menu" + i

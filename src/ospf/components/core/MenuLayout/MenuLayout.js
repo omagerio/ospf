@@ -16,17 +16,13 @@ class MenuLayout extends Component {
         if(event.name == "TabsBar_tabClick"){
             if(event.sender == this.getChild("tabsBar")){
                 let tab = this.tabs.find(item => item.key == event.parameter.key);
-                await this.setContent(tab.component);
+                await this.getChild("content").setComponent(tab.component);
             }
         }
     }
 
-    async setContent(component){
-        await this.getChild("content").setComponent(component);
-    }
-
-    async createTab({component, name, icon, key}){
-        await this.getChild("tabsBar").createTab({
+    async addTab({component, name, icon, key}){
+        await this.getChild("tabsBar").addTab({
             name: name,
             icon: icon,
             key: key

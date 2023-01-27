@@ -6,7 +6,7 @@ class MenuBar extends Component {
         this.visible = false;
     }
 
-    async createTab({ name, icon, key }) {
+    async addTab({ name, icon, key }) {
         let tab = { name: name, id: uuid(), icon: icon, key: key };
         this.tabs.push(tab);
     }

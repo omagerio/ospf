@@ -193,6 +193,10 @@ class Component {
         await Promise.all(ps);
     }
 
+    async update(){
+        console.error("update() method has been deprecated. Please use databind() and refresh() together");
+    }
+
     _setNeedsRefresh(needsRefresh) {
         this._needsRefresh = needsRefresh;
         let children = this.getChildren();
@@ -454,5 +458,20 @@ class Component {
 
     renderChild(childName) {
         return this.getChild(childName).render();
+    }
+
+    getTree(parent = null) {
+
+        if (parent === null) {
+            parent = {};
+        }
+
+        parent[this._id] = {};
+
+        for (let child of this.getChildren()) {
+            child.component.getTree(parent[this._id]);
+        }
+
+        return parent;
     }
 }
