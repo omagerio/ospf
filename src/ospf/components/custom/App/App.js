@@ -6,7 +6,7 @@ class App extends Component {
         await super.init();
         this.env = (await this.loadFile("env?t=" + Date.now())).trim();
 
-        let view = await this.pushChild("view", new MenuLayoutExample());
+        let view = await this.pushChild("view", new TabbedLayoutExample());
         await view.init();
     }
 
